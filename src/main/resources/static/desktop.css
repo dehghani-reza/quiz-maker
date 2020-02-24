@@ -1,0 +1,71 @@
+.desktop-top-menu {
+    position: fixed;
+    top: 0;
+    height: 64px;
+    width: 100%;
+    z-index: 2;
+    background-color: white;
+    border-bottom-style: solid;
+    border-bottom-color: gray;
+    border-bottom-width: 1px;
+}
+
+.desktop-brand-box {
+    display: table;
+    background-color: #37474f;
+    width: 240px;
+    height: 64px;
+}
+.desktop-brand-title {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    letter-spacing: 8px;
+}
+
+.desktop-side-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 64px;
+    height: 100%;
+    width: 240px;
+    background-color: #263238;
+    z-index: 1;
+}
+
+.desktop-side-bar-menu {
+    color: #cfd8dc;
+    padding-left: 24px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    cursor: pointer;
+    font-size: 18px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #2e4049;
+}
+
+.desktop-side-bar-menu-ul {
+    display: none;
+    list-style: none;
+    background-color: #2c383f;
+    margin: 0;
+    padding: 0;
+    border-left: 2px;
+    border-left-style: solid;
+    border-left-color: #f57c00;
+}
+
+.desktop-side-bar-menu-li {
+    color: #cfd8dc;
+    padding: 16px 8px 16px 32px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #263238;
+}
