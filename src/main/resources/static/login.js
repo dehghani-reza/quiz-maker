@@ -39,5 +39,5 @@ function loginSuccessful(username, password) {
 }
 
 function loginFailed() {
-    $("#loginFailedMessage").fadeIn().delay(5000).fadeOut();
+    $("#loginFailedMessage").fadeIn().delay(2500).fadeOut();
 }

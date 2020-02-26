@@ -1,4 +1,4 @@
-package ir.maktab.quizmaker.entities;
+package ir.maktab.quizmaker.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,13 +19,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
-    @ManyToMany
-    @JoinTable(name = "role_account",
-            joinColumns = @JoinColumn(name = "roleId"),
-            inverseJoinColumns = @JoinColumn(name = "accountId"))
+    @ManyToMany(mappedBy = "roleList")
     private List<Account> accountList;
 
     @Override

@@ -1,4 +1,4 @@
-package ir.maktab.quizmaker.entities;
+package ir.maktab.quizmaker.model;
 
 import lombok.*;
 

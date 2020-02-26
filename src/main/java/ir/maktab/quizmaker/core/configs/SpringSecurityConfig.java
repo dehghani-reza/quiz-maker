@@ -1,12 +1,17 @@
 package ir.maktab.quizmaker.core.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -14,20 +19,30 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
+@EnableWebSecurity//todo ask what is difference between this annotation and config?
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password("{noop}pass")
-                .roles("USER")
-                .and()
-                .withUser("admin")
-                .password("{noop}pass")
-                .roles("ADMIN");
+    UserDetailsService userDetailsService;
+
+    @Autowired
+    public SpringSecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
+    @Bean//todo how to encode pass properly
+    public PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+    //todo authentication success handler for redirect to proper page depend on role
+
+    //    ********************************************************************************
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+    }
+
+    //    ********************************************************************************
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -35,7 +50,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/index.html").permitAll()
+                .antMatchers("/index.html").permitAll()//todo ant matchers has role implement
                 .antMatchers(HttpMethod.GET).permitAll() // permit all html, css, js
                 .anyRequest().authenticated()
                 .and()
@@ -44,7 +59,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .logout().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        ;
+        ;//todo exception handling
     }
 
     // Config Cors for Spring Security

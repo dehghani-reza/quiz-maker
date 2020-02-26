@@ -1,4 +1,4 @@
-package ir.maktab.quizmaker.entities;
+package ir.maktab.quizmaker.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +28,10 @@ public class Account {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "accountList")
+    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @JoinTable(name = "account_role",
+            joinColumns = @JoinColumn(name = "accountId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
     private List<Role> roleList;
 
     @OneToOne

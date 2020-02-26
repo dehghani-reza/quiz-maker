@@ -1,10 +1,9 @@
-package ir.maktab.quizmaker.entities;
+package ir.maktab.quizmaker.model;
 
 import lombok.*;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.List;
 @EqualsAndHashCode(callSuper = true)
