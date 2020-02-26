@@ -8,9 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional//todo its help that session open and bring list that fetch type was lazy
 public class MyUserDetailsService implements UserDetailsService {
 
 

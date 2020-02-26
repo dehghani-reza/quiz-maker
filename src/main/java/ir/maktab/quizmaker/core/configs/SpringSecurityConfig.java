@@ -1,6 +1,7 @@
 package ir.maktab.quizmaker.core.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,7 +26,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService;
 
     @Autowired
-    public SpringSecurityConfig(UserDetailsService userDetailsService) {
+    public SpringSecurityConfig(@Qualifier("myUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -50,6 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/signUp/data").permitAll()
                 .antMatchers("/index.html").permitAll()//todo ant matchers has role implement
                 .antMatchers(HttpMethod.GET).permitAll() // permit all html, css, js
                 .anyRequest().authenticated()

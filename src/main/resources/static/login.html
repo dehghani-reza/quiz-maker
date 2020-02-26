@@ -1,13 +1,38 @@
 <!-- Desktop CSS -->
 <link rel="stylesheet" href="login.css">
-<link rel="stylesheet" href="/assets/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <!-- Desktop Java Script -->
 <script src="login.js"></script>
 
-<script src="/assets/js/jquery-3.4.1.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="/assets/js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="/assets/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="/assets/js/jquery-3.4.1.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="/assets/js/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="/assets/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
 
+    function get_action(form)
+    {
+        var v = grecaptcha.getResponse();
+        if(v.length == 0)
+        {
+            document.getElementById('captcha').innerHTML="You can't leave Captcha Code empty";
+            return false;
+        }
+        else
+        {
+            document.getElementById('captcha').innerHTML="Captcha completed";
+            return true;
+        }
+    }
+
+</script>
 <div class="login-wrap">
     <div class="login-html">
         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
@@ -17,7 +42,7 @@
                 <div class="sign-in-htm">
                     <div class="group">
                         <label for="usernameInput" class="label">Username</label>
-                        <input id="usernameInput"  type="text" class="input">
+                        <input id="usernameInput" type="text" class="input">
                     </div>
                     <div class="group">
                         <label for="passwordInput" class="label">Password</label>
@@ -35,13 +60,15 @@
                         Login
                     </button>
                     <div class="alert alert-danger loginFailedMessage" role="alert" id="loginFailedMessage"
-                         style="margin-top: 5px ; border-radius: 30px ">
+                         style="margin-top: 20px ; display: none ">
                         Login Failed ...
                     </div>
                     <div class="hr"></div>
                     <div class="foot-lnk">
                         <a href="#forgot">Forgot Password?</a>
                     </div>
+                    <div class="g-recaptcha" id="rcaptcha" style="margin-top: 70px" data-sitekey="site key"></div>
+                    <span id="captcha" style="color:red" /></span>
                 </div>
             </form>
             <form>
@@ -59,20 +86,26 @@
                         <input id="emailAddress" type="email" class="input">
                     </div>
                     <div class="group">
-                        <input type="submit" class="btn btn-primary btn-lg btn-block"
-                               style="border-radius: 30px" value="Sign Up">
+                        <label for="firstName" class="label">first Name</label>
+                        <input id="firstName" type="email" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="lastName" class="label">last Name</label>
+                        <input id="lastName" type="email" class="input">
+                    </div>
+                    <div class="toggle" style="height: 50px">
+                        <input type="radio" name="sizeBy" value="ROLE_TEACHER" id="teacher"/>
+                        <label for="teacher">Teacher</label>
+                        <input type="radio" name="sizeBy" value="ROLE_STUDENT" id="student" checked="checked"/>
+                        <label for="student">Student</label>
                     </div>
 
-<!--                    <button type="button"-->
-<!--                            class="button"-->
-<!--                            onclick="login()">-->
-<!--                        Login-->
-<!--                    </button>-->
-
-                    <div class="hr"></div>
-                    <div class="foot-lnk">
-                        <label for="tab-1">Already Member?</label>
-                    </div>
+                    <button type="button"
+                            class="btn btn-primary btn-lg btn-block"
+                            style="border-radius: 30px"
+                            onclick="signUp()">
+                        Sign Up
+                    </button>
                 </div>
             </form>
 

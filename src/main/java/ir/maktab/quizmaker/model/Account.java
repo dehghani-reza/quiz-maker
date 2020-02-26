@@ -27,14 +27,14 @@ public class Account {
     @Column(unique = true)
     private String email;
 
-//    @JsonIgnore//todo really amazing tip its like lombok and going in to loop
-    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+//    @JsonIgnore//todo really amazing tip its like lombok and going in to loop but remember we dont sent this object we sent dto of this class
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private List<Role> roleList;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "personId")
     private Person person;
 
