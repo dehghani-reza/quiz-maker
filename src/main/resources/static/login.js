@@ -48,7 +48,7 @@ function signUp() {
     const email = $("#emailAddress").val();
     const firstName = $("#firstName").val();
     const lastName = $("#lastName").val();
-    const roleName = $(".toggle:checked").val();
+    const roleName = $("input:radio[name='position']:checked").val();
     const userAuthenticationCommand = {
         "username": username,
         "password": password,
@@ -64,13 +64,13 @@ function signUp() {
         /*beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
         },*/
-        headers: {
-            "Authorization": "Basic " + btoa(username + ":" + password)
-        },
+        // headers: {
+        //     "Authorization": "Basic " + btoa(username + ":" + password)
+        // },
         contentType: "application/json; charset=utf-8",
         success: function (data, textStatus) {
             if (data.message !== null) {
-                alert(data.message+"please wait until manager confirm you");
+                alert(data.message+"\nplease wait until manager confirm you");
             } else {
                 alert("some things went wrong");
             }

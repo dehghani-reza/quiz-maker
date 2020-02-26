@@ -16,6 +16,10 @@ import java.util.List;
 @DiscriminatorValue(value = "teacher")
 public class Teacher extends Person {
 
+    public Teacher(Long personId, String firstName, String lastName, Account account) {
+        super(personId, firstName, lastName, account);
+    }
+
     @OneToMany(mappedBy = "teacher")
     private List<Course> courseList;
 }

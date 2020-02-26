@@ -14,6 +14,10 @@ import java.util.List;
 @DiscriminatorValue(value = "student")
 public class Student extends Person {
 
+    public Student(Long personId, String firstName, String lastName, Account account) {
+        super(personId, firstName, lastName, account);
+    }
+
     @ManyToMany
     @JoinTable(name = "student_course",
             joinColumns = @JoinColumn(name = "personId"),
