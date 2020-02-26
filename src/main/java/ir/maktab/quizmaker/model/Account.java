@@ -1,8 +1,7 @@
 package ir.maktab.quizmaker.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,6 +27,7 @@ public class Account {
     @Column(unique = true)
     private String email;
 
+//    @JsonIgnore//todo really amazing tip its like lombok and going in to loop
     @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
