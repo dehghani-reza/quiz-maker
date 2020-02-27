@@ -15,30 +15,19 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<script>
-
-    function get_action(form)
-    {
-        var v = grecaptcha.getResponse();
-        if(v.length == 0)
-        {
-            document.getElementById('captcha').innerHTML="You can't leave Captcha Code empty";
-            return false;
-        }
-        else
-        {
-            document.getElementById('captcha').innerHTML="Captcha completed";
-            return true;
-        }
-    }
-
+<script type="text/javascript">
+    var onloadCallback = function() {
+        grecaptcha.render('form-login', {
+            'sitekey' : '6LdNp9wUAAAAALGfhm8wv-DOFkkk_ZJjh5ijOMTm'
+        });
+    };
 </script>
 <div class="login-wrap">
     <div class="login-html">
         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
         <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
         <div class="login-form">
-            <form>
+            <form id="form-login">
                 <div class="sign-in-htm">
                     <div class="group">
                         <label for="usernameInput" class="label">Username</label>
@@ -56,6 +45,7 @@
                     <button type="button"
                             class="btn btn-primary btn-lg btn-block"
                             style="border-radius: 30px"
+                            id="login-button"
                             onclick="login()">
                         Login
                     </button>
@@ -67,7 +57,7 @@
                     <div class="foot-lnk">
                         <a href="#forgot">Forgot Password?</a>
                     </div>
-                    <div class="g-recaptcha" id="rcaptcha" style="margin-top: 70px" data-sitekey="site key"></div>
+                    <div class="g-recaptcha" id="rcaptcha" style="margin-top: 70px" data-sitekey="6LdNp9wUAAAAALGfhm8wv-DOFkkk_ZJjh5ijOMTm" ></div>
                     <span id="captcha" style="color:red" /></span>
                 </div>
             </form>
@@ -75,11 +65,11 @@
                 <div class="sign-up-htm">
                     <div class="group">
                         <label for="newUsernameInput" class="label">Username</label>
-                        <input id="newUsernameInput" type="text" class="input">
+                        <input id="newUsernameInput" type="text" class="input" required>
                     </div>
                     <div class="group">
                         <label for="newPasswordInput" class="label">Password</label>
-                        <input id="newPasswordInput" type="password" class="input" data-type="password">
+                        <input id="newPasswordInput" type="password" class="input" data-type="password" required>
                     </div>
                     <div class="group">
                         <label for="emailAddress" class="label">Email Address</label>

@@ -1,4 +1,5 @@
 function login() {
+    recaptcha();
     const username = $("#usernameInput").val();
     const password = $("#passwordInput").val();
     const userAuthenticationCommand = {
@@ -49,7 +50,7 @@ function signUp() {
     const firstName = $("#firstName").val();
     const lastName = $("#lastName").val();
     const roleName = $("input:radio[name='position']:checked").val();
-    const userAuthenticationCommand = {
+    const userSignUpCommand = {
         "username": username,
         "password": password,
         "email": email,
@@ -60,13 +61,7 @@ function signUp() {
     $.ajax({
         url: serverUrl() + "/signUp/data",
         type: "POST",
-        data: JSON.stringify(userAuthenticationCommand),
-        /*beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-        },*/
-        // headers: {
-        //     "Authorization": "Basic " + btoa(username + ":" + password)
-        // },
+        data: JSON.stringify(userSignUpCommand),
         contentType: "application/json; charset=utf-8",
         success: function (data, textStatus) {
             if (data.message !== null) {
@@ -81,3 +76,11 @@ function signUp() {
     });
 }
 //**********************************
+function recaptcha() {
+
+    var recaptcha = $("#g-recaptcha-response").val();
+    if (recaptcha === "") {
+        alert("Please check the recaptcha");
+        throw DOMException;
+    }
+}

@@ -18,7 +18,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account signUpAccount(Account account) throws NotValidAccountException {
-        if(account.getPassword()==null|account.getUsername()==null||account.getEmail()==null){
+        if(account.getPassword().equals("") | account.getUsername().equals("") ||account.getEmail().equals("")){
             throw new NotValidAccountException("this Account cant be created");
         }
         return accountRepository.save(account);

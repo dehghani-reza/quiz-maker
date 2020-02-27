@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 @EnableWebSecurity//todo ask what is difference between this annotation and config?
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    UserDetailsService userDetailsService;
+    final UserDetailsService userDetailsService;
 
     @Autowired
     public SpringSecurityConfig(@Qualifier("myUserDetailsService") UserDetailsService userDetailsService) {
@@ -32,7 +33,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean//todo how to encode pass properly
     public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     //todo authentication success handler for redirect to proper page depend on role
