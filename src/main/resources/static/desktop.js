@@ -38,3 +38,9 @@ function showFirstMessage(message) {
     $("#first-login-message-alert").html(message);
     $("#first-login-message-alert").fadeIn(2000).fadeOut(10000);
 }
+
+function loadPage(page) {
+    if (page === 'load-pending-account') {
+        $('#app-content-load').load('features/manager/load-pending-account.html');
+    }
+}

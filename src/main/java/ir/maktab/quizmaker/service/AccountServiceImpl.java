@@ -6,6 +6,8 @@ import ir.maktab.quizmaker.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -22,6 +24,11 @@ public class AccountServiceImpl implements AccountService {
             throw new NotValidAccountException("this Account cant be created");
         }
         return accountRepository.save(account);
+    }
+
+    @Override
+    public List<Account> loadPendedAccount() {
+       return accountRepository.findAllByEnabledFalse();
     }
 
 
