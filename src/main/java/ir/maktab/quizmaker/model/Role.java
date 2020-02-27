@@ -20,6 +20,7 @@ public class Role {
     private Long roleId;
 
     @Enumerated(EnumType.STRING)
+    @Column(unique = true)
     private RoleName roleName;
 
     @ManyToMany(mappedBy = "roleList")

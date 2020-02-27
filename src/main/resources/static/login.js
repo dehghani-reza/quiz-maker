@@ -80,7 +80,7 @@ function recaptcha() {
 
     var recaptcha = $("#g-recaptcha-response").val();
     if (recaptcha === "") {
-        alert("Please check the recaptcha");
-        throw DOMException;
+        // alert("Please check the recaptcha");
+        // throw DOMException; todo
     }
 }
