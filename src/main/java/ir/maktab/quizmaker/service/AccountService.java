@@ -1,5 +1,7 @@
 package ir.maktab.quizmaker.service;
 
+import ir.maktab.quizmaker.dto.AccountDto;
+import ir.maktab.quizmaker.dto.AccountSubmitDto;
 import ir.maktab.quizmaker.dto.SignUpAccountDto;
 import ir.maktab.quizmaker.exceptions.NotValidAccountException;
 import ir.maktab.quizmaker.model.Account;
@@ -13,5 +15,5 @@ public interface AccountService {
 
     List<Account> loadPendedAccount();
 
-    Account submitAccountByManger(String username , List<Role> roles);
+    Account submitAccountByManger(AccountSubmitDto accountSubmitDto);
 }

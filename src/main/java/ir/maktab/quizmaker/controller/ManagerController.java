@@ -36,17 +36,7 @@ public class ManagerController {
 
     @PostMapping("/submit")
     private OutMessage submitAccountByManager(@RequestBody AccountSubmitDto accountSubmitDto) {
-        System.out.println(accountSubmitDto.toString());
-        List<Role> roleList = new ArrayList<>();
-        if(!(accountSubmitDto.getRole()==null||accountSubmitDto.getRole().equals("")||accountSubmitDto.getRole().isEmpty())){
-            if(accountSubmitDto.getRole().contains("TEACHER")){
-                roleList.add(new Role(null, RoleName.ROLE_TEACHER,null));
-            }
-            if(accountSubmitDto.getRole().contains("STUDENT")){
-                roleList.add(new Role(null, RoleName.ROLE_STUDENT,null));
-            }
-        }
-        Account account = accountService.submitAccountByManger(accountSubmitDto.getUsername(), roleList);
+        Account account = accountService.submitAccountByManger(accountSubmitDto);
         return new OutMessage("successfully submit user:" + account.getUsername());
     }
 }

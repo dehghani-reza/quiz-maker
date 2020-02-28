@@ -15,4 +15,5 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     List<Account> findAllByEnabledFalse();
 
     Account findByUsername(String username);
+
 }

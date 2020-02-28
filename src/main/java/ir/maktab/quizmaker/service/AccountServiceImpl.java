@@ -1,5 +1,6 @@
 package ir.maktab.quizmaker.service;
 
+import ir.maktab.quizmaker.dto.AccountSubmitDto;
 import ir.maktab.quizmaker.dto.SignUpAccountDto;
 import ir.maktab.quizmaker.exceptions.NotValidAccountException;
 import ir.maktab.quizmaker.model.*;
@@ -10,9 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Array;
+import java.time.Period;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,37 +32,25 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account signUpAccount(SignUpAccountDto signUpAccountDto) throws NotValidAccountException {//todo need to refactor and break down to little methods with single task
-        List<Role> roleList = new ArrayList<>();
-        Person person;
-        if (signUpAccountDto.getRoleName().contains("TEACHER")) {
-            Optional<Role> teacher = roleRepository.findByRoleName(RoleName.ROLE_TEACHER);
-            if (teacher.isEmpty()) {
-                roleList.add(new Role(null, RoleName.ROLE_TEACHER, null));
-                person = new Teacher(null, signUpAccountDto.getFirstName(), signUpAccountDto.getLastName(), null);
-            } else {
-                roleList.add(teacher.get());
-                person = new Teacher(null, signUpAccountDto.getFirstName(), signUpAccountDto.getLastName(), null);
-            }
-        } else if (signUpAccountDto.getRoleName().contains("STUDENT")) {
-            Optional<Role> student = roleRepository.findByRoleName(RoleName.ROLE_STUDENT);
-            if (student.isEmpty()) {
-                roleList.add(new Role(null, RoleName.ROLE_STUDENT, null));
-                person = new Student(null, signUpAccountDto.getFirstName(), signUpAccountDto.getLastName(), null);
-            } else {
-                roleList.add(student.get());
-                person = new Student(null, signUpAccountDto.getFirstName(), signUpAccountDto.getLastName(), null);
-            }
-
-        } else {
-            throw new NotValidAccountException("Role Not valid");
-        }
-        Account account = new Account(null, signUpAccountDto.getUsername(), passwordEncoder.encode(signUpAccountDto.getPassword()), signUpAccountDto.getEmail(), roleList, null, false);
-        person.setAccount(account);
-        account.setPerson(person);
-        if (account.getPassword().equals("") | account.getUsername().equals("") || account.getEmail().equals("")) {
+    public Account signUpAccount(SignUpAccountDto signUpAccountDto) throws NotValidAccountException {
+        // validation
+        if (signUpAccountDto.getPassword().equals("") | signUpAccountDto.getUsername().equals("") || signUpAccountDto.getEmail().equals("")) {
             throw new NotValidAccountException("this Account cant be created");
         }
+        //creating account progress
+        Role role = convertStringToValidRole(signUpAccountDto.getRoleName());
+        List<Role> roleList = Collections.singletonList(role);
+        Person person;
+        if (role.getRoleName().equals(RoleName.ROLE_TEACHER)) {
+            person = new Teacher(null, signUpAccountDto.getFirstName(), signUpAccountDto.getLastName(), null);
+        } else {
+            person = new Student(null, signUpAccountDto.getFirstName(), signUpAccountDto.getLastName(), null);
+        }
+        Account account = new Account(null, signUpAccountDto.getUsername(),
+                passwordEncoder.encode(signUpAccountDto.getPassword()),
+                signUpAccountDto.getEmail(),
+                roleList,
+                person, false);
         return accountRepository.save(account);
     }
 
@@ -70,18 +60,80 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account submitAccountByManger(String username, List<Role> roles) {
-        Account account = accountRepository.findByUsername(username);
+    public Account submitAccountByManger(AccountSubmitDto accountSubmitDto) {
+        Account account = accountRepository.findByUsername(accountSubmitDto.getUsername());
         account.setEnabled(true);
-        if (!roles.isEmpty()) {
-            for (int i = 0; i < account.getRoleList().size(); i++) {
-                roleRepository.deleteById(account.getRoleList().get(i).getRoleId());
+        if (accountSubmitDto.getRole() == null || accountSubmitDto.getRole().equals("") || accountSubmitDto.getRole().isEmpty()) {
+            return accountRepository.save(account);
+        }
+        List<RoleName> managerConfirmRoleString = convertMultipleStringToRoleNameList(accountSubmitDto.getRole());
+        List<Role> managerConfirmRole = managerConfirmRoleString.stream().map(roleName -> {
+            try {
+                return convertStringToValidRole(roleName.toString());
+            } catch (NotValidAccountException e) {
+                System.out.println(e.getMessage() + "when want to submit user by username: " + accountSubmitDto.getUsername());
             }
-            roles.forEach(role -> System.out.println(role.getRoleName()));
-            account.setRoleList(roles);
+            return null;
+        }).collect(Collectors.toList());
+        if (!compareAccountRoleWithWhatManagerSubmit(managerConfirmRole, account.getRoleList())) {
+            account.setRoleList(null);
+            if (account.getPerson() instanceof Student && managerConfirmRole.size() == 2) {
+                Person person = new Teacher(null, account.getPerson().getFirstName(), account.getPerson().getLastName(), null);
+                account.setPerson(person);
+            } else if (managerConfirmRole.size() == 1) {
+                Person person = createPersonByRole(managerConfirmRole.get(0), account.getPerson().getFirstName(), account.getPerson().getLastName());
+                account.setPerson(person);
+            }
+            accountRepository.save(account);
+            account.setRoleList(managerConfirmRole);
         }
         return accountRepository.save(account);
     }
 
+    private boolean compareAccountRoleWithWhatManagerSubmit(List<Role> managerConfirm, List<Role> accountSignedUp) {
+        int counter = managerConfirm.size();
+        Collection<String> strings;
+        Collection<String> strings1;
+        strings = managerConfirm.stream().map(role -> role.getRoleName().toString()).collect(Collectors.toList());
+        strings1 = accountSignedUp.stream().map(role -> role.getRoleName().toString()).collect(Collectors.toList());
+        if(strings.size()!=strings1.size()) return false;
+        strings.retainAll(strings1);
+        return strings.size() == counter;
+    }
 
+    private Role convertStringToValidRole(String role) throws NotValidAccountException {
+        RoleName roleName;
+        if (role.contains("TEACHER")) {
+            roleName = RoleName.ROLE_TEACHER;
+        } else if (role.contains("STUDENT")) {
+            roleName = RoleName.ROLE_STUDENT;
+        } else {
+            throw new NotValidAccountException("role not valid");
+        }
+        Optional<Role> optionalRole = roleRepository.findByRoleName(roleName);
+        return optionalRole.orElseGet(() -> switch (roleName.toString()) {
+            case "ROLE_TEACHER" -> new Role(null, RoleName.ROLE_TEACHER, null);
+            case "ROLE_STUDENT" -> new Role(null, RoleName.ROLE_STUDENT, null);
+            default -> throw new IllegalStateException("Unexpected value: " + roleName.toString());
+        });
+    }
+
+    private List<RoleName> convertMultipleStringToRoleNameList(String role) {
+        List<RoleName> roleList = new ArrayList<>();
+        if (role.contains("TEACHER")) {
+            roleList.add(RoleName.ROLE_TEACHER);
+        }
+        if (role.contains("STUDENT")) {
+            roleList.add(RoleName.ROLE_STUDENT);
+        }
+        return roleList;
+    }
+
+    private Person createPersonByRole(Role role, String firstName, String lastName) {
+        if (role.getRoleName().equals(RoleName.ROLE_TEACHER)) {
+            return new Teacher(null, firstName, lastName, null);
+        } else {
+            return new Student(null, firstName, lastName, null);
+        }
+    }
 }
