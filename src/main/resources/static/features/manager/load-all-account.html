@@ -2,10 +2,20 @@
 
 
 <div id="load-pending-account-list">
-    <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl;">
+    <div>
+        <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl;">
+        </div>
     </div>
+
     <div class="table-responsive">
-        <h2>All Accounts: </h2>
+        <div style="display: flex ; justify-content: space-between">
+            <div>
+                <h2>All Accounts: </h2>
+            </div>
+            <div style="padding: 5px ; width: 25%">
+                <input class="form-control mb-4" id="tableSearch" type="text" placeholder="Search list items"/>
+            </div>
+        </div>
         <table class="table table-striped table-hover" style="padding-top: 10px">
             <thead class="thead-dark">
             <tr>
@@ -104,3 +114,4 @@
         </div>
     </div>
 </div>
+<!--todo it can be update able table-->

@@ -48,6 +48,7 @@ public class ManagerController {
                         accountService.convertBooleanStatusToString(account.isEnabled()),
                         accountService.convertRolesListToString(account.getRoleList())))
                 .collect(Collectors.toList());
+        accountEditableDtos.removeIf(accountEditableDto -> accountEditableDto.getRole().contains("manager"));
         return accountEditableDtos;
     }
 
