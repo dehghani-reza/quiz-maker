@@ -1,8 +1,6 @@
 package ir.maktab.quizmaker.service;
 
-import ir.maktab.quizmaker.dto.AccountDto;
-import ir.maktab.quizmaker.dto.AccountSubmitDto;
-import ir.maktab.quizmaker.dto.SignUpAccountDto;
+import ir.maktab.quizmaker.dto.*;
 import ir.maktab.quizmaker.exceptions.NotValidAccountException;
 import ir.maktab.quizmaker.model.Account;
 import ir.maktab.quizmaker.model.Role;
@@ -15,5 +13,15 @@ public interface AccountService {
 
     List<Account> loadPendedAccount();
 
+    List<Account> loadAllAccount();
+
     Account submitAccountByManger(AccountSubmitDto accountSubmitDto);
+
+    String convertRolesListToString(List<Role> roles);
+
+    String convertBooleanStatusToString(boolean status);
+
+    Account editAccountByManager(AccountEditedByManagerFromFrontDto account);
+
+    Account editAccountByManager(Account account);
 }

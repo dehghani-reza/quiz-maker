@@ -1,0 +1,106 @@
+<script src="features/manager/load-all-account.js"></script>
+
+
+<div id="load-pending-account-list">
+    <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl;">
+    </div>
+    <div class="table-responsive">
+        <h2>All Accounts: </h2>
+        <table class="table table-striped table-hover" style="padding-top: 10px">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">firstName</th>
+                <th scope="col">lastName</th>
+                <th scope="col">username</th>
+                <th scope="col">Account Status</th>
+                <th scope="col">roles</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Unable</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--                           modals                                    -->
+<div id="submit-account-by-manager-modal-box">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+
+                    <form id="form-submit-pended-account">
+                        <div class="sign-in-htm">
+                            <label>
+                                <label for="usernameInput" class="label" >Username</label>
+                                <input id="usernameInput" class="form-control" type="text" placeholder="Readonly input here…" readonly>
+                            </label>
+                            <div class="form-group">
+                                <label for="First-name-input" class="col-form-label">First Name:</label>
+                                <input type="text" class="form-control" id="First-name-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="Last-name-input" class="col-form-label">Last Name:</label>
+                                <input type="text" class="form-control" id="Last-name-input">
+                            </div>
+
+                            <p style="padding-top: 50px"> <a class="tooltip-test" title="if leave it empty its doesn't change">Role('s):</a></p>
+                            <div class="inputGroup">
+                                <input id="position1" name="position" type="checkbox" value="STUDENT"/>
+                                <label for="position1">Student</label>
+                            </div>
+                            <div class="inputGroup">
+                                <input id="position2" name="position2" type="checkbox"  value="TEACHER"/>
+                                <label for="position2">Teacher</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning" id="submit-account" onclick="editAccountForDataBase()">Change
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--        second modal           -->
+    <div class="modal fade" id="unableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unableModalLabel">Unable Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-1">
+
+                    <form id="form-unable-pended-account">
+                        <div class="sign-in-htm">
+                            <label>
+                                <label for="usernameInputUnable" class="label" >Username</label>
+                                <input id="usernameInputUnable" class="form-control" type="text" placeholder="Readonly input here…" readonly>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="unable-account" onclick="unableAccountForDataBase()">Unable
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,8 @@ $('#load-pending-account-list').ready(function () {
     loadPendingFromDBForManager();
 });
 
+var globalData;
+
 function loadPendingFromDBForManager() {
     const username = window.authenticatedUsername;
     const password = window.authenticatedPassword;
@@ -22,6 +24,7 @@ function loadPendingFromDBForManager() {
 }
 
 function prepareTable(data) {
+    globalData = data;
     let content = '';
     for (let i = 0; i < data.length; i++) {
         content += "<tr>";
@@ -31,7 +34,7 @@ function prepareTable(data) {
         content += "<td >" + data[i].email + "</td>";
         content += "<td >" + data[i].role + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-primary btn-sm' onclick='showSubmitIncidentByEmployeeModal(" + i + ")'>edit</button>" +
+            "<button type='button' class='btn btn-outline-success btn-sm' onclick='showSubmitIncidentByEmployeeModal(" + i + ")'>submit</button>" +
             "</td>";
         content += "</tr>";
     }
@@ -40,7 +43,7 @@ function prepareTable(data) {
 
 function showSubmitIncidentByEmployeeModal(data) {
 
-    $("#usernameInput").val(document.getElementById(data).innerText);
+    $("#usernameInput").val(globalData[data].username);
     $("#exampleModal").modal('toggle');
 }
 
@@ -64,7 +67,8 @@ function submitAccountForDataBase() {
         },
         success: function (data, textStatus) {
             if (data.message !== null) {
-                alert(data.message);
+                showSubmitMessage(data.message);
+                loadPendingFromDBForManager()
             } else {
                 alert("some things went wrong");
             }
@@ -74,5 +78,9 @@ function submitAccountForDataBase() {
         }
     });
     $("#exampleModal").modal('hide');
-    loadPendingFromDBForManager()
+}
+
+function showSubmitMessage(message) {
+    $("#submit-status-message-alert").html(message);
+    $("#submit-status-message-alert").fadeIn().fadeOut(10000);
 }

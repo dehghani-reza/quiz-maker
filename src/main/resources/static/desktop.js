@@ -43,4 +43,7 @@ function loadPage(page) {
     if (page === 'load-pending-account') {
         $('#app-content-load').load('features/manager/load-pending-account.html');
     }
+    if(page==='load-all-account'){
+        $('#app-content-load').load('features/manager/load-all-account.html');
+    }
 }

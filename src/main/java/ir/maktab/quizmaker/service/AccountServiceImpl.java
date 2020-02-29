@@ -1,6 +1,8 @@
 package ir.maktab.quizmaker.service;
 
+import ir.maktab.quizmaker.dto.AccountEditedByManagerFromFrontDto;
 import ir.maktab.quizmaker.dto.AccountSubmitDto;
+import ir.maktab.quizmaker.dto.AccountUnableDto;
 import ir.maktab.quizmaker.dto.SignUpAccountDto;
 import ir.maktab.quizmaker.exceptions.NotValidAccountException;
 import ir.maktab.quizmaker.model.*;
@@ -11,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Array;
-import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,33 +60,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<Account> loadAllAccount() {
+        return accountRepository.findAll();
+    }
+
+    @Override
     public Account submitAccountByManger(AccountSubmitDto accountSubmitDto) {
         Account account = accountRepository.findByUsername(accountSubmitDto.getUsername());
         account.setEnabled(true);
         if (accountSubmitDto.getRole() == null || accountSubmitDto.getRole().equals("") || accountSubmitDto.getRole().isEmpty()) {
             return accountRepository.save(account);
         }
-        List<RoleName> managerConfirmRoleString = convertMultipleStringToRoleNameList(accountSubmitDto.getRole());
-        List<Role> managerConfirmRole = managerConfirmRoleString.stream().map(roleName -> {
-            try {
-                return convertStringToValidRole(roleName.toString());
-            } catch (NotValidAccountException e) {
-                System.out.println(e.getMessage() + "when want to submit user by username: " + accountSubmitDto.getUsername());
-            }
-            return null;
-        }).collect(Collectors.toList());
-        if (!compareAccountRoleWithWhatManagerSubmit(managerConfirmRole, account.getRoleList())) {
-            account.setRoleList(null);
-            if (account.getPerson() instanceof Student && managerConfirmRole.size() == 2) {
-                Person person = new Teacher(null, account.getPerson().getFirstName(), account.getPerson().getLastName(), null);
-                account.setPerson(person);
-            } else if (managerConfirmRole.size() == 1) {
-                Person person = createPersonByRole(managerConfirmRole.get(0), account.getPerson().getFirstName(), account.getPerson().getLastName());
-                account.setPerson(person);
-            }
-            accountRepository.save(account);
-            account.setRoleList(managerConfirmRole);
-        }
+        changeRole(accountSubmitDto.getRole(),account);
         return accountRepository.save(account);
     }
 
@@ -136,4 +121,69 @@ public class AccountServiceImpl implements AccountService {
             return new Student(null, firstName, lastName, null);
         }
     }
+
+    public String convertRolesListToString(List<Role> roles){
+        String rolesString = "";
+        for (int i = 0; i <roles.size() ; i++) {
+            String trimmer = roles.get(i).getRoleName().toString();
+            trimmer = trimmer.replace("ROLE_", "");
+            rolesString = rolesString.concat(trimmer+"/").toLowerCase();
+        }
+        rolesString = rolesString.substring(0,rolesString.length()-1);
+        return rolesString;
+    }
+
+    @Override
+    public String convertBooleanStatusToString(boolean status) {
+        if(!status){
+            return "Unable";
+        }
+        return "Enabled";
+    }
+
+    @Override
+    public Account editAccountByManager(AccountEditedByManagerFromFrontDto account) {
+        Account byUsername = accountRepository.findByUsername(account.getUsername());
+        byUsername.getPerson().setFirstName(account.getChangedFirstName());
+        byUsername.getPerson().setLastName(account.getChangedLastName());
+        accountRepository.save(byUsername);
+        if (account.getRole() == null || account.getRole().equals("") || account.getRole().isEmpty()) {
+            return byUsername;
+        }
+        changeRole(account.getRole(),byUsername);
+        return accountRepository.save(byUsername);
+    }
+
+    @Override
+    public Account editAccountByManager(Account account) {
+        Account byUsername = accountRepository.findByUsername(account.getUsername());
+        byUsername.setEnabled(false);
+        return accountRepository.save(byUsername);
+    }
+
+    private void changeRole(String multipleRoleStringByManager , Account account){
+        List<RoleName> managerConfirmRoleString = convertMultipleStringToRoleNameList(multipleRoleStringByManager);
+        List<Role> managerConfirmRole = managerConfirmRoleString.stream().map(roleName -> {
+            try {
+                return convertStringToValidRole(roleName.toString());
+            } catch (NotValidAccountException e) {
+                System.out.println(e.getMessage() + "when want to submit user by username: " + account.getUsername());
+            }
+            return null;
+        }).collect(Collectors.toList());
+        if (!compareAccountRoleWithWhatManagerSubmit(managerConfirmRole, account.getRoleList())) {
+            account.setRoleList(null);
+            if (account.getPerson() instanceof Student && managerConfirmRole.size() == 2) {
+                Person person = new Teacher(null, account.getPerson().getFirstName(), account.getPerson().getLastName(), null);
+                account.setPerson(person);
+            } else if (managerConfirmRole.size() == 1) {
+                Person person = createPersonByRole(managerConfirmRole.get(0), account.getPerson().getFirstName(), account.getPerson().getLastName());
+                account.setPerson(person);
+            }
+            accountRepository.save(account);
+            account.setRoleList(managerConfirmRole);
+        }
+    }
+
+
 }
