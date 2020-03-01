@@ -11,13 +11,17 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackageClasses = AccountRepository.class)
 public class QuizMakerApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         SpringApplication.run(QuizMakerApplication.class, args);
     }
 

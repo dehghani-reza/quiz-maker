@@ -93,3 +93,23 @@ code {
     background-color: #9aa3ac;
     padding: 0 8px;
 }
+/**********************************/
+.input-icons i {
+    position: absolute;
+}
+
+.input-icons {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.icon1 {
+    padding: 10px;
+    min-width: 40px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}

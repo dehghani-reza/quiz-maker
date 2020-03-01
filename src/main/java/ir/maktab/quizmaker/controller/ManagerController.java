@@ -2,14 +2,18 @@ package ir.maktab.quizmaker.controller;
 
 import ir.maktab.quizmaker.dto.*;
 import ir.maktab.quizmaker.model.Account;
+import ir.maktab.quizmaker.model.Course;
 import ir.maktab.quizmaker.model.Role;
 import ir.maktab.quizmaker.model.RoleName;
 import ir.maktab.quizmaker.service.AccountService;
+import ir.maktab.quizmaker.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +23,12 @@ import java.util.stream.Collectors;
 public class ManagerController {
 
     AccountService accountService;
+    CourseService courseService;
 
     @Autowired
-    public ManagerController(AccountService accountService) {
+    public ManagerController(AccountService accountService, CourseService courseService) {
         this.accountService = accountService;
+        this.courseService = courseService;
     }
 
     @PostMapping(value = "/load-pended-account")
@@ -66,10 +72,30 @@ public class ManagerController {
 
     @PostMapping("/unableAccount")
     private OutMessage unableAccountByManager(@RequestBody Account AccountUnableDto) {
-        System.out.println(AccountUnableDto);
         Account account1 = accountService.editAccountByManager(AccountUnableDto);
         return new OutMessage("successfully unable user:" + account1.getUsername());
     }
 
+    @PostMapping("/create-course")
+    private OutMessage createCourseByManager(@RequestBody CourseCreationDto courseCreationDto) {
+        System.out.println(courseCreationDto.toString());
+        Course courseByManager = null;
+        try {
+            courseByManager = courseService.createCourseByManager(courseCreationDto);
+        } catch (ParseException e) {
+            return new OutMessage(e.getMessage());
+        }
+        return new OutMessage("course successfully created by id " + courseByManager.getCourseId());
+    }
 
+    @PostMapping("/load-all-course")
+    private List<CourseOutDto> loadAllCourseForManager() {
+        return courseService.loadAllCourseForManager();
+    }
+
+    @PostMapping("/delete-course")
+    private OutMessage deleteCourseByManager(@RequestBody Course courseDeleteDto) {
+        courseService.deleteCourseByManager(courseDeleteDto.getCourseId());
+        return new OutMessage("Course with Id "+courseDeleteDto.getCourseId()+" deleted");
+    }
 }

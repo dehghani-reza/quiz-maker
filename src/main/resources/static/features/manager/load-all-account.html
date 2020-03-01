@@ -1,37 +1,41 @@
 <script src="features/manager/load-all-account.js"></script>
 
-
 <div id="load-pending-account-list">
-    <div>
-        <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl;">
-        </div>
-    </div>
-
     <div class="table-responsive">
-        <div style="display: flex ; justify-content: space-between">
-            <div>
-                <h2>All Accounts: </h2>
+            <div style="display: flex ; justify-content: space-between">
+                <div class="alert alert-success" id="submit-status-message-alert" role="alert"
+                     style="display: none; direction: rtl; z-index: +1 ; position: absolute;left: 45%;">
+                </div>
+                <div>
+                    <h2>All Accounts: </h2>
+                </div>
+                <div style="padding-top: 5px ; width: 25%" class="input-icons">
+                    <form>
+                        <i class="fa fa-search icon1"></i>
+                        <input class="form-control mb-4 input-field" id="tableSearch" type="text"
+                               placeholder="Search list items"/>
+                    </form>
+                </div>
             </div>
-            <div style="padding: 5px ; width: 25%">
-                <input class="form-control mb-4" id="tableSearch" type="text" placeholder="Search list items"/>
-            </div>
-        </div>
-        <table class="table table-striped table-hover" style="padding-top: 10px">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">firstName</th>
-                <th scope="col">lastName</th>
-                <th scope="col">username</th>
-                <th scope="col">Account Status</th>
-                <th scope="col">roles</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Unable</th>
-            </tr>
-            </thead>
-            <tbody id="table-body">
 
-            </tbody>
-        </table>
+        <div>
+            <table class="table table-striped table-hover" style="padding-top: 10px">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">firstName</th>
+                    <th scope="col">lastName</th>
+                    <th scope="col">username</th>
+                    <th scope="col">Account Status</th>
+                    <th scope="col">roles</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Unable</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!--                           modals                                    -->
@@ -51,8 +55,9 @@
                     <form id="form-submit-pended-account">
                         <div class="sign-in-htm">
                             <label>
-                                <label for="usernameInput" class="label" >Username</label>
-                                <input id="usernameInput" class="form-control" type="text" placeholder="Readonly input here…" readonly>
+                                <label for="usernameInput" class="label">Username</label>
+                                <input id="usernameInput" class="form-control" type="text"
+                                       placeholder="Readonly input here…" readonly>
                             </label>
                             <div class="form-group">
                                 <label for="First-name-input" class="col-form-label">First Name:</label>
@@ -63,13 +68,15 @@
                                 <input type="text" class="form-control" id="Last-name-input">
                             </div>
 
-                            <p style="padding-top: 50px"> <a class="tooltip-test" title="if leave it empty its doesn't change">Role('s):</a></p>
+                            <p style="padding-top: 50px"><a class="tooltip-test"
+                                                            title="if leave it empty its doesn't change">Role('s):</a>
+                            </p>
                             <div class="inputGroup">
                                 <input id="position1" name="position" type="checkbox" value="STUDENT"/>
                                 <label for="position1">Student</label>
                             </div>
                             <div class="inputGroup">
-                                <input id="position2" name="position2" type="checkbox"  value="TEACHER"/>
+                                <input id="position2" name="position2" type="checkbox" value="TEACHER"/>
                                 <label for="position2">Teacher</label>
                             </div>
                         </div>
@@ -77,13 +84,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning" id="submit-account" onclick="editAccountForDataBase()">Change
+                    <button type="button" class="btn btn-warning" id="submit-account"
+                            onclick="editAccountForDataBase()">Change
                     </button>
                 </div>
             </div>
         </div>
     </div>
-<!--        second modal           -->
+    <!--        second modal           -->
     <div class="modal fade" id="unableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -99,15 +107,17 @@
                     <form id="form-unable-pended-account">
                         <div class="sign-in-htm">
                             <label>
-                                <label for="usernameInputUnable" class="label" >Username</label>
-                                <input id="usernameInputUnable" class="form-control" type="text" placeholder="Readonly input here…" readonly>
+                                <label for="usernameInputUnable" class="label">Username</label>
+                                <input id="usernameInputUnable" class="form-control" type="text"
+                                       placeholder="Readonly input here…" readonly>
                             </label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" id="unable-account" onclick="unableAccountForDataBase()">Unable
+                    <button type="button" class="btn btn-danger" id="unable-account"
+                            onclick="unableAccountForDataBase()">Unable
                     </button>
                 </div>
             </div>

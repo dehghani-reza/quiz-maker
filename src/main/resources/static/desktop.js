@@ -46,4 +46,7 @@ function loadPage(page) {
     if(page==='load-all-account'){
         $('#app-content-load').load('features/manager/load-all-account.html');
     }
+    if(page==='show-add-course-by-manager'){
+        $('#app-content-load').load('features/manager/show-add-course-by-manager.html');
+    }
 }
