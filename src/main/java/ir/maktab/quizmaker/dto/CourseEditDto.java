@@ -12,4 +12,6 @@ public class CourseEditDto {
     private String startDate;
 
     private String endDate;
+
+    private String teacherUsername;
 }

@@ -72,7 +72,7 @@ function addCourseByManager() {
         success: function (data, textStatus) {
             if (data.message !== null) {
                 showEditMessage(data.message);
-                loadAllCourseForManager()
+                $('#app-content-load').load('features/manager/show-add-course-by-manager.html');
             } else {
                 alert("some things went wrong");
             }
@@ -103,7 +103,7 @@ function deleteCourseByManager() {
         success: function (data, textStatus) {
             if (data.message !== null) {
                 showEditMessage(data.message);
-                loadAllCourseForManager()
+                $('#app-content-load').load('features/manager/show-add-course-by-manager.html');
             } else {
                 alert("some things went wrong");
             }

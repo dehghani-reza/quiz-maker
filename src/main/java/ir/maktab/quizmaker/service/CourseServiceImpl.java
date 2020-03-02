@@ -89,6 +89,11 @@ public class CourseServiceImpl implements CourseService {
     public CourseOutDto editCourse(CourseEditDto courseEditDto) throws Exception {
         Optional<Course> course = courseRepository.findById(Long.valueOf(courseEditDto.getCourseId()));
         if(course.isEmpty()) throw new Exception("course with this id does not exist");
+        if (!(courseEditDto.getTeacherUsername()==null||courseEditDto.getTeacherUsername().equals(""))){
+            Optional<Teacher> byAccount_username = teacherRepository.findByAccount_Username(courseEditDto.getTeacherUsername());
+            if(byAccount_username.isEmpty()) throw new Exception("teacher with this id does not exist");
+            course.get().setTeacher(byAccount_username.get());
+        }
         course.get().setCourseTitle(courseEditDto.getCourseTitle());
         course.get().setStartDate(convertStringToDate(courseEditDto.getStartDate(),"yyyy-MM-dd"));
         course.get().setEndDate(convertStringToDate(courseEditDto.getEndDate(),"yyyy-MM-dd"));
@@ -104,7 +109,6 @@ public class CourseServiceImpl implements CourseService {
                 save.getEndDate().toString(),
                 save.getCourseTitle(),
                 teacherName);
-
     }
 
     private LocalDate convertStringToDate(String date , String format){

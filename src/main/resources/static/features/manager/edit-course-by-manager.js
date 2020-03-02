@@ -8,6 +8,9 @@ $('#load-pending-account-list').ready(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+    // Material Select
+    $('.mdb-select').materialSelect({
+    });
 });
 var globalData;
 
@@ -42,6 +45,7 @@ function showEditCourseModal() {
     $("#course-delete-titleInput-edit").val(globalData.courseName);
     $("#course-delete-startDateInput-edit").val(globalData.startDate);
     $("#course-delete-endDateInput-edit").val(globalData.endDate);
+    $("#exampleFormControlSelect1").val(globalData.teacherName);
     $("#editCourse").modal('toggle');
 }
 
@@ -52,11 +56,13 @@ function editCourseByManager() {
     const courseTitle = $("#course-delete-titleInput-edit").val();
     const startDate = $("#course-delete-startDateInput-edit").val();
     const endDate = $("#course-delete-endDateInput-edit").val();
+    const teacherUsername = $("#exampleFormControlSelect1").find(":selected").val();
     const newCourseCommand = {
         "courseId": courseId,
         "courseTitle": courseTitle,
         "startDate": startDate,
         "endDate": endDate,
+        "teacherUsername": teacherUsername
     }
     jQuery.ajax({
         url: serverUrl() + "/manager/edit-course",
@@ -100,9 +106,9 @@ function loadAllTeacher() {
 function teacherDropDown(data) {
     let content = '';
     for (let i = 0; i < data.length; i++) {
-        // content+="<option value="+data[i].username+">"+data[i].firstName+" "+data[i].lastName +"</option>\n"
-        $("#course-delete-teacherInput-edit").html(new Option(data[i].firstName+" "+data[i].lastName,data[i].username));
+        content+="<option value="+data[i].username+">"+data[i].firstName+" "+data[i].lastName +"</option>\n"
     }
+    $("#exampleFormControlSelect1").html(content);
 
 }
 
