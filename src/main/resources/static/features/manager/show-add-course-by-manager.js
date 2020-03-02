@@ -40,7 +40,7 @@ function prepareCourseTable(data) {
         content += "<td id=" + i + ">" + data[i].endDate + "</td>";
         content += "<td >" + data[i].teacherName + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal(" + i + ")'>Edit</button>" +
+            "<button type='button' class='btn btn-primary btn-sm' onclick='showEditCoursePage(" + i + ")'>Course Page</button>" +
             "</td>";
         content += "<td >" +
             "<button type='button' class='btn btn-outline-danger btn-sm' onclick='showDeleteCourseModal(" + i + ")'>Delete</button>" +
@@ -127,7 +127,8 @@ function showDeleteCourseModal(data) {
     $("#deleteCourse").modal('toggle');
 }
 
-function showEditCourseModal() {
+function showEditCoursePage(data) {
+    window.courseEditingData = globalData[data];
     $('#app-content-load').load('features/manager/edit-course-by-manager.html');
 }
 function showEditMessage(message) {

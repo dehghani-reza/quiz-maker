@@ -98,4 +98,14 @@ public class ManagerController {
         courseService.deleteCourseByManager(courseDeleteDto.getCourseId());
         return new OutMessage("Course with Id "+courseDeleteDto.getCourseId()+" deleted");
     }
+
+    @PostMapping("/load-all-teacher")
+    private List<TeacherIdAndNameDto> loadAllTeacher() {
+        return courseService.loadAllTeacher();
+    }
+
+    @PostMapping("/edit-course")
+    private CourseOutDto editCourse(@RequestBody CourseEditDto courseEditDto) throws Exception {
+        return courseService.editCourse(courseEditDto);
+    }
 }
