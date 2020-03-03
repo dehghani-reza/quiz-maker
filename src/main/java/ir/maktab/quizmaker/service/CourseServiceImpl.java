@@ -2,11 +2,9 @@ package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.*;
 import ir.maktab.quizmaker.model.Course;
+import ir.maktab.quizmaker.model.Student;
 import ir.maktab.quizmaker.model.Teacher;
-import ir.maktab.quizmaker.repositories.AccountRepository;
-import ir.maktab.quizmaker.repositories.CourseRepository;
-import ir.maktab.quizmaker.repositories.PersonRepository;
-import ir.maktab.quizmaker.repositories.TeacherRepository;
+import ir.maktab.quizmaker.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,12 +28,14 @@ public class CourseServiceImpl implements CourseService {
     CourseRepository courseRepository;
     PersonRepository personRepository;
     TeacherRepository teacherRepository;
+    StudentRepository studentRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, PersonRepository personRepository,TeacherRepository teacherRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, PersonRepository personRepository,TeacherRepository teacherRepository ,  StudentRepository studentRepository) {
         this.courseRepository = courseRepository;
         this.personRepository = personRepository;
         this.teacherRepository = teacherRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -79,7 +79,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<TeacherIdAndNameDto> loadAllTeacher() {
-        List<Teacher> teacherList = teacherRepository.findAllByAccountNotNull();
+        List<Teacher> teacherList = teacherRepository.findAllByAccountNotNull().stream().filter(teacher ->
+                teacher.getAccount().isEnabled()).collect(Collectors.toList());
         return teacherList.stream().map(teacher -> new TeacherIdAndNameDto(teacher.getFirstName(),
                 teacher.getLastName(),
                 teacher.getAccount().getUsername())).collect(Collectors.toList());
@@ -109,6 +110,27 @@ public class CourseServiceImpl implements CourseService {
                 save.getEndDate().toString(),
                 save.getCourseTitle(),
                 teacherName);
+    }
+
+    @Override
+    public List<StudentInCourseDto> loadAllCourseStudent(Course course) {
+        Optional<Course> byId = courseRepository.findById(course.getCourseId());
+        List<Student> studentList = byId.get().getStudentList();
+        return studentList.stream().map(student -> new StudentInCourseDto(student.getFirstName(),
+                student.getLastName(),
+                student.getAccount().getUsername(),
+                student.getAccount().getEmail())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentInCourseDto> loadAllStudent() {
+
+        List<Student> allByAccountNotNull = studentRepository.findAllByAccountNotNull();
+        allByAccountNotNull = allByAccountNotNull.stream().filter(student -> student.getAccount().isEnabled()).collect(Collectors.toList());
+        return allByAccountNotNull.stream().map(student -> new StudentInCourseDto(student.getFirstName(),
+                student.getLastName(),
+                student.getAccount().getUsername(),
+                student.getAccount().getEmail())).collect(Collectors.toList());
     }
 
     private LocalDate convertStringToDate(String date , String format){

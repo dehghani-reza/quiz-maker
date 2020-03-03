@@ -17,4 +17,8 @@ public interface CourseService {
     List<TeacherIdAndNameDto> loadAllTeacher();
 
     CourseOutDto editCourse(CourseEditDto courseCreationDto) throws Exception;
+
+    List<StudentInCourseDto> loadAllCourseStudent(Course course);
+
+    List<StudentInCourseDto> loadAllStudent();
 }

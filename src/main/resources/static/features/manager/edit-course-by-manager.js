@@ -1,6 +1,5 @@
 $('#load-pending-account-list').ready(function () {
     loadCourseFromWindow(window.courseEditingData);
-    console.info(window.courseEditingData.toString());
     loadAllTeacher();
     $("#courseSearch").on("keyup", function () {
         var value = $(this).val().toLowerCase();
@@ -9,8 +8,7 @@ $('#load-pending-account-list').ready(function () {
         });
     });
     // Material Select
-    $('.mdb-select').materialSelect({
-    });
+    $('.mdb-select').materialSelect({});
 });
 var globalData;
 
@@ -24,11 +22,11 @@ function loadCourseFromWindow(data) {
     content += "<td >" + data.endDate + "</td>";
     content += "<td >" + data.teacherName + "</td>";
     content += "<td >" +
-        "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>Alter Course</button>" +
+        "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>Alter Course (Add Teacher)</button>" +
         "</td>";
-    content += "<td >" +
-        "<button type='button' class='btn btn-outline-danger btn-sm' onclick='showDeleteCourseModalInEditPage()'>Delete</button>" +
-        "</td>";
+    // content += "<td >" +
+    //     "<button type='button' class='btn btn-outline-danger btn-sm' onclick='showDeleteCourseModalInEditPage()'>Delete</button>" +
+    //     "</td>";
     content += "</tr>";
     $('#table-body').html(content);
 }
@@ -103,12 +101,87 @@ function loadAllTeacher() {
         }
     });
 }
+
 function teacherDropDown(data) {
     let content = '';
     for (let i = 0; i < data.length; i++) {
-        content+="<option value="+data[i].username+">"+data[i].firstName+" "+data[i].lastName +"</option>\n"
+        content += "<option value=" + data[i].username + ">" + data[i].firstName + " " + data[i].lastName + "</option>\n"
     }
     $("#exampleFormControlSelect1").html(content);
 
 }
 
+function showCourseStudent() {
+    $("#course-students").fadeIn(1000).show();
+    const username = window.authenticatedUsername;
+    const password = window.authenticatedPassword;
+    const newCourseCommand = {
+        "courseId": globalData.id,
+    };
+    jQuery.ajax({
+        url: serverUrl() + "/manager/load-all-course-student",
+        type: "POST",
+        data: JSON.stringify(newCourseCommand),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        success: function (data, textStatus, jQxhr) {
+            fillStudentTable(data);
+            console.table(data);
+        },
+        error: function (errorMessage) {
+            alert(errorMessage.toString())
+        }
+    });
+}
+
+function fillStudentTable(data) {
+    let content = '';
+    for (let i = 0; i < data.length; i++) {
+        content += "<tr>";
+        content += "<th scope='row'>" + data[i].firstName + "</th>";
+        content += "<td >" + data[i].lastName + "</td>";
+        content += "<td >" + data[i].username + "</td>";
+        content += "<td id=" + i + ">" + data[i].email + "</td>";
+        content += "</tr>";
+    }
+    $('#student-table').html(content);
+}
+
+function showAddStudentModal() {
+    const username = window.authenticatedUsername;
+    const password = window.authenticatedPassword;
+    jQuery.ajax({
+        url: serverUrl() + "/manager/load-all-student",
+        type: "POST",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        success: function (data,) {
+            fillAddStudentToCourseModal(data);
+        },
+        error: function (errorMessage) {
+            alert(errorMessage.toString())
+        }
+    });
+    $("#addStudentToCourseModal").modal('toggle');
+}
+
+function fillAddStudentToCourseModal(data) {
+    let content = '';
+    for (let i = 0; i < data.length; i++) {
+        content += "<tr>";
+        content += "<th scope='row'>" + data[i].firstName + "</th>";
+        content += "<td >" + data[i].lastName + "</td>";
+        content += "<td >" + data[i].username + "</td>";
+        content += "<td id=" + i + ">" + data[i].email + "</td>";
+        // content += "<td >" +
+        //     "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>Alter Course (Add Teacher)</button>" +
+        //     "</td>";
+        content += "<td><input class='form-check-input' type='checkbox' id='vehicle1' name='vehicle1' value='Bike'>";
+        content += "<label class='form-check-label' for='vehicle1'> I have a bike</label></td>";
+        content += "</tr>";
+    }
+    $('#modal-add-student-table').html(content);
+}

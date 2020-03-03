@@ -108,4 +108,15 @@ public class ManagerController {
     private CourseOutDto editCourse(@RequestBody CourseEditDto courseEditDto) throws Exception {
         return courseService.editCourse(courseEditDto);
     }
+
+    @PostMapping("/load-all-course-student")
+    private List<StudentInCourseDto> loadAllCourseStudents(@RequestBody Course course) throws Exception {
+        return courseService.loadAllCourseStudent(course);
+
+    }
+
+    @PostMapping("/load-all-student")
+    private List<StudentInCourseDto> loadAllStudent() {
+        return courseService.loadAllStudent();
+    }
 }
