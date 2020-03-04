@@ -28,11 +28,20 @@ public class Course {
     private LocalDate endDate;
 
     @ManyToOne
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    @ManyToMany(mappedBy = "courseList")
+    @ManyToMany
+    @JoinTable(name = "student_course",
+            joinColumns = @JoinColumn(name = "courseId"),
+            inverseJoinColumns =@JoinColumn(name = "personId"))
     private List<Student> studentList;
+
+    @ManyToMany
+    @JoinTable(name = "teachersStudent_course",
+            joinColumns = @JoinColumn(name = "courseId"),
+            inverseJoinColumns =@JoinColumn(name = "personId") )
+    private List<Teacher> teachersStudent;
 
     @Override
     public boolean equals(Object o) {
@@ -55,5 +64,14 @@ public class Course {
                 ", endDate=" + endDate +
                 ", teacher=" + teacher +
                 '}';
+    }
+
+    public Course(Long courseId , LocalDate startDate, LocalDate endDate, String courseTitle , Teacher teacher , List<Student> studentList) {
+        this.courseId=courseId;
+        this.startDate=startDate;
+        this.endDate=endDate;
+        this.courseTitle=courseTitle;
+        this.teacher=teacher;
+        this.studentList=studentList;
     }
 }

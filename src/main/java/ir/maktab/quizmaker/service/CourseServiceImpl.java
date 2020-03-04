@@ -1,23 +1,16 @@
 package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.*;
-import ir.maktab.quizmaker.model.Course;
-import ir.maktab.quizmaker.model.Student;
-import ir.maktab.quizmaker.model.Teacher;
+import ir.maktab.quizmaker.model.*;
 import ir.maktab.quizmaker.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,23 +22,32 @@ public class CourseServiceImpl implements CourseService {
     PersonRepository personRepository;
     TeacherRepository teacherRepository;
     StudentRepository studentRepository;
+    AccountRepository accountRepository;
+    RoleRepository roleRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, PersonRepository personRepository,TeacherRepository teacherRepository ,  StudentRepository studentRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository,
+                             PersonRepository personRepository,
+                             TeacherRepository teacherRepository,
+                             StudentRepository studentRepository,
+                             AccountRepository accountRepository,
+                             RoleRepository roleRepository) {
         this.courseRepository = courseRepository;
         this.personRepository = personRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
+        this.accountRepository = accountRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public Course createCourseByManager(CourseCreationDto courseCreationDto) throws ParseException {
-        LocalDate startDate = convertStringToDate(courseCreationDto.getStartDate(),"yyyy-MM-dd");
-        LocalDate endDate = convertStringToDate(courseCreationDto.getEndDate(),"yyyy-MM-dd");
+        LocalDate startDate = convertStringToDate(courseCreationDto.getStartDate(), "yyyy-MM-dd");
+        LocalDate endDate = convertStringToDate(courseCreationDto.getEndDate(), "yyyy-MM-dd");
 
         Course course = new Course(null, startDate,
-                courseCreationDto.getCourseTitle(),
                 endDate,
+                courseCreationDto.getCourseTitle(),
                 null,
                 null);
         return courseRepository.save(course);
@@ -57,9 +59,9 @@ public class CourseServiceImpl implements CourseService {
 
         Function<Course, CourseOutDto> function = course -> {
             String teacherLastName;
-            if(course.getTeacher()==null){
+            if (course.getTeacher() == null) {
                 teacherLastName = "Not assigned!";
-            }else {
+            } else {
                 teacherLastName = course.getTeacher().getLastName();
             }
             return new CourseOutDto(course.getCourseId().toString(),
@@ -89,20 +91,20 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseOutDto editCourse(CourseEditDto courseEditDto) throws Exception {
         Optional<Course> course = courseRepository.findById(Long.valueOf(courseEditDto.getCourseId()));
-        if(course.isEmpty()) throw new Exception("course with this id does not exist");
-        if (!(courseEditDto.getTeacherUsername()==null||courseEditDto.getTeacherUsername().equals(""))){
+        if (course.isEmpty()) throw new Exception("course with this id does not exist");
+        if (!(courseEditDto.getTeacherUsername() == null || courseEditDto.getTeacherUsername().equals(""))) {
             Optional<Teacher> byAccount_username = teacherRepository.findByAccount_Username(courseEditDto.getTeacherUsername());
-            if(byAccount_username.isEmpty()) throw new Exception("teacher with this id does not exist");
+            if (byAccount_username.isEmpty()) throw new Exception("teacher with this id does not exist");
             course.get().setTeacher(byAccount_username.get());
         }
         course.get().setCourseTitle(courseEditDto.getCourseTitle());
-        course.get().setStartDate(convertStringToDate(courseEditDto.getStartDate(),"yyyy-MM-dd"));
-        course.get().setEndDate(convertStringToDate(courseEditDto.getEndDate(),"yyyy-MM-dd"));
+        course.get().setStartDate(convertStringToDate(courseEditDto.getStartDate(), "yyyy-MM-dd"));
+        course.get().setEndDate(convertStringToDate(courseEditDto.getEndDate(), "yyyy-MM-dd"));
         Course save = courseRepository.save(course.get());
         String teacherName;
-        if(save.getTeacher()==null){
+        if (save.getTeacher() == null) {
             teacherName = "Not assigned!";
-        }else {
+        } else {
             teacherName = save.getTeacher().getLastName();
         }
         return new CourseOutDto(save.getCourseId().toString(),
@@ -116,24 +118,88 @@ public class CourseServiceImpl implements CourseService {
     public List<StudentInCourseDto> loadAllCourseStudent(Course course) {
         Optional<Course> byId = courseRepository.findById(course.getCourseId());
         List<Student> studentList = byId.get().getStudentList();
-        return studentList.stream().map(student -> new StudentInCourseDto(student.getFirstName(),
-                student.getLastName(),
-                student.getAccount().getUsername(),
-                student.getAccount().getEmail())).collect(Collectors.toList());
+        List<StudentInCourseDto> studentInCourseDtos = new LinkedList<>();
+        if (!studentList.isEmpty()) {
+            studentInCourseDtos = studentList.stream().map(student -> new StudentInCourseDto(student.getFirstName(),
+                    student.getLastName(),
+                    student.getAccount().getUsername(),
+                    student.getAccount().getEmail())).collect(Collectors.toList());
+        }
+        if (!byId.get().getTeachersStudent().isEmpty()) {
+            studentInCourseDtos.addAll(byId.get().getTeachersStudent().stream().map(teacher -> new StudentInCourseDto(teacher.getFirstName(),
+                    teacher.getLastName(),
+                    teacher.getAccount().getUsername(),
+                    teacher.getAccount().getEmail())).collect(Collectors.toList()));
+        }
+        return studentInCourseDtos;
     }
 
     @Override
-    public List<StudentInCourseDto> loadAllStudent() {
-
-        List<Student> allByAccountNotNull = studentRepository.findAllByAccountNotNull();
-        allByAccountNotNull = allByAccountNotNull.stream().filter(student -> student.getAccount().isEnabled()).collect(Collectors.toList());
-        return allByAccountNotNull.stream().map(student -> new StudentInCourseDto(student.getFirstName(),
-                student.getLastName(),
-                student.getAccount().getUsername(),
-                student.getAccount().getEmail())).collect(Collectors.toList());
+    public List<StudentInCourseDto> loadAllStudentForAddingToCourse(CourseEditDto courseEditDto) {
+        Optional<Course> course = courseRepository.findById(Long.valueOf(courseEditDto.getCourseId()));
+        Optional<Role> studentRole = roleRepository.findByRoleName(RoleName.ROLE_STUDENT);
+        if (studentRole.isPresent() && course.isPresent()) {
+            List<Person> students = studentRole.get().getAccountList().stream()
+                    .filter(Account::isEnabled)
+                    .map(Account::getPerson)
+                    .filter(person -> !checkIfPersonHasThisCourse(person, course.get())).collect(Collectors.toList());
+            return students.stream().map(student -> new StudentInCourseDto(student.getFirstName(),
+                    student.getLastName(),
+                    student.getAccount().getUsername(),
+                    student.getAccount().getEmail())).collect(Collectors.toList());
+        }
+        return null;
     }
 
-    private LocalDate convertStringToDate(String date , String format){
+    @Override
+    public Course addStudentToCourse(StudentListAssignForCourseDto students) throws Exception {
+        Optional<Course> course = courseRepository.findById(Long.valueOf(students.getCourseId()));
+        if (course.isEmpty()) throw new Exception("course with this id has been deleted");
+        List<Person> people = students.getStudentForCourse().stream()
+                .map(username -> accountRepository.findByUsername(username))
+                .map(Account::getPerson)
+                .filter(person -> !checkIfPersonHasThisCourse(person,course.get())).collect(Collectors.toList());
+
+        List<Teacher> teacher = people.stream()
+                .filter(person -> person instanceof Teacher)
+                .map(person -> (Teacher)person).collect(Collectors.toList());
+
+        List<Student> student = people.stream()
+                .filter(person -> person instanceof Student)
+                .map(person -> (Student)person).collect(Collectors.toList());
+
+       course.get().getStudentList().addAll(student);
+       course.get().getTeachersStudent().addAll(teacher);
+        return courseRepository.save(course.get());
+
+    }
+
+    @Override
+    public void deleteStudentFromCourse(StudentDeleteFromCourseDto studentCourse) throws Exception {
+        Optional<Course> course = courseRepository.findById(Long.valueOf(studentCourse.getCourseId()));
+        if(course.isEmpty())throw new Exception("this course does not exist");
+        Account account = accountRepository.findByUsername(studentCourse.getStudentUsername());
+        Person person = account.getPerson();
+        if(person instanceof Teacher){
+            course.get().getTeachersStudent().remove(person);
+        }
+        if (person instanceof Student){
+            course.get().getStudentList().remove(person);
+        }
+        courseRepository.save(course.get());
+    }
+
+    private boolean checkIfPersonHasThisCourse(Person person, Course course) {
+        if (person instanceof Teacher) {
+            return (((Teacher) person).getStudentInCourseList().contains(course));
+        }
+        if (person instanceof Student) {
+            return ((Student) person).getCourseList().contains(course);
+        }
+        return false;
+    }
+
+    private LocalDate convertStringToDate(String date, String format) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return LocalDate.parse(date, formatter);
     }

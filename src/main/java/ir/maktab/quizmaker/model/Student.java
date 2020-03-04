@@ -18,10 +18,7 @@ public class Student extends Person {
         super(personId, firstName, lastName, account);
     }
 
-    @ManyToMany
-    @JoinTable(name = "student_course",
-            joinColumns = @JoinColumn(name = "personId"),
-            inverseJoinColumns = @JoinColumn(name = "courseId"))
+    @ManyToMany(mappedBy = "studentList")
     private List<Course> courseList;
 
 

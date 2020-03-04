@@ -20,5 +20,9 @@ public interface CourseService {
 
     List<StudentInCourseDto> loadAllCourseStudent(Course course);
 
-    List<StudentInCourseDto> loadAllStudent();
+    List<StudentInCourseDto> loadAllStudentForAddingToCourse(CourseEditDto courseEditDto);
+
+    Course addStudentToCourse(StudentListAssignForCourseDto students) throws Exception;
+
+    void deleteStudentFromCourse(StudentDeleteFromCourseDto studentCourse) throws Exception;
 }

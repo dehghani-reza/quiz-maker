@@ -115,8 +115,20 @@ public class ManagerController {
 
     }
 
-    @PostMapping("/load-all-student")
-    private List<StudentInCourseDto> loadAllStudent() {
-        return courseService.loadAllStudent();
+    @PostMapping("/load-all-student-for-adding-to-course")
+    private List<StudentInCourseDto> loadAllStudentForAddingToCourse(@RequestBody CourseEditDto courseEditDto) {
+        return courseService.loadAllStudentForAddingToCourse(courseEditDto);
+    }
+
+    @PostMapping("/add-students-to-course")
+    private  OutMessage addStudentToCourse(@RequestBody StudentListAssignForCourseDto students) throws Exception {
+        Course course = courseService.addStudentToCourse(students);
+        return new OutMessage("student('s) assigned for course "+course.getCourseTitle());
+    }
+
+    @PostMapping("/delete-students-from-course")
+    private OutMessage deleteStudentFromCourse(@RequestBody StudentDeleteFromCourseDto studentCourse) throws Exception {
+        courseService.deleteStudentFromCourse(studentCourse);
+        return new OutMessage("student deleted successfully");
     }
 }

@@ -135,8 +135,9 @@ function showCourseStudent() {
         }
     });
 }
-
+var allCourseStudent;
 function fillStudentTable(data) {
+    allCourseStudent = data;
     let content = '';
     for (let i = 0; i < data.length; i++) {
         content += "<tr>";
@@ -144,6 +145,9 @@ function fillStudentTable(data) {
         content += "<td >" + data[i].lastName + "</td>";
         content += "<td >" + data[i].username + "</td>";
         content += "<td id=" + i + ">" + data[i].email + "</td>";
+        content += "<td >" +
+            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteStudentFromCourse(\"" + data[i].username + "\")'>Delete</button>" +
+            "</td>";
         content += "</tr>";
     }
     $('#student-table').html(content);
@@ -152,9 +156,14 @@ function fillStudentTable(data) {
 function showAddStudentModal() {
     const username = window.authenticatedUsername;
     const password = window.authenticatedPassword;
+    const newCourseCommand = {
+        "courseId": globalData.id
+    };
     jQuery.ajax({
-        url: serverUrl() + "/manager/load-all-student",
+        url: serverUrl() + "/manager/load-all-student-for-adding-to-course",
         type: "POST",
+        data: JSON.stringify(newCourseCommand),
+        contentType: "application/json; charset=utf-8",
         headers: {
             "Authorization": "Basic " + btoa(username + ":" + password)
         },
@@ -179,9 +188,74 @@ function fillAddStudentToCourseModal(data) {
         // content += "<td >" +
         //     "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>Alter Course (Add Teacher)</button>" +
         //     "</td>";
-        content += "<td><input class='form-check-input' type='checkbox' id='vehicle1' name='vehicle1' value='Bike'>";
-        content += "<label class='form-check-label' for='vehicle1'> I have a bike</label></td>";
+        content += "<td><input class='form-check-input' type='checkbox' id='" + data[i].username + "' name='student' value='" + data[i].username + "'>";
+        content += "<label class='form-check-label' for='" + data[i].username + "'></label></td>";
         content += "</tr>";
     }
     $('#modal-add-student-table').html(content);
+}
+
+function addStudentToCourse() {
+    const username = window.authenticatedUsername;
+    const password = window.authenticatedPassword;
+    const studentForCourse = [];
+    $("input:checkbox[name='student']:checked").each(function (j) {
+        studentForCourse[j] = $(this).val();
+    });
+    const newCourseCommand = {
+        "studentForCourse": studentForCourse,
+        "courseId": globalData.id
+    };
+    jQuery.ajax({
+        url: serverUrl() + "/manager/add-students-to-course",
+        type: "POST",
+        data: JSON.stringify(newCourseCommand),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        success: function (data, textStatus) {
+            if (data.message !== null) {
+                showSubmitMessage(data.message);
+            } else {
+                alert("some things went wrong");
+            }
+        },
+        error: function (errorMessage) {
+            alert("some things went wrong!");
+        }
+    });
+    $("#addStudentToCourseModal").modal('hide');
+}
+function deleteStudentFromCourse(data) {
+    const username = window.authenticatedUsername;
+    const password = window.authenticatedPassword;
+    const newCourseCommand = {
+        "studentUsername": data,
+        "courseId": globalData.id
+    };
+    jQuery.ajax({
+        url: serverUrl() + "/manager/delete-students-from-course",
+        type: "POST",
+        data: JSON.stringify(newCourseCommand),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        success: function (data, textStatus) {
+            if (data.message !== null) {
+                showSubmitMessage(data.message);
+            } else {
+                alert("some things went wrong");
+            }
+        },
+        error: function (errorMessage) {
+            alert("some things went wrong!");
+        }
+    });
+    showCourseStudent();
+}
+function showSubmitMessage(message) {
+    $("#submit-status-message-alert").html(message);
+    $("#submit-status-message-alert").fadeIn().fadeOut(10000);
 }
