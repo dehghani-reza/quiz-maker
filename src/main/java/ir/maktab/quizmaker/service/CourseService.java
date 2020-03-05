@@ -1,6 +1,7 @@
 package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.*;
+import ir.maktab.quizmaker.model.Account;
 import ir.maktab.quizmaker.model.Course;
 
 import java.text.ParseException;
@@ -25,4 +26,6 @@ public interface CourseService {
     Course addStudentToCourse(StudentListAssignForCourseDto students) throws Exception;
 
     void deleteStudentFromCourse(StudentDeleteFromCourseDto studentCourse) throws Exception;
+
+    List<CourseForTeacherDto> loadAllTeacherCourse(Account account) throws Exception;
 }

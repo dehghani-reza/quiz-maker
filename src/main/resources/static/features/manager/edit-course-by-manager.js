@@ -253,7 +253,8 @@ function deleteStudentFromCourse(data) {
             alert("some things went wrong!");
         }
     });
-    showCourseStudent();
+
+    $("#showStudentButton").trigger('click');//todo student list doesnt refresh!!!!
 }
 function showSubmitMessage(message) {
     $("#submit-status-message-alert").html(message);

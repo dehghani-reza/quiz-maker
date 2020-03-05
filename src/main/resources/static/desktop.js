@@ -49,4 +49,7 @@ function loadPage(page) {
     if(page==='show-add-course-by-manager'){
         $('#app-content-load').load('features/manager/show-add-course-by-manager.html');
     }
+    if(page==='show-teacher-courses'){
+        $('#app-content-load').load('features/teacher/show-teacher-courses.html');
+    }
 }

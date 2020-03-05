@@ -189,6 +189,19 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.save(course.get());
     }
 
+    @Override
+    public List<CourseForTeacherDto> loadAllTeacherCourse(Account account) throws Exception {
+        Optional<Teacher> teacher = teacherRepository.findByAccount_Username(account.getUsername());
+        if(teacher.isEmpty()) throw new Exception("can't find teacher with this user name");
+        Optional<List<Course>> courseList = courseRepository.findAllByTeacher(teacher.get());
+        if(courseList.isEmpty()) throw new Exception("you dont have any course");
+        return courseList.get().stream().map(course -> new CourseForTeacherDto(String.valueOf(course.getCourseId()),
+                course.getCourseTitle(),
+                String.valueOf(course.getStartDate()),
+                String.valueOf(course.getEndDate()),
+                String.valueOf(course.getStudentList().size()+course.getTeachersStudent().size()))).collect(Collectors.toList());
+    }
+
     private boolean checkIfPersonHasThisCourse(Person person, Course course) {
         if (person instanceof Teacher) {
             return (((Teacher) person).getStudentInCourseList().contains(course));
