@@ -41,9 +41,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course createCourseByManager(CourseCreationDto courseCreationDto) throws ParseException {
+    public Course createCourseByManager(CourseCreationDto courseCreationDto) throws Exception {
         LocalDate startDate = convertStringToDate(courseCreationDto.getStartDate(), "yyyy-MM-dd");
         LocalDate endDate = convertStringToDate(courseCreationDto.getEndDate(), "yyyy-MM-dd");
+
+        if(startDate.isAfter(endDate)) throw new Exception("start date cant be after end date");
 
         Course course = new Course(null, startDate,
                 endDate,

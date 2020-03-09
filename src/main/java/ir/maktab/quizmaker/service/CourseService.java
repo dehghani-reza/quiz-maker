@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CourseService {
 
-    Course createCourseByManager(CourseCreationDto courseCreationDto) throws ParseException;
+    Course createCourseByManager(CourseCreationDto courseCreationDto) throws Exception;
 
     List<CourseOutDto> loadAllCourseForManager();
 

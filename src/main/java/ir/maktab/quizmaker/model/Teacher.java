@@ -23,4 +23,7 @@ public class Teacher extends Person {
 
     @ManyToMany(mappedBy = "teachersStudent")
     private List<Course> studentInCourseList;
+
+    @OneToMany(mappedBy = "usernameCreator")
+    private List<Question> questionList;
 }

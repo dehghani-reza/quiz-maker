@@ -82,7 +82,7 @@ public class ManagerController {
         Course courseByManager = null;
         try {
             courseByManager = courseService.createCourseByManager(courseCreationDto);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             return new OutMessage(e.getMessage());
         }
         return new OutMessage("course successfully created by id " + courseByManager.getCourseId());

@@ -27,6 +27,11 @@ public class Course {
 
     private LocalDate endDate;
 
+    private boolean isEnable;
+
+    @OneToMany(mappedBy = "course")
+    private List<Exam> examList;
+
     @ManyToOne
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
