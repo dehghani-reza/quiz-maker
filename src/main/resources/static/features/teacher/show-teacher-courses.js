@@ -18,7 +18,6 @@ function loadAllCourseForTeacher() {
         },
         success: function (data, textStatus) {
             if (data.message !== null) {
-                console.table(data);
                 fillCourseTable(data);
             } else {
                 alert("some things went wrong");

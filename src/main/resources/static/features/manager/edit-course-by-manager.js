@@ -61,7 +61,7 @@ function editCourseByManager() {
         "startDate": startDate,
         "endDate": endDate,
         "teacherUsername": teacherUsername
-    }
+    };
     jQuery.ajax({
         url: serverUrl() + "/manager/edit-course",
         type: "POST",
