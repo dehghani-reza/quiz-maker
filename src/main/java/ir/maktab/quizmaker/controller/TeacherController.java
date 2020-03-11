@@ -1,9 +1,6 @@
 package ir.maktab.quizmaker.controller;
 
-import ir.maktab.quizmaker.dto.CourseForTeacherDto;
-import ir.maktab.quizmaker.dto.CreateExamDto;
-import ir.maktab.quizmaker.dto.ExamOutDto;
-import ir.maktab.quizmaker.dto.OutMessage;
+import ir.maktab.quizmaker.dto.*;
 import ir.maktab.quizmaker.model.Account;
 import ir.maktab.quizmaker.model.Course;
 import ir.maktab.quizmaker.model.Exam;
@@ -49,5 +46,10 @@ public class TeacherController {
     private OutMessage deleteExamFromCourse(@RequestBody Exam exam) throws Exception {
         examService.deleteExamFromCourse(exam);
         return new OutMessage("exam with id "+exam.getExamId()+" deleted");
+    }
+
+    @PostMapping("/edit-exam-to-db")
+    private ExamOutDto changeExamToDataBase(@RequestBody ExamChangeDto exam) throws Exception {
+        return examService.changeExam(exam);
     }
 }

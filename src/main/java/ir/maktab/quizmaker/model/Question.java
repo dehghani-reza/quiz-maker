@@ -13,6 +13,8 @@ import java.util.Objects;
 @NoArgsConstructor
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type" , discriminatorType =DiscriminatorType.STRING)
 public class Question {
 
     @Id

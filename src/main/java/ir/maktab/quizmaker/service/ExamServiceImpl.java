@@ -1,6 +1,7 @@
 package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.CreateExamDto;
+import ir.maktab.quizmaker.dto.ExamChangeDto;
 import ir.maktab.quizmaker.dto.ExamOutDto;
 import ir.maktab.quizmaker.model.Course;
 import ir.maktab.quizmaker.model.Exam;
@@ -71,6 +72,22 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public void deleteExamFromCourse(Exam exam) {
         examRepository.deleteById(exam.getExamId());
+    }
+
+    @Override
+    public ExamOutDto changeExam(ExamChangeDto examChangeDto) throws Exception {
+        Exam exam = examRepository.findById(Long.valueOf(examChangeDto.getExamId())).get();
+        exam.setTitle(examChangeDto.getExamTitle());
+        exam.setExplanation(examChangeDto.getExamExplanation());
+        if(!(examChangeDto.getExamDuration()==null||examChangeDto.getExamDuration().equals(""))) {
+            exam.setExamDuration(convertStringToTime(examChangeDto.getExamDuration()));
+        }
+        Exam save = examRepository.save(exam);
+        return new ExamOutDto(save.getExamId(),
+                save.getTitle(),
+                save.getExplanation(),
+                save.getExamDuration().toString(),
+                save.getScores().stream().map(Score::getPoint).reduce((float) 0, Float::sum));
     }
 
     private LocalTime convertStringToTime(String time) throws Exception {

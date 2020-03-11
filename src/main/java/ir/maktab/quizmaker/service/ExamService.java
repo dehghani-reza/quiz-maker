@@ -2,6 +2,7 @@ package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.CourseForTeacherDto;
 import ir.maktab.quizmaker.dto.CreateExamDto;
+import ir.maktab.quizmaker.dto.ExamChangeDto;
 import ir.maktab.quizmaker.dto.ExamOutDto;
 import ir.maktab.quizmaker.model.Course;
 import ir.maktab.quizmaker.model.Exam;
@@ -15,4 +16,6 @@ public interface ExamService {
     List<ExamOutDto> loadAllCourseExam(Course course) throws Exception;
 
     void deleteExamFromCourse(Exam exam);
+
+    ExamOutDto changeExam(ExamChangeDto examChangeDto) throws Exception;
 }

@@ -25,6 +25,7 @@ public class Exam {
     private String explanation;
 
     //todo for operate exam we can create timer and receive time from browser if have 30second difference we can ignore else throw exception
+    @Column(nullable = false)
     private LocalTime examDuration;
 
     private boolean isEnded;

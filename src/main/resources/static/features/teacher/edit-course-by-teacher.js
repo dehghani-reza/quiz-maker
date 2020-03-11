@@ -1,4 +1,4 @@
-$('#load-pending-account-list').ready(function () {
+$(document).ready(function () {
     loadCourseFromWindowFotTeacher(window.courseDataForTeacher);
 });
 var teacherCourseData;
@@ -99,7 +99,7 @@ function fillExamTable(data) {
         content += "<td >" + data[i].duration + "</td>";
         content += "<td id=" + i + ">" + data[i].totalScore + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-info btn-sm' onclick='deleteStudentFromCourse(\"" + data[i].examId + "\")'>Exam Page</button>" +
+            "<button type='button' class='btn btn-outline-info btn-sm' onclick='showExamEditPage(\"" + i + "\")'>Exam Page</button>" +
             "</td>";
         content += "<td >" +
             "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteExamFromCourse(\"" + data[i].examId + "\")'>DeleteExam</button>" +
@@ -134,6 +134,11 @@ function deleteExamFromCourse(data) {
             }
         });
     }
+}
+
+function showExamEditPage(data) {
+    window.examDataForTeacher = allCourseStudent[data];
+    $('#app-content-load').load('features/teacher/edit-exam-by-teacher.html');
 }
 
 function showSubmitMessage(message) {
