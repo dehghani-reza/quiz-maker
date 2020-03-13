@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -17,10 +18,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("optional_question")
 public class OptionalQuestion extends Question {
 
-    private String secondOption;
-
-    private String thirdOption;
-
-    private String fourthOption;
+    @Lob
+    private String Options;
 
 }

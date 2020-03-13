@@ -16,11 +16,7 @@ public class CreateOptionalQuestionDto {
 
         private String questionAnswer;
 
-        private String questionOption2;
-
-        private String questionOption3;
-
-        private String questionOption4;
+        private String questionOption;
 
         private float questionScore;
 

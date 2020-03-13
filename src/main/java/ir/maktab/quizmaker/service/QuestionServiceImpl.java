@@ -71,9 +71,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTitle(questionDto.getQuestionTitle());
         question.setUsernameCreator(teacher);
         question.setCourseCreatedId(course);
-        question.setSecondOption(questionDto.getQuestionOption2());
-        question.setThirdOption(questionDto.getQuestionOption3());
-        question.setFourthOption(questionDto.getQuestionOption4());
+        question.setOptions(questionDto.getQuestionOption());
         question.getScoreList().add(score);
         exam.getQuestionList().add(question);
         questionRepository.save(question);

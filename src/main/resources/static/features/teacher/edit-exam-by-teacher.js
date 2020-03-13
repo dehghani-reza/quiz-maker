@@ -236,15 +236,42 @@ function addQuestionByTeacher() {
     $("#createQuestion").modal('hide');
 }
 
+//edit multiple options
+
+var counter = 1;
+
+$("#add-option-to-question").on("click", function () {
+    var cols = "";
+    cols += '<div class="form-group">';
+    cols += '<div style="display: flex; justify-content: space-between">';
+    cols += '<label for="optional-question-add-option' + counter + '" class="col-form-label">Question Option:</label>';
+    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="delete">';
+    cols += '</div>';
+    cols += '<input type="text" class="form-control" name="question-options" id="optional-question-add-option' + counter + '" >';
+    cols += '</div>';
+    $("#other-options").append(cols);
+    counter++;
+});
+
+
+$("#other-options").on("click", ".ibtnDel", function () {
+    $(this).closest("div").parent().remove();
+    counter -= 1
+});
+
+
+//
+
 function addOptionalQuestionByTeacher() {
     const username = window.authenticatedUsername;
     const password = window.authenticatedPassword;
     const questionTitle = $("#optional-question-add-titleInput").val();
     const questionContext = $("#optional-question-add-contextInput").val();
     const questionAnswer = $("#optional-question-add-answerInput").val();
-    const questionOption2 = $("#optional-question-add-option2Input").val();
-    const questionOption3 = $("#optional-question-add-option3Input").val();
-    const questionOption4 = $("#optional-question-add-option4Input").val();
+    var questionOption = "";
+    $("#optional-question-form").find('input[name="question-options"]').each(function () {
+        questionOption += $(this).val()+"$/$!/@";
+    });
     const questionScore = $("#optional-question-add-scoreInput").val();
 
     const newCourseCommand = {
@@ -254,9 +281,7 @@ function addOptionalQuestionByTeacher() {
         "questionTitle": questionTitle,
         "questionContext": questionContext,
         "questionAnswer": questionAnswer,
-        "questionOption2": questionOption2,
-        "questionOption3": questionOption3,
-        "questionOption4": questionOption4,
+        "questionOption": questionOption,
         "questionScore": questionScore,
     };
     jQuery.ajax({
@@ -315,7 +340,7 @@ function fillAddQuestionToExamModal(data) {
         content += "<th scope='row'>" + data[i].title + "</th>";
         content += "<td >" + data[i].context + "</td>";
         content += "<td >" + data[i].type + "</td>";
-        content += "<td><input class='form-check-input' style='width: 75px' type='number' step='0.25' id='score"+data[i].questionId+"' name='score' value='" + data[i].score + "'>";
+        content += "<td><input class='form-check-input' style='width: 75px' type='number' step='0.25' id='score" + data[i].questionId + "' name='score' value='" + data[i].score + "'>";
         content += "<label class='form-check-label' for='score" + data[i].questionId + "'></label></td>";
         content += "<td><input class='form-check-input' type='checkbox' id='" + data[i].questionId + "' name='question' value='" + data[i].questionId + "'>";
         content += "<label class='form-check-label' for='" + data[i].questionId + "'></label></td>";
@@ -331,7 +356,7 @@ function addQuestionToExamFromBankByTeacher() {
     const scoreQuestionForExam = [];
     $("input:checkbox[name='question']:checked").each(function (j) {
         questionForExam[j] = $(this).val();
-        scoreQuestionForExam[j] = document.getElementById('score'+questionForExam[j]).value;
+        scoreQuestionForExam[j] = document.getElementById('score' + questionForExam[j]).value;
     });
     const newCourseCommand = {
         "scoreQuestionForExam": scoreQuestionForExam,

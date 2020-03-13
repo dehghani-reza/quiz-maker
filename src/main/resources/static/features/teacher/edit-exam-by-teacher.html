@@ -144,7 +144,7 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                            <form>
+                            <form id="optional-question-form">
                                 <div class="form-group">
                                     <label for="optional-question-add-titleInput" class="col-form-label">Question Title:</label>
                                     <input type="text" class="form-control" id="optional-question-add-titleInput" >
@@ -158,16 +158,14 @@
                                     <input type="text" class="form-control" id="optional-question-add-answerInput" >
                                 </div>
                                 <div class="form-group">
-                                    <label for="optional-question-add-option2Input" class="col-form-label">Question Option2:</label>
-                                    <input type="text" class="form-control" id="optional-question-add-option2Input" >
+                                    <div style="display: flex ; justify-content: space-between">
+                                        <label for="optional-question-add-option0Input" class="col-form-label">Question Option:</label>
+                                        <button type="button" class="btn btn-success" style="border-radius: 50px " id="add-option-to-question">Add Option</button>
+                                    </div>
+                                    <input type="text" class="form-control"  name="question-options" id="optional-question-add-option0Input" >
                                 </div>
-                                <div class="form-group">
-                                    <label for="optional-question-add-option3Input" class="col-form-label">Question Option3:</label>
-                                    <input type="text" class="form-control" id="optional-question-add-option3Input" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="optional-question-add-option4Input" class="col-form-label">Question Option4:</label>
-                                    <input type="text" class="form-control" id="optional-question-add-option4Input" >
+                                <div id="other-options">
+
                                 </div>
                                 <div class="form-group">
                                     <label for="optional-question-add-scoreInput" class="col-form-label">Question Score:</label>
