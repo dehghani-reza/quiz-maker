@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,8 +38,8 @@ public class Question {
     @JoinColumn(name = "cpurseId")
     private Course courseCreatedId;
 
-    @OneToMany(mappedBy = "question")
-    private List<Score> scoreList;
+    @OneToMany(mappedBy = "question",cascade = CascadeType.PERSIST)
+    private List<Score> scoreList = new ArrayList<>();
 
 
     @ManyToMany(mappedBy = "questionList")

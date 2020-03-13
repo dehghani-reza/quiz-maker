@@ -14,7 +14,7 @@
             </div>
         </div>
         <table class="table table-striped table-hover" style="padding-top: 10px ; text-align: center" id="table-course-student">
-            <thead class="thead-dark">
+            <thead class="thead-light">
             <tr>
                 <th scope="col">Exam Title</th>
                 <th scope="col">Explanation</th>
@@ -29,9 +29,35 @@
         </table>
     </div>
     <div style="justify-content: flex-end ; display: flex ; padding-top: 10px">
-        <button type="button" class="btn btn-info" onclick="showExamListForTeacher()">Show Exams</button>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <button type="button" class="btn btn-info" onclick="showQuestionOfExamForTeacher()">Show Questions</button>
+                <button type="button" class="btn btn-primary" onclick="loadQuestionOfTeacherForExam()">Add Questions</button>
+                <button type="button" class="btn btn-success" onclick="showModalCreateQuestionByTeacher()">Create Questions</button>
+        </div>
+    </div>
+
+    <div style="display: none" id="question-list">
+        <h4 style="padding-bottom: 5px">Question's list:</h4>
+        <table class="table table-striped table-hover" style="padding-top: 10px ; text-align: center" id="table-exam-question">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Context</th>
+                <th scope="col">Answer</th>
+                <th scope="col">Score</th>
+                <th scope="col">type</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody id="question-table">
+            </tbody>
+        </table>
+
     </div>
 </div>
+
+
 <!--modal-->
 
 <div>
@@ -64,6 +90,171 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-warning" onclick="editExamFromModalToDB()">Change</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal add question-->
+
+<div>
+    <div class="modal fade" id="createQuestion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="questionInput">Question:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Simple Question</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Optional Question</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <form>
+                                <div class="form-group">
+                                    <label for="question-add-titleInput" class="col-form-label">Question Title:</label>
+                                    <input type="text" class="form-control" id="question-add-titleInput" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="question-add-contextInput" class="col-form-label">Question Context:</label>
+                                    <textarea type="text" class="form-control" id="question-add-contextInput" ></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="question-add-answerInput" class="col-form-label">Question Answer:</label>
+                                    <textarea type="text" class="form-control" id="question-add-answerInput" ></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="question-add-scoreInput" class="col-form-label">Question Score:</label>
+                                    <input type="number" step="0.25" class="form-control" id="question-add-scoreInput" >
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success" onclick="addQuestionByTeacher()">Create</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <form>
+                                <div class="form-group">
+                                    <label for="optional-question-add-titleInput" class="col-form-label">Question Title:</label>
+                                    <input type="text" class="form-control" id="optional-question-add-titleInput" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="optional-question-add-contextInput" class="col-form-label">Question Context:</label>
+                                    <input type="text" class="form-control" id="optional-question-add-contextInput" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="optional-question-add-answerInput" class="col-form-label">Question Answer:</label>
+                                    <input type="text" class="form-control" id="optional-question-add-answerInput" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="optional-question-add-option2Input" class="col-form-label">Question Option2:</label>
+                                    <input type="text" class="form-control" id="optional-question-add-option2Input" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="optional-question-add-option3Input" class="col-form-label">Question Option3:</label>
+                                    <input type="text" class="form-control" id="optional-question-add-option3Input" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="optional-question-add-option4Input" class="col-form-label">Question Option4:</label>
+                                    <input type="text" class="form-control" id="optional-question-add-option4Input" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="optional-question-add-scoreInput" class="col-form-label">Question Score:</label>
+                                    <input type="number" step="0.25" class="form-control" id="optional-question-add-scoreInput" >
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success" onclick="addOptionalQuestionByTeacher()">Create</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal change question score-->
+
+
+<div>
+    <div class="modal fade" id="editQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabelChange">Question Score:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="text" style="display: none" class="form-control" id="question-edit-idInput" readonly>
+                        <div class="form-group">
+                            <label for="question-edit-titleInput" class="col-form-label">Question Title:</label>
+                            <input type="text" class="form-control" id="question-edit-titleInput" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="question-edit-ScoreInput" class="col-form-label">Score:</label>
+                            <input type="number" step="0.25" class="form-control" id="question-edit-ScoreInput" >
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning" onclick="editQuestionFromModalToDB()">Change</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--add question from bank modal-->
+
+
+<div>
+    <div class="modal fade bd-example-modal-lg" id="addQuestionFromBank" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addQuestionBank">Question List:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <table class="table table-striped table-hover" style="padding-top: 10px ; text-align: center" id="table-question-bank">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Question Title</th>
+                                <th scope="col">Context</th>
+                                <th scope="col">type</th>
+                                <th scope="col">Score</th>
+                                <th scope="col">Add</th>
+                            </tr>
+                            </thead>
+                            <tbody id="question-bank-table">
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="addQuestionToExamFromBankByTeacher()">Add all</button>
                 </div>
             </div>
         </div>

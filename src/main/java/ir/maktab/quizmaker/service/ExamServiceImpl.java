@@ -1,6 +1,7 @@
 package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.CreateExamDto;
+import ir.maktab.quizmaker.dto.CreateSimpleQuestionDto;
 import ir.maktab.quizmaker.dto.ExamChangeDto;
 import ir.maktab.quizmaker.dto.ExamOutDto;
 import ir.maktab.quizmaker.model.Course;

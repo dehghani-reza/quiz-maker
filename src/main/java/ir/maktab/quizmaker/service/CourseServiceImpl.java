@@ -52,6 +52,7 @@ public class CourseServiceImpl implements CourseService {
                 courseCreationDto.getCourseTitle(),
                 null,
                 null);
+        course.setEnable(true);
         return courseRepository.save(course);
     }
 

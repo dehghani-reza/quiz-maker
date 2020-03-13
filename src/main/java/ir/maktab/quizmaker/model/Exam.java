@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,13 +29,13 @@ public class Exam {
 
     private boolean isEnded;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "exam_question",
             joinColumns = @JoinColumn(name = "examId"),
             inverseJoinColumns = @JoinColumn(name = "questionId"))
-    private List<Question> questionList;
+    private Set<Question> questionList = new HashSet<>();
 
-    @OneToMany(mappedBy = "exam")
+    @OneToMany(mappedBy = "exam",orphanRemoval = true)
     private List<Score> scores;
 
     @ManyToOne
