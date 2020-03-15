@@ -1,0 +1,24 @@
+<script src="features/student/exam-page-for-student.js"></script>
+<script src="../../assets/js/jquery-3.4.1.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="../../assets/js/popper.min.js"></script>
+
+<div>
+    <div style="display: flex;justify-content: flex-end">
+        <div style="display: flex ;background-color: burlywood ; width: 240px ; height: 30px; border-radius: 10px">
+            <div style=" width: 110px ; height: 30px">
+                <p id="timer" style="color: black;padding-top: 5px;padding-left: 10px"></p>
+            </div>
+            <p style="color: black;padding-left: 10px ; padding-top: 5px">left to end 🕑</p>
+        </div>
+    </div>
+    <h3 style="padding-top: 5px;padding-bottom: 5px">Questions:</h3>
+    <div style="padding-left: 50px">
+        <form id="exam-question">
+
+        </form>
+        <div style="padding-bottom: 50px">
+            <button type='button' class='btn btn-success btn-sm' onclick='submitAnswersByStudent()'>SubmitAnswers</button>
+        </div>
+    </div>
+</div>

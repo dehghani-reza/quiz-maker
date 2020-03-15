@@ -15,4 +15,6 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     List<Student> findAllByAccountNotNull();
 
     Optional<List<Student>> findAllByCourseListIn(Collection<List<Course>> courseList);
+
+    Optional<Student> findByAccount_Username(String username);
 }

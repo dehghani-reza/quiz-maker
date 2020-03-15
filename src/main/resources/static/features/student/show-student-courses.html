@@ -1,12 +1,12 @@
-<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="features/student/show-student-courses.js"></script>
 <script src="../../assets/js/jquery-3.4.1.min.js"></script>
-<script src="features/teacher/show-teacher-courses.js"></script>
-<script src="features/teacher/jquery.dataTables.min.js"></script>
-<script src="features/teacher/dataTables.bootstrap.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="../../assets/js/popper.min.js"></script>
+<p id="demo"></p>
 
 <div>
     <h3 style="padding-top: 5px;padding-bottom: 5px">Course List:</h3>
-    <table class="table table-hover" id="example">
+    <table class="table table-hover" id="studentCourse">
         <thead class="thead-dark">
         <tr>
             <th scope="col">Course ID</th>
@@ -14,10 +14,10 @@
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Teacher</th>
-            <th scope="col">Course page</th>
+            <th scope="col">Course Exams</th>
         </tr>
         </thead>
-        <tbody id="teacher-course-list">
+        <tbody id="student-course-list">
 
         </tbody>
     </table>

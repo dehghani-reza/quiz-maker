@@ -1,15 +1,14 @@
 $(".app-content").ready(function () {
-
     // receive first login message
     receiveFirstLoginMessage();
-
-    // side bar menu clicked
     $(".desktop-side-bar-menu").click(function () {
+
         const submenu = $(this).next();
         submenu.slideToggle(500);
         submenu.siblings("ul").hide(500);
     });
-})
+    // side bar menu clicked
+});
 
 function receiveFirstLoginMessage() {
     // receive username and password from shared values window container
@@ -51,5 +50,8 @@ function loadPage(page) {
     }
     if(page==='show-teacher-courses'){
         $('#app-content-load').load('features/teacher/show-teacher-courses.html');
+    }
+    if(page==='show-student-courses'){
+        $('#app-content-load').load('features/student/show-student-courses.html');
     }
 }

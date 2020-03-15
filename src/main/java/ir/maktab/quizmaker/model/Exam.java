@@ -42,6 +42,12 @@ public class Exam {
     @JoinColumn(name = "courseId")
     private Course course;
 
+    @OneToMany(mappedBy = "exam",orphanRemoval = true)
+    private List<StudentAnswer> studentAnswerList;
+
+    @OneToMany(mappedBy = "exam",orphanRemoval = true)
+    private List<StudentAnswerSheet> studentAnswerSheetList;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

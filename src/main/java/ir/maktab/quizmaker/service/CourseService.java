@@ -28,4 +28,6 @@ public interface CourseService {
     void deleteStudentFromCourse(StudentDeleteFromCourseDto studentCourse) throws Exception;
 
     List<CourseForTeacherDto> loadAllTeacherCourse(Account account) throws Exception;
+
+    List<CourseOutDto> loadAllCourseForStudent(Account account);
 }

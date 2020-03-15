@@ -45,6 +45,9 @@ public class Question {
     @ManyToMany(mappedBy = "questionList")
     private List<Exam> exams;
 
+    @OneToMany(mappedBy = "question")
+    private List<StudentAnswer> studentAnswerList;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

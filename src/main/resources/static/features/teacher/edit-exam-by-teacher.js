@@ -270,7 +270,7 @@ function addOptionalQuestionByTeacher() {
     const questionAnswer = $("#optional-question-add-answerInput").val();
     var questionOption = "";
     $("#optional-question-form").find('input[name="question-options"]').each(function () {
-        questionOption += $(this).val()+"$/$!/@";
+        questionOption += $(this).val()+"&/!/@";
     });
     const questionScore = $("#optional-question-add-scoreInput").val();
 

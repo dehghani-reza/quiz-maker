@@ -205,6 +205,28 @@ public class CourseServiceImpl implements CourseService {
                 String.valueOf(course.getStudentList().size()+course.getTeachersStudent().size()))).collect(Collectors.toList());
     }
 
+    @Override
+    public List<CourseOutDto> loadAllCourseForStudent(Account account) {
+        Person username = personRepository.findByAccount_Username(account.getUsername());
+        if(username instanceof Student) {
+            List<Course> courseList = ((Student) username).getCourseList();
+            if (courseList.isEmpty()) return null;
+            return courseList.stream().map(course -> new CourseOutDto(course.getCourseId().toString(),
+                    course.getStartDate().toString(),
+                    course.getEndDate().toString(),
+                    course.getCourseTitle(),
+                    course.getTeacher().getLastName())).collect(Collectors.toList());
+        }else if(username instanceof Teacher){
+            List<Course> courseList = ((Teacher) username).getStudentInCourseList();
+            return courseList.stream().map(course -> new CourseOutDto(course.getCourseId().toString(),
+                    course.getStartDate().toString(),
+                    course.getEndDate().toString(),
+                    course.getCourseTitle(),
+                    "Mr."+course.getTeacher().getLastName())).collect(Collectors.toList());
+        }
+        return null;
+    }
+
     private boolean checkIfPersonHasThisCourse(Person person, Course course) {
         if (person instanceof Teacher) {
             return (((Teacher) person).getStudentInCourseList().contains(course));

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -28,6 +29,19 @@ public class Person {
 
     @OneToOne(mappedBy = "person")
     private Account account;
+
+    @OneToMany(mappedBy = "examiner")
+    private List<StudentAnswer> studentAnswerList;
+
+    @OneToMany(mappedBy = "examiner")
+    private List<StudentAnswerSheet> studentAnswerSheet;
+
+    public Person(Long personId , String firstName , String lastName , Account account) {
+        this.personId = personId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.account = account;
+    }
 
     @Override
     public boolean equals(Object o) {
