@@ -65,7 +65,12 @@ function submitAnswersByStudent() {
     for (let i = 0; i < globalExamQuestionForStudent.length; i++) {
         var idCreated = "answer" + globalExamQuestionForStudent[i].questionId;
         if(document.getElementById(idCreated).tagName==='INPUT'){
-            answers[i] = [globalExamQuestionForStudent[i].questionId,document.querySelector('input[name=' + idCreated + ']:checked').value];
+            var input = document.querySelector('input[name=' + idCreated + ']:checked');
+            if(input===null){
+                answers[i] = [globalExamQuestionForStudent[i].questionId,null];
+            }else {
+                answers[i] = [globalExamQuestionForStudent[i].questionId, input.value];
+            }
         }else if(document.getElementById(idCreated).tagName==='TEXTAREA'){
             answers[i] = [globalExamQuestionForStudent[i].questionId,document.getElementById(idCreated).value];
         }
