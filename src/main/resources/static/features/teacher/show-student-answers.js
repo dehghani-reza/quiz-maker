@@ -42,6 +42,7 @@ function fillStudentAnswersSheet(data) {
         content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].context + "'>" + data[i].context.substring(0, 19) + "</td>";
         content += "<td >" + data[i].isCorrected + "</td>";
         content += "<td > <input step='0.25' min='0' type='number' max='" + data[i].questionScore + "' id='" + data[i].answerId + "' class='form-control' placeholder='max:" + data[i].questionScore.toString() + "'></td>";
+        content += "<td >" + data[i].studentScore + "</td>";
         content += "<td >" +
             "<button type='button' class='btn btn-success btn-sm' onclick='setScore(" + data[i].answerId + ")'>SetScore</button>" +
             "</td>";
@@ -49,7 +50,7 @@ function fillStudentAnswersSheet(data) {
     }
     content += "<tr>";
     content += "<th scope='row'>TotalScore:</th>";
-    content += "<td colspan='5'>" + calculateTotalScore(answersGlobalData) + "</td>";
+    content += "<td colspan='6'>" + calculateTotalScore(answersGlobalData) + "</td>";
     content += "</tr>";
     $('#all-answers-from-sheet').html(content);
 
@@ -88,13 +89,13 @@ function setScore(data) {
 function setAllScore() {
     const username = window.authenticatedUsername;
     const password = window.authenticatedPassword;
-    const scoreQuestion = [];
+    var scoreQuestionList = [];
     for (let i = 0; i < answersGlobalData.length; i++) {
-        scoreQuestion[i] = [answersGlobalData[i].answerId, document.getElementById(answersGlobalData[i].answerId).value]
+        scoreQuestionList[i] = [answersGlobalData[i].answerId, document.getElementById(answersGlobalData[i].answerId).value]
     }
     const newCourseCommand = {
-        "studentAnswerId": data,
-        "scoreQuestion": scoreQuestion
+        "username": username,
+        "scoreQuestionList": scoreQuestionList
     };
     jQuery.ajax({
         url: serverUrl() + "/teacher/set-score-for-all-student-Answers",

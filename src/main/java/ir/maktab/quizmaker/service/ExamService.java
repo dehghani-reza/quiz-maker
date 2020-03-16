@@ -28,5 +28,7 @@ public interface ExamService {
 
     List<StudentAnswersOutDto> loadStudentAnswerForCorrection(StudentAnswerSheet sheet);
 
-    List<StudentAnswersOutDto> correctOneAnswerByTeacher(StudentAnswer answer) throws Exception;
+    List<StudentAnswersOutDto> correctOneAnswerByTeacher(StudentAnswerDto answer) throws Exception;
+
+    List<StudentAnswersOutDto> correctAllAnswerByTeacher(AllAnswerScoreDto answer) throws Exception;
 }

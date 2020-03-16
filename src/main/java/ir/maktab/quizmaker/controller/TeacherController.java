@@ -111,7 +111,12 @@ public class TeacherController {
     }
 
     @PostMapping("/set-score-for-one-student-Answers")
-    private List<StudentAnswersOutDto> correctOneStudentAnswer(@RequestBody StudentAnswer answer) throws Exception {
+    private List<StudentAnswersOutDto> correctOneStudentAnswer(@RequestBody StudentAnswerDto answer) throws Exception {
         return examService.correctOneAnswerByTeacher(answer);
+    }
+
+    @PostMapping("/set-score-for-all-student-Answers")
+    private List<StudentAnswersOutDto> correctAllStudentAnswer(@RequestBody AllAnswerScoreDto answer) throws Exception {
+        return examService.correctAllAnswerByTeacher(answer);
     }
 }

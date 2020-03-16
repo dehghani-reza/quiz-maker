@@ -200,7 +200,7 @@ public class ExamServiceImpl implements ExamService {
         return sheetC.get().getStudentAnswers().stream().map(a -> new StudentAnswersOutDto(a.getStudentAnswerId(),
                 a.getContext(),
                 a.getStudentScore(),
-                scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(a.getQuestion().getQuestionId(),sheetC.get().getExam().getExamId()).getPoint(),
+                scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(a.getQuestion().getQuestionId(), sheetC.get().getExam().getExamId()).getPoint(),
                 convertBooleanToString(a.isCorrected()),
                 convertBooleanToString(a.isTrue()),
                 a.getQuestion().getContext(),
@@ -208,18 +208,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<StudentAnswersOutDto> correctOneAnswerByTeacher(StudentAnswer answer) throws Exception {
-        if(answer.getStudentScore()<0)throw new Exception("score not valid");
-        StudentAnswer byId = studentAnswerRepository.findById(answer.getStudentAnswerId()).get();
-        if(answer.getStudentScore()>scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(byId.getQuestion().getQuestionId(),byId.getExam().getExamId()).getPoint())throw new Exception("score not valid");
-        byId.setStudentScore(answer.getStudentScore());
-        byId.setCorrected(true);
-        if(answer.getStudentScore()!=0) byId.setTrue(true);
-        StudentAnswerSheet studentAnswerSheet = byId.getStudentAnswerSheet();
-        studentAnswerSheet.setFinalScore(studentAnswerSheet.getFinalScore()+answer.getStudentScore());
-        if(studentAnswerSheet.getStudentAnswers().stream().allMatch(StudentAnswer::isCorrected)) studentAnswerSheet.setCalculated(true);
-        studentAnswerRepository.save(byId);
-        sheetRepository.save(studentAnswerSheet);
+    public List<StudentAnswersOutDto> correctOneAnswerByTeacher(StudentAnswerDto answer) throws Exception {
+        StudentAnswerSheet studentAnswerSheet = correctOneAnswer(answer);
         return studentAnswerSheet.getStudentAnswers().stream().map(a -> new StudentAnswersOutDto(a.getStudentAnswerId(),
                 a.getContext(),
                 a.getStudentScore(),
@@ -228,6 +218,45 @@ public class ExamServiceImpl implements ExamService {
                 convertBooleanToString(a.isTrue()),
                 a.getQuestion().getContext(),
                 a.getQuestion().getAnswer())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentAnswersOutDto> correctAllAnswerByTeacher(AllAnswerScoreDto answer) throws Exception {
+        StudentAnswerSheet studentAnswerSheet = null;
+        for (int i = 0; i < answer.getScoreQuestionList().length; i++) {
+            StudentAnswerDto answer1 = new StudentAnswerDto(Long.valueOf(answer.getScoreQuestionList()[i][0]),answer.getScoreQuestionList()[i][1]);
+            studentAnswerSheet = correctOneAnswer(answer1);
+            if (studentAnswerSheet.isCalculated()) break;
+        }
+        StudentAnswerSheet finalStudentAnswerSheet = studentAnswerSheet;
+        assert studentAnswerSheet != null;
+        return studentAnswerSheet.getStudentAnswers().stream().map(a -> new StudentAnswersOutDto(a.getStudentAnswerId(),
+                a.getContext(),
+                a.getStudentScore(),
+                scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(a.getQuestion().getQuestionId(), finalStudentAnswerSheet.getExam().getExamId()).getPoint(),
+                convertBooleanToString(a.isCorrected()),
+                convertBooleanToString(a.isTrue()),
+                a.getQuestion().getContext(),
+                a.getQuestion().getAnswer())).collect(Collectors.toList());
+    }
+
+    private StudentAnswerSheet correctOneAnswer(StudentAnswerDto answer1) throws Exception {
+        if (answer1.getStudentScore() == null || answer1.getStudentScore().equals("") || answer1.getStudentScore().isEmpty()) {
+            return studentAnswerRepository.findById(answer1.getStudentAnswerId()).get().getStudentAnswerSheet();
+        }
+        if (Float.parseFloat(answer1.getStudentScore()) < 0) throw new Exception("score not valid");
+        StudentAnswer byId = studentAnswerRepository.findById(answer1.getStudentAnswerId()).get();
+        if (Float.parseFloat(answer1.getStudentScore()) > scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(byId.getQuestion().getQuestionId(), byId.getExam().getExamId()).getPoint())
+            throw new Exception("score not valid");
+        byId.setStudentScore(Float.parseFloat(answer1.getStudentScore()));
+        byId.setCorrected(true);
+        if (Float.parseFloat(answer1.getStudentScore()) != 0) byId.setTrue(true);
+        StudentAnswerSheet studentAnswerSheet = byId.getStudentAnswerSheet();
+        studentAnswerSheet.setFinalScore(studentAnswerSheet.getStudentAnswers().stream().map(StudentAnswer::getStudentScore).reduce(((float) 0), Float::sum));
+        if (studentAnswerSheet.getStudentAnswers().stream().allMatch(StudentAnswer::isCorrected))
+            studentAnswerSheet.setCalculated(true);
+        studentAnswerRepository.save(byId);
+        return sheetRepository.save(studentAnswerSheet);
     }
 
     private List<String> convertStringToQuestionOptions(Question question) {
