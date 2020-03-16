@@ -94,7 +94,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public float editQuestionFromExam(QuestionChangeExamDto question) {
+    public float editQuestionFromExam(QuestionChangeExamDto question) throws Exception {
+        if(examRepository.findById(question.getExamId()).get().getStudentAnswerSheetList().size()!=0)throw new Exception("you cant change exam question score after starting");
         Score score = scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(question.getQuestionId(), question.getExamId());
         score.setPoint(question.getQuestionScore());
         scoreRepository.save(score);

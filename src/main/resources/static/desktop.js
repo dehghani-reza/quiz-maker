@@ -51,7 +51,14 @@ function loadPage(page) {
     if(page==='show-teacher-courses'){
         $('#app-content-load').load('features/teacher/show-teacher-courses.html');
     }
+    if(page==='show-teacher-exams'){
+        $('#app-content-load').load('features/teacher/show-teacher-exams.html');
+    }
     if(page==='show-student-courses'){
         $('#app-content-load').load('features/student/show-student-courses.html');
     }
 }
+
+window.onbeforeunload = function(e) {
+    return 'Bye now!';
+};

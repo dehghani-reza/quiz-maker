@@ -38,20 +38,28 @@ function createExamForm(data) {
     let content = '';
     startTimer(data[0].duration);
     for (let i = 0; i < data.length; i++) {
+        var backgroundColor;
+        if (i % 2 === 0) {
+            backgroundColor = '#e2e2e2';
+        } else {
+            backgroundColor = '#ffebd8';
+        }
+        content += '<div style="background-color:' + backgroundColor + ';border-radius: 10px;padding: 10px">';
         if (data[i].type === "SimpleQuestion") {
             content += "<p style='margin: 0px'>" + (i + 1) + ") " + data[i].context + " (score: " + data[i].score + ")" + "</p>";
             content += "<div style='padding-left: 50px; height: 100px'>";
-            content += "<textarea rows=\"4\" cols=\"50\" class='form-check-input' placeholder='youre answer' type='text' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'></textarea>";
+            content += "<textarea rows=\"3\" cols=\"50\" class='form-check-input' placeholder='youre answer' type='text' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'></textarea>";
             content += "</div>"
         } else if (data[i].type === "OptionalQuestion") {
             content += "<p>" + (i + 1) + ") " + data[i].context + " (score: " + data[i].score + ")" + "</p>";
             content += "<div style='padding-left: 20px'>";
             for (let j = 0; j < data[i].options.length; j++) {
-                content += "<input type=\"radio\" value='" + data[i].options[j] + "' id='answer" + data[i].questionId +"' name='answer" + data[i].questionId + "'>";
+                content += "<input type=\"radio\" value='" + data[i].options[j] + "' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'>";
                 content += "<label for='question" + i + "option" + j + "'>" + data[i].options[j] + "</label><br>"
             }
             content += "</div>";
         }
+        content += '</div>';
         content += "<br>";
         content += "<hr>";
     }
@@ -64,17 +72,17 @@ function submitAnswersByStudent() {
     var answers = [];
     for (let i = 0; i < globalExamQuestionForStudent.length; i++) {
         var idCreated = "answer" + globalExamQuestionForStudent[i].questionId;
-        if(document.getElementById(idCreated).tagName==='INPUT'){
+        if (document.getElementById(idCreated).tagName === 'INPUT') {
             var input = document.querySelector('input[name=' + idCreated + ']:checked');
-            if(input===null){
-                answers[i] = [globalExamQuestionForStudent[i].questionId,null];
-            }else {
+            if (input === null) {
+                answers[i] = [globalExamQuestionForStudent[i].questionId, null];
+            } else {
                 answers[i] = [globalExamQuestionForStudent[i].questionId, input.value];
             }
-        }else if(document.getElementById(idCreated).tagName==='TEXTAREA'){
-            answers[i] = [globalExamQuestionForStudent[i].questionId,document.getElementById(idCreated).value];
+        } else if (document.getElementById(idCreated).tagName === 'TEXTAREA') {
+            answers[i] = [globalExamQuestionForStudent[i].questionId, document.getElementById(idCreated).value];
         }
-
+        clearInterval(timer);
     }
 
     const newCourseCommand = {
@@ -105,10 +113,12 @@ function submitAnswersByStudent() {
     });
 }
 
+var timer;
+
 function startTimer(Duration) {
     var nowDay = new Date().getTime();
     var countDownDate = new Date(nowDay + Duration).getTime();
-    var x = setInterval(function () {
+    timer = setInterval(function () {
         var now = new Date().getTime();
         var distance = countDownDate - now;
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -120,15 +130,19 @@ function startTimer(Duration) {
             $("#timer").css("color", "darkred").fadeOut().fadeIn(200);
         }
         if (distance < 0) {
-            clearInterval(x);
+            clearInterval(timer);
             $("#timer").innerHTML = "EXPIRED";
-        }
-        if (distance < -10000) {
             submitAnswersByStudent();
         }
         if ($("#timer") === null) {
-            clearInterval(x);
+            clearInterval(timer);
         }
+        //todo if filled send to db
     }, 1000);
 
 }
+
+
+$("#exam-page-div").on( "unload", function () {
+clearInterval(timer);
+});

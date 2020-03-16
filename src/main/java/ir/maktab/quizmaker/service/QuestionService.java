@@ -16,7 +16,7 @@ public interface QuestionService {
 
     List<QuestionOutDto> loadAllQuestionOfExam(Exam exam);
 
-    float editQuestionFromExam(QuestionChangeExamDto question);
+    float editQuestionFromExam(QuestionChangeExamDto question) throws Exception;
 
     float deleteQuestionFromExam(QuestionChangeExamDto question);
 

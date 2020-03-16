@@ -25,6 +25,7 @@ public class ExamServiceImpl implements ExamService {
     private StudentAnswerSheetRepository sheetRepository;
     private QuestionRepository questionRepository;
     private ScoreRepository scoreRepository;
+    private StudentAnswerRepository studentAnswerRepository;
 
     @Autowired
     public ExamServiceImpl(ExamRepository examRepository,
@@ -32,13 +33,15 @@ public class ExamServiceImpl implements ExamService {
                            PersonRepository personRepository,
                            StudentAnswerSheetRepository sheetRepository,
                            QuestionRepository questionRepository,
-                           ScoreRepository scoreRepository) {
+                           ScoreRepository scoreRepository,
+                           StudentAnswerRepository studentAnswerRepository) {
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.personRepository = personRepository;
         this.sheetRepository = sheetRepository;
         this.questionRepository = questionRepository;
         this.scoreRepository = scoreRepository;
+        this.studentAnswerRepository = studentAnswerRepository;
     }
 
 
@@ -129,7 +132,7 @@ public class ExamServiceImpl implements ExamService {
                 exam.get(),
                 null);
         sheetRepository.save(sheet);
-        Map<Question,Score> questionPoint = new HashMap<>();
+        Map<Question, Score> questionPoint = new HashMap<>();
         exam.get().getScores().forEach(score -> questionPoint.put(score.getQuestion(), score));
         int hour = exam.get().getExamDuration().getHour();
         int minute = exam.get().getExamDuration().getMinute();
@@ -138,7 +141,7 @@ public class ExamServiceImpl implements ExamService {
                 question.getContext(),
                 questionPoint.get(question).getPoint(),
                 question.getClass().getName().replace("ir.maktab.quizmaker.model.", ""),
-                hour*3600*1000+minute*60*1000+second*1000,
+                hour * 3600 * 1000 + minute * 60 * 1000 + second * 1000,
                 convertStringToQuestionOptions(question))).collect(Collectors.toSet());
     }
 
@@ -166,8 +169,69 @@ public class ExamServiceImpl implements ExamService {
         return save.getStudentAnswers().size();
     }
 
-    private List<String> convertStringToQuestionOptions(Question question){
-        if(question instanceof OptionalQuestion){
+    @Override
+    public List<ExamMoreOutDto> loadAllExamForTeacher(Account account) {
+        Optional<List<Exam>> exams = examRepository.findAllByCourse_Teacher_Account_Username(account.getUsername());
+        if (exams.isEmpty()) return null;
+        return exams.get().stream().map(exam -> new ExamMoreOutDto(exam.getExamId(),
+                exam.getCourse().getCourseTitle(),
+                exam.getTitle(),
+                exam.getCourse().getStudentList().size() + exam.getCourse().getTeachersStudent().size(),
+                exam.getStudentAnswerSheetList().size(),
+                exam.getScores().stream().map(Score::getPoint).reduce(((float) 0), Float::sum),
+                calculateAverageScoreOfExam(exam))).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AnswerSheetOutDto> loadAllExamStyleSheetForTeacher(Exam exam) {
+        Optional<Exam> currentExam = examRepository.findById(exam.getExamId());
+        return currentExam.get().getStudentAnswerSheetList().stream().map(sheet -> new AnswerSheetOutDto(sheet.getAnswerSheetId(),
+                sheet.getCreatedDate(),
+                sheet.getFilledDate(),
+                convertBooleanToString(sheet.isOnTime()),
+                convertBooleanToString(sheet.isCalculated()),
+                sheet.getFinalScore(),
+                sheet.getExaminer().getFirstName() + " " + sheet.getExaminer().getLastName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentAnswersOutDto> loadStudentAnswerForCorrection(StudentAnswerSheet sheet) {
+        Optional<StudentAnswerSheet> sheetC = sheetRepository.findById(sheet.getAnswerSheetId());
+        return sheetC.get().getStudentAnswers().stream().map(a -> new StudentAnswersOutDto(a.getStudentAnswerId(),
+                a.getContext(),
+                a.getStudentScore(),
+                scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(a.getQuestion().getQuestionId(),sheetC.get().getExam().getExamId()).getPoint(),
+                convertBooleanToString(a.isCorrected()),
+                convertBooleanToString(a.isTrue()),
+                a.getQuestion().getContext(),
+                a.getQuestion().getAnswer())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentAnswersOutDto> correctOneAnswerByTeacher(StudentAnswer answer) throws Exception {
+        if(answer.getStudentScore()<0)throw new Exception("score not valid");
+        StudentAnswer byId = studentAnswerRepository.findById(answer.getStudentAnswerId()).get();
+        if(answer.getStudentScore()>scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(byId.getQuestion().getQuestionId(),byId.getExam().getExamId()).getPoint())throw new Exception("score not valid");
+        byId.setStudentScore(answer.getStudentScore());
+        byId.setCorrected(true);
+        if(answer.getStudentScore()!=0) byId.setTrue(true);
+        StudentAnswerSheet studentAnswerSheet = byId.getStudentAnswerSheet();
+        studentAnswerSheet.setFinalScore(studentAnswerSheet.getFinalScore()+answer.getStudentScore());
+        if(studentAnswerSheet.getStudentAnswers().stream().allMatch(StudentAnswer::isCorrected)) studentAnswerSheet.setCalculated(true);
+        studentAnswerRepository.save(byId);
+        sheetRepository.save(studentAnswerSheet);
+        return studentAnswerSheet.getStudentAnswers().stream().map(a -> new StudentAnswersOutDto(a.getStudentAnswerId(),
+                a.getContext(),
+                a.getStudentScore(),
+                scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(a.getQuestion().getQuestionId(), studentAnswerSheet.getExam().getExamId()).getPoint(),
+                convertBooleanToString(a.isCorrected()),
+                convertBooleanToString(a.isTrue()),
+                a.getQuestion().getContext(),
+                a.getQuestion().getAnswer())).collect(Collectors.toList());
+    }
+
+    private List<String> convertStringToQuestionOptions(Question question) {
+        if (question instanceof OptionalQuestion) {
             String separatorKey = "&/!/@";
             String options = ((OptionalQuestion) question).getOptions();
             List<String> option = new ArrayList<>(Arrays.asList(options.split(separatorKey)));
@@ -188,7 +252,7 @@ public class ExamServiceImpl implements ExamService {
         throw new Exception("cant convert to valid time for exam");
     }
 
-    private void checkIfAnswerSheetIsOnTime(StudentAnswerSheet studentAnswerSheet){
+    private void checkIfAnswerSheetIsOnTime(StudentAnswerSheet studentAnswerSheet) {
         Date createdDate = studentAnswerSheet.getCreatedDate();
         Date finished = new Date();
         finished.setTime(new Date().getTime());
@@ -197,16 +261,16 @@ public class ExamServiceImpl implements ExamService {
         int hour = examDuration.getHour();
         int minute = examDuration.getMinute();
         int second = examDuration.getSecond();
-        int longTime = second*1000+minute*60*1000+hour*3600*1000+(12*1000);
-        if(createdDate.getTime()-finished.getTime()>longTime){
+        int longTime = second * 1000 + minute * 60 * 1000 + hour * 3600 * 1000 + (12 * 1000);
+        if (createdDate.getTime() - finished.getTime() > longTime) {
             studentAnswerSheet.setOnTime(false);
-        }else {
+        } else {
             studentAnswerSheet.setOnTime(true);
         }
     }
 
-    private void correctionOfOptionalQuestion(StudentAnswerSheet sheet){
-        if (sheet.isCalculated())return;
+    private void correctionOfOptionalQuestion(StudentAnswerSheet sheet) {
+        if (sheet.isCalculated()) return;
         List<StudentAnswer> studentOptionalAnswers = sheet.getStudentAnswers().stream()
                 .filter(studentAnswer -> studentAnswer.getQuestion() instanceof OptionalQuestion).collect(Collectors.toList());
         for (StudentAnswer studentAnswer : studentOptionalAnswers) {
@@ -223,9 +287,20 @@ public class ExamServiceImpl implements ExamService {
             }
             Float finalScore = studentOptionalAnswers.stream().map(StudentAnswer::getStudentScore).reduce(((float) 0), Float::sum);
             sheet.setFinalScore(finalScore);
-            if(studentOptionalAnswers.size()==sheet.getStudentAnswers().size()){
+            if (studentOptionalAnswers.size() == sheet.getStudentAnswers().size()) {
                 sheet.setCalculated(true);
             }
         }
+    }
+
+    private double calculateAverageScoreOfExam(Exam exam) {
+        List<StudentAnswerSheet> studentAnswerSheetList = exam.getStudentAnswerSheetList();
+        double sum = studentAnswerSheetList.stream().map(StudentAnswerSheet::getFinalScore).reduce(((double) 0), Double::sum);
+        return (sum / exam.getStudentAnswerSheetList().size());
+    }
+
+    private String convertBooleanToString(boolean b) {
+        if (b) return "Yes";
+        return "No";
     }
 }

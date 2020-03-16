@@ -1,10 +1,7 @@
 package ir.maktab.quizmaker.controller;
 
 import ir.maktab.quizmaker.dto.*;
-import ir.maktab.quizmaker.model.Account;
-import ir.maktab.quizmaker.model.Course;
-import ir.maktab.quizmaker.model.Exam;
-import ir.maktab.quizmaker.model.Question;
+import ir.maktab.quizmaker.model.*;
 import ir.maktab.quizmaker.service.CourseService;
 import ir.maktab.quizmaker.service.ExamService;
 import ir.maktab.quizmaker.service.QuestionService;
@@ -95,5 +92,26 @@ public class TeacherController {
     private OutMessageWithExamScoreDto addQuestionToExamFromBank(@RequestBody QuestionIdScoreDto questionIdScoreDto) throws Exception {
         float v = questionService.addQuestionFromBankToExam(questionIdScoreDto);
         return new OutMessageWithExamScoreDto("Questions added successfully",v);
+    }
+
+
+    @PostMapping("/load-all-exam-for-teacher")
+    private List<ExamMoreOutDto> loadAllExamForTeacher(@RequestBody Account account) throws Exception {
+        return examService.loadAllExamForTeacher(account);
+    }
+
+    @PostMapping("/load-all-exam-style-sheet")
+    private List<AnswerSheetOutDto> loadAllExamStyleSheetForTeacher(@RequestBody Exam exam) throws Exception {
+        return examService.loadAllExamStyleSheetForTeacher(exam);
+    }
+
+    @PostMapping("/load-student-exam-Answers")
+    private List<StudentAnswersOutDto> loadStudentAnswersForCorrection(@RequestBody StudentAnswerSheet sheet) throws Exception {
+        return examService.loadStudentAnswerForCorrection(sheet);
+    }
+
+    @PostMapping("/set-score-for-one-student-Answers")
+    private List<StudentAnswersOutDto> correctOneStudentAnswer(@RequestBody StudentAnswer answer) throws Exception {
+        return examService.correctOneAnswerByTeacher(answer);
     }
 }

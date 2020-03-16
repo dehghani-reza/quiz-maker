@@ -1,0 +1,35 @@
+<script src="features/teacher/show-student-answers.js"></script>
+<script src="../../assets/js/jquery-3.4.1.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="../../assets/js/popper.min.js"></script>
+
+
+<div>
+    <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl; z-index: +1 ; position: absolute;left: 45%;">
+    </div>
+    <div id="courseId" style="padding-top: 10px">
+        <div style="display: flex ; justify-content: space-between ; padding-bottom: 10px">
+            <h3 style="padding-top: 5px">Answers</h3>
+            <div>
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="backToSheetPage()">Back To sheet Page</button>
+            </div>
+        </div>
+        <table class="table table-striped table-hover" style="padding-top: 10px ; text-align: center" id="table-course-student">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">QuestionContext</th>
+                <th scope="col">QuestionAnswer</th>
+                <th scope="col">StudentAnswer</th>
+                <th scope="col">Corrected</th>
+                <th scope="col">Score</th>
+                <th scope="col">SetScore</th>
+            </tr>
+            </thead>
+            <tbody id="all-answers-from-sheet">
+            </tbody>
+        </table>
+        <div>
+            <button type="button" class="btn btn-success btn-lg btn-block" onclick="setAllScore()">Set All Score</button>
+        </div>
+    </div>
+</div>
