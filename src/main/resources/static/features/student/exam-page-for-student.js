@@ -36,7 +36,7 @@ var globalExamQuestionForStudent;
 function createExamForm(data) {
     globalExamQuestionForStudent = data;
     let content = '';
-    // startTimer(data[0].duration);
+    startTimer(data[0].duration);
     for (let i = 0; i < data.length; i++) {
         if (data[i].type === "SimpleQuestion") {
             content += "<p style='margin: 0px'>" + (i + 1) + ") " + data[i].context + " (score: " + data[i].score + ")" + "</p>";

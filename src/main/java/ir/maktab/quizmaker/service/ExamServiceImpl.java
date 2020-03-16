@@ -192,7 +192,7 @@ public class ExamServiceImpl implements ExamService {
         int hour = examDuration.getHour();
         int minute = examDuration.getMinute();
         int second = examDuration.getSecond();
-        int longTime = second*1000+minute*60*1000+hour*3600*1000;
+        int longTime = second*1000+minute*60*1000+hour*3600*1000+(12*1000);
         if(createdDate.getTime()-finished.getTime()>longTime){
             studentAnswerSheet.setOnTime(false);
         }else {
