@@ -24,18 +24,21 @@ public class ExamServiceImpl implements ExamService {
     private PersonRepository personRepository;
     private StudentAnswerSheetRepository sheetRepository;
     private QuestionRepository questionRepository;
+    private ScoreRepository scoreRepository;
 
     @Autowired
     public ExamServiceImpl(ExamRepository examRepository,
                            CourseRepository courseRepository,
                            PersonRepository personRepository,
                            StudentAnswerSheetRepository sheetRepository,
-                           QuestionRepository questionRepository) {
+                           QuestionRepository questionRepository,
+                           ScoreRepository scoreRepository) {
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.personRepository = personRepository;
         this.sheetRepository = sheetRepository;
         this.questionRepository = questionRepository;
+        this.scoreRepository = scoreRepository;
     }
 
 
@@ -148,6 +151,8 @@ public class ExamServiceImpl implements ExamService {
         for (int i = 0; i < submitAnswersDto.getAnswers().length; i++) {
             answers.add(new StudentAnswer(null,
                     submitAnswersDto.getAnswers()[i][1],
+                    0,
+                    false,
                     false,
                     person,
                     exam,
@@ -156,6 +161,7 @@ public class ExamServiceImpl implements ExamService {
         }
         checkIfAnswerSheetIsOnTime(sheet);
         sheet.setStudentAnswers(answers);
+        correctionOfOptionalQuestion(sheet);
         StudentAnswerSheet save = sheetRepository.save(sheet);
         return save.getStudentAnswers().size();
     }
@@ -165,7 +171,6 @@ public class ExamServiceImpl implements ExamService {
             String separatorKey = "&/!/@";
             String options = ((OptionalQuestion) question).getOptions();
             List<String> option = new ArrayList<>(Arrays.asList(options.split(separatorKey)));
-            System.out.println(question.getAnswer());
             option.add(question.getAnswer());
             Collections.shuffle(option);
             return option;
@@ -197,6 +202,30 @@ public class ExamServiceImpl implements ExamService {
             studentAnswerSheet.setOnTime(false);
         }else {
             studentAnswerSheet.setOnTime(true);
+        }
+    }
+
+    private void correctionOfOptionalQuestion(StudentAnswerSheet sheet){
+        if (sheet.isCalculated())return;
+        List<StudentAnswer> studentOptionalAnswers = sheet.getStudentAnswers().stream()
+                .filter(studentAnswer -> studentAnswer.getQuestion() instanceof OptionalQuestion).collect(Collectors.toList());
+        for (StudentAnswer studentAnswer : studentOptionalAnswers) {
+            String answer = studentAnswer.getQuestion().getAnswer();
+            if (answer.equals(studentAnswer.getContext())) {
+                studentAnswer.setTrue(true);
+                studentAnswer.setCorrected(true);
+                Score score = scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(studentAnswer.getQuestion().getQuestionId(), studentAnswer.getExam().getExamId());
+                studentAnswer.setStudentScore(score.getPoint());
+            } else {
+                studentAnswer.setTrue(false);
+                studentAnswer.setCorrected(true);
+                studentAnswer.setStudentScore(0);
+            }
+            Float finalScore = studentOptionalAnswers.stream().map(StudentAnswer::getStudentScore).reduce(((float) 0), Float::sum);
+            sheet.setFinalScore(finalScore);
+            if(studentOptionalAnswers.size()==sheet.getStudentAnswers().size()){
+                sheet.setCalculated(true);
+            }
         }
     }
 }

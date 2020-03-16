@@ -19,6 +19,10 @@ public class StudentAnswer {
 
     private String context;
 
+    private float studentScore;
+
+    private boolean isCorrected;
+
     private boolean isTrue;
 
     @ManyToOne
