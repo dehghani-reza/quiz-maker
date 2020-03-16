@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class Account {
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private List<Role> roleList;
+    private List<Role> roleList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.PERSIST,orphanRemoval = true)
     @JoinColumn(name = "personId")

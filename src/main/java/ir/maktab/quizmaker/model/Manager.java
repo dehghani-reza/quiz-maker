@@ -11,4 +11,5 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("manager")
 public class Manager extends Person {
+
 }
