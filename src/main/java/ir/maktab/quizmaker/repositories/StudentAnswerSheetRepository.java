@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudentAnswerSheetRepository extends JpaRepository<StudentAnswerSheet,Long> {
+
+    StudentAnswerSheet findByExam_ExamIdAndExaminer_PersonId(Long exam_examId, Long examiner_personId);
 }

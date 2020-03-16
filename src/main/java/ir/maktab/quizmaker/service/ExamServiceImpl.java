@@ -2,10 +2,8 @@ package ir.maktab.quizmaker.service;
 
 import ir.maktab.quizmaker.dto.*;
 import ir.maktab.quizmaker.model.*;
-import ir.maktab.quizmaker.repositories.CourseRepository;
-import ir.maktab.quizmaker.repositories.ExamRepository;
-import ir.maktab.quizmaker.repositories.PersonRepository;
-import ir.maktab.quizmaker.repositories.StudentAnswerSheetRepository;
+import ir.maktab.quizmaker.model.StudentAnswer;
+import ir.maktab.quizmaker.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +23,19 @@ public class ExamServiceImpl implements ExamService {
     private CourseRepository courseRepository;
     private PersonRepository personRepository;
     private StudentAnswerSheetRepository sheetRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     public ExamServiceImpl(ExamRepository examRepository,
                            CourseRepository courseRepository,
                            PersonRepository personRepository,
-                           StudentAnswerSheetRepository sheetRepository ) {
+                           StudentAnswerSheetRepository sheetRepository,
+                           QuestionRepository questionRepository) {
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.personRepository = personRepository;
         this.sheetRepository = sheetRepository;
+        this.questionRepository = questionRepository;
     }
 
 
@@ -119,11 +120,12 @@ public class ExamServiceImpl implements ExamService {
                 start,
                 null,
                 false,
+                false,
                 0,
                 examiner,
                 exam.get(),
                 null);
-//        sheetRepository.save(sheet);todo
+        sheetRepository.save(sheet);
         Map<Question,Score> questionPoint = new HashMap<>();
         exam.get().getScores().forEach(score -> questionPoint.put(score.getQuestion(), score));
         int hour = exam.get().getExamDuration().getHour();
@@ -139,8 +141,23 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public int submitAnswersToAnswerSheet(SubmitAnswersDto submitAnswersDto) {
-        System.out.println(submitAnswersDto);
-        return 1;
+        Exam exam = examRepository.findById(submitAnswersDto.getExamId()).get();
+        Person person = personRepository.findByAccount_Username(submitAnswersDto.getUsername());
+        StudentAnswerSheet sheet = sheetRepository.findByExam_ExamIdAndExaminer_PersonId(exam.getExamId(), person.getPersonId());
+        List<StudentAnswer> answers = new ArrayList<>();
+        for (int i = 0; i < submitAnswersDto.getAnswers().length; i++) {
+            answers.add(new StudentAnswer(null,
+                    submitAnswersDto.getAnswers()[i][1],
+                    false,
+                    person,
+                    exam,
+                    questionRepository.findById(Long.valueOf(submitAnswersDto.getAnswers()[i][0])).get(),
+                    sheet));
+        }
+        checkIfAnswerSheetIsOnTime(sheet);
+        sheet.setStudentAnswers(answers);
+        StudentAnswerSheet save = sheetRepository.save(sheet);
+        return save.getStudentAnswers().size();
     }
 
     private List<String> convertStringToQuestionOptions(Question question){
@@ -164,5 +181,22 @@ public class ExamServiceImpl implements ExamService {
             return LocalTime.of(0, timer, 0, 0);
         }
         throw new Exception("cant convert to valid time for exam");
+    }
+
+    private void checkIfAnswerSheetIsOnTime(StudentAnswerSheet studentAnswerSheet){
+        Date createdDate = studentAnswerSheet.getCreatedDate();
+        Date finished = new Date();
+        finished.setTime(new Date().getTime());
+        studentAnswerSheet.setFilledDate(finished);
+        LocalTime examDuration = studentAnswerSheet.getExam().getExamDuration();
+        int hour = examDuration.getHour();
+        int minute = examDuration.getMinute();
+        int second = examDuration.getSecond();
+        int longTime = second*1000+minute*60*1000+hour*3600*1000;
+        if(createdDate.getTime()-finished.getTime()>longTime){
+            studentAnswerSheet.setOnTime(false);
+        }else {
+            studentAnswerSheet.setOnTime(true);
+        }
     }
 }

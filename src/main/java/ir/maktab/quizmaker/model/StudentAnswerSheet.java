@@ -26,6 +26,8 @@ public class StudentAnswerSheet {
 
     private boolean isOnTime;
 
+    private boolean isCalculated;
+
     private double finalScore;
 
     @ManyToOne
@@ -36,6 +38,6 @@ public class StudentAnswerSheet {
     @JoinColumn(name = "exam_id")
     private Exam exam;
 
-    @OneToMany(mappedBy = "studentAnswerSheet")
+    @OneToMany(mappedBy = "studentAnswerSheet",cascade = CascadeType.ALL)
     private List<StudentAnswer> studentAnswers = new ArrayList<>();
 }
