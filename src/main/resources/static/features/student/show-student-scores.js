@@ -53,3 +53,30 @@ function loadAnswerSheetForStudent(data) {
     window.studentAnswerSheetIdForDetain = studentGlobalScoresData[data].sheetId;
     $('#app-content-load').load('features/student/sheet-exam-for-student.html');
 }
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+    var data = google.visualization.arrayToDataTable(
+        fillTheChart(studentGlobalScoresData)
+    );
+
+    var options = {
+        title: 'Exams OverView',
+        hAxis: {title: 'ExamTitle',  titleTextStyle: {color: '#333'}},
+        vAxis: {minValue: 0}
+    };
+
+    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+}
+
+function fillTheChart(data) {
+    var char =  [['ExamTitle', 'YourScore', 'AverageScore']];
+    for (let i = 0; i <data.length ; i++) {
+        char.push([data[i].examTitle, data[i].yourScore,data[i].averageScore]);
+    }
+    return char;
+}
+
