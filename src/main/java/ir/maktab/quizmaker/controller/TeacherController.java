@@ -119,4 +119,26 @@ public class TeacherController {
     private List<StudentAnswersOutDto> correctAllStudentAnswer(@RequestBody AllAnswerScoreDto answer) throws Exception {
         return examService.correctAllAnswerByTeacher(answer);
     }
+
+    @PostMapping("/load-all-question-bank")
+    private List<QuestionOutDto> loadQuestionBank(@RequestBody Account account) throws Exception {
+        return questionService.loadQuestionFromBank(account);
+    }
+
+    @PostMapping("/load-optional-question-for-change")
+    private QuestionOutExamDto loadOptionalQuestionForChange(@RequestBody Question question) throws Exception {
+        return questionService.loadOptionalQuestionForChange(question);
+    }
+
+    @PostMapping("/change-optional-question")
+    private OutMessage changeOptionalQuestionByTeacher(@RequestBody ChangeOptionalQuestionDto question) throws Exception {
+        questionService.changeOptionalQuestionByTeacher(question);
+        return new OutMessage("question successfully changed");
+    }
+
+    @PostMapping("/change-simple-question")
+    private OutMessage changeSimpleQuestionByTeacher(@RequestBody ChangeSimpleQuestionDto question) throws Exception {
+        questionService.changeSimpleQuestionByTeacher(question);
+        return new OutMessage("question successfully changed");
+    }
 }

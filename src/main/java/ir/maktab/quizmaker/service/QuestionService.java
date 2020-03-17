@@ -3,6 +3,7 @@ package ir.maktab.quizmaker.service;
 import ir.maktab.quizmaker.dto.*;
 import ir.maktab.quizmaker.model.Account;
 import ir.maktab.quizmaker.model.Exam;
+import ir.maktab.quizmaker.model.Question;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,4 +24,12 @@ public interface QuestionService {
     List<QuestionOutDto> loadAllTeacherQuestion(Account account);
 
     float addQuestionFromBankToExam(QuestionIdScoreDto questionIdScoreDto) throws Exception;
+
+    List<QuestionOutDto> loadQuestionFromBank(Account account);
+
+    QuestionOutExamDto loadOptionalQuestionForChange(Question question);
+
+    void changeOptionalQuestionByTeacher(ChangeOptionalQuestionDto question);
+
+    void changeSimpleQuestionByTeacher(ChangeSimpleQuestionDto question);
 }

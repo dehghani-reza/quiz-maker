@@ -160,6 +160,42 @@ public class QuestionServiceImpl implements QuestionService {
         return calculateExamTotalScore(exam);
     }
 
+    @Override
+    public List<QuestionOutDto> loadQuestionFromBank(Account account) {
+        Optional<Teacher> teacher = teacherRepository.findByAccount_Username(account.getUsername());
+        return teacher.get().getQuestionList().stream().map(a->new QuestionOutDto(a.getQuestionId(),
+                a.getContext(),
+                a.getAnswer(),
+                a.getTitle(),
+                a.getScoreList().stream().map(Score::getPoint).reduce((float) 0,(aFloat, aFloat2) -> (aFloat+aFloat2)/2),
+                a.getClass().getName().replace("ir.maktab.quizmaker.model.", ""))).collect(Collectors.toList());
+    }
+
+    @Override
+    public QuestionOutExamDto loadOptionalQuestionForChange(Question question) {
+        Question question1 = questionRepository.findById(question.getQuestionId()).get();
+        return new QuestionOutExamDto(null,null,0,null,0,convertStringToQuestionOptions(question1));
+    }
+
+    @Override
+    public void changeOptionalQuestionByTeacher(ChangeOptionalQuestionDto question) {
+        OptionalQuestion question1 = (OptionalQuestion) questionRepository.findById(question.getQuestionId()).get();
+        question1.setTitle(question.getQuestionTitle());
+        question1.setContext(question.getQuestionContext());
+        question1.setAnswer(question.getQuestionAnswer());
+        question1.setOptions(question.getQuestionOption());
+        questionRepository.save(question1);
+    }
+
+    @Override
+    public void changeSimpleQuestionByTeacher(ChangeSimpleQuestionDto question) {
+        SimpleQuestion question1 = (SimpleQuestion) questionRepository.findById(question.getQuestionId()).get();
+        question1.setTitle(question.getQuestionTitle());
+        question1.setContext(question.getQuestionContext());
+        question1.setAnswer(question.getQuestionAnswer());
+        questionRepository.save(question1);
+    }
+
     private float calculateExamTotalScore(Exam exam) {
         return exam.getScores().stream().map(Score::getPoint).reduce((float) 0, Float::sum);
     }
@@ -172,5 +208,15 @@ public class QuestionServiceImpl implements QuestionService {
         }
         float val = scoreList.stream().map(Score::getPoint).reduce((aFloat, aFloat2) -> (aFloat + aFloat2) / 2).get();
         return Math.round(val*4)/((float)4);
+    }
+
+    private List<String> convertStringToQuestionOptions(Question question) {
+        if (question instanceof OptionalQuestion) {
+            String separatorKey = "&/!/@";
+            String options = ((OptionalQuestion) question).getOptions();
+            List<String> option = new ArrayList<>(Arrays.asList(options.split(separatorKey)));
+            return option;
+        }
+        return null;
     }
 }
