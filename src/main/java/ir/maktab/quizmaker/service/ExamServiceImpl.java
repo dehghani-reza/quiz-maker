@@ -54,6 +54,7 @@ public class ExamServiceImpl implements ExamService {
                 createExamDto.getExamExplanation(),
                 convertStringToTime(createExamDto.getExamDuration()),
                 false,
+                false,
                 null,
                 null,
                 course.get(),
@@ -105,7 +106,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public List<ExamOutDto> loadAllCourseExamForStudent(CourseExamDto courseExamDto) {
-        List<Exam> exams = examRepository.findAllByCourse_CourseId(courseExamDto.getCourseId());
+        List<Exam> exams = examRepository.findAllByCourse_CourseId(courseExamDto.getCourseId()).stream().filter(Exam::isStarted).filter(exam -> !exam.isEnded()).collect(Collectors.toList());
         Person examiner = personRepository.findByAccount_Username(courseExamDto.getUsername());
         List<Exam> doneExam = examiner.getStudentAnswerSheet().stream().map(StudentAnswerSheet::getExam).collect(Collectors.toList());
         exams.removeAll(doneExam);
@@ -176,6 +177,7 @@ public class ExamServiceImpl implements ExamService {
         return exams.get().stream().map(exam -> new ExamMoreOutDto(exam.getExamId(),
                 exam.getCourse().getCourseTitle(),
                 exam.getTitle(),
+                examStatus(exam),
                 exam.getCourse().getStudentList().size() + exam.getCourse().getTeachersStudent().size(),
                 exam.getStudentAnswerSheetList().size(),
                 exam.getScores().stream().map(Score::getPoint).reduce(((float) 0), Float::sum),
@@ -240,6 +242,21 @@ public class ExamServiceImpl implements ExamService {
                 a.getQuestion().getAnswer())).collect(Collectors.toList());
     }
 
+    @Override
+    public void startExamByTeacher(Exam exam) {
+        Exam exam1 = examRepository.findById(exam.getExamId()).get();
+        exam1.setStarted(true);
+        exam1.setEnded(false);
+        examRepository.save(exam1);
+    }
+
+    @Override
+    public void endExamByTeacher(Exam exam) {
+        Exam exam1 = examRepository.findById(exam.getExamId()).get();
+        exam1.setEnded(true);
+        examRepository.save(exam1);
+    }
+
     private StudentAnswerSheet correctOneAnswer(StudentAnswerDto answer1) throws Exception {
         if (answer1.getStudentScore() == null || answer1.getStudentScore().equals("") || answer1.getStudentScore().isEmpty()) {
             return studentAnswerRepository.findById(answer1.getStudentAnswerId()).get().getStudentAnswerSheet();
@@ -275,7 +292,7 @@ public class ExamServiceImpl implements ExamService {
         int timer = Integer.parseInt(time);
         if (timer >= 60) {
             return LocalTime.of(1, 0, 0, 0);
-        } else if (timer < 60 && timer >= 5) {
+        } else if (timer < 60 && timer >= 1) {
             return LocalTime.of(0, timer, 0, 0);
         }
         throw new Exception("cant convert to valid time for exam");
@@ -331,5 +348,12 @@ public class ExamServiceImpl implements ExamService {
     private String convertBooleanToString(boolean b) {
         if (b) return "Yes";
         return "No";
+    }
+
+    private String examStatus(Exam exam){
+        if(exam.isEnded())return "Finished";
+        if(!exam.isStarted()) return "Not Started";
+        if(!exam.isEnded()) return "On Going";
+        return null;
     }
 }

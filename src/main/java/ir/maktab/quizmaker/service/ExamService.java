@@ -31,4 +31,8 @@ public interface ExamService {
     List<StudentAnswersOutDto> correctOneAnswerByTeacher(StudentAnswerDto answer) throws Exception;
 
     List<StudentAnswersOutDto> correctAllAnswerByTeacher(AllAnswerScoreDto answer) throws Exception;
+
+    void startExamByTeacher(Exam exam);
+
+    void endExamByTeacher(Exam exam);
 }

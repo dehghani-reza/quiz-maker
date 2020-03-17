@@ -29,6 +29,8 @@ public class Exam {
 
     private boolean isEnded;
 
+    private boolean isStarted;
+
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "exam_question",
             joinColumns = @JoinColumn(name = "examId"),

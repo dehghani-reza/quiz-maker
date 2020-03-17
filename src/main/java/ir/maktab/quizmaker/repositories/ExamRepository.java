@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface ExamRepository extends JpaRepository<Exam,Long> {
 
-    List<Exam> findAllByCourse_CourseId(Long courseId);
+    List<Exam> findAllByCourse_CourseId(Long course_courseId);
 
     Optional<List<Exam>> findAllByCourse_Teacher_Account_Username(String course_teacher_account_username);
+
+
 }

@@ -11,6 +11,8 @@ public class ExamMoreOutDto {
 
     private String examTitle;
 
+    private String status;
+
     private int studentNumber;
 
     private int studentParticipationNumber;

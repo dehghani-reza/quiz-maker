@@ -83,6 +83,18 @@ public class TeacherController {
         return new OutMessageWithExamScoreDto("question deleted from exam", v);
     }
 
+    @PostMapping("/start-exam")
+    private OutMessage startExamByTeacher(@RequestBody Exam exam) throws Exception {
+       examService.startExamByTeacher(exam);
+        return new OutMessage("exam started");
+    }
+
+    @PostMapping("/end-exam")
+    private OutMessage endExamByTeacher(@RequestBody Exam exam) throws Exception {
+        examService.endExamByTeacher(exam);
+        return new OutMessage("exam ended");
+    }
+
     @PostMapping("/load-all-question-from-bank")
     private List<QuestionOutDto> loadAllTeacherQuestionFromBank(@RequestBody Account account) throws Exception {
         return questionService.loadAllTeacherQuestion(account);
