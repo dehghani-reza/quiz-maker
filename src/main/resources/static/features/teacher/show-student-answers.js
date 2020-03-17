@@ -39,7 +39,7 @@ function fillStudentAnswersSheet(data) {
         content += "<tr class='"+makeRowRed(data[i])+"'>";
         content += "<th scope='row'>" + data[i].questionContent + "</th>";
         content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].questionAnswer + "'>" + data[i].questionAnswer.substring(0, 19) + "</td>";
-        content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].context + "'>" + data[i].context.substring(0, 19) + "</td>";
+        content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].context + "'>" + data[i].context + "</td>";
         content += "<td >" + data[i].isCorrected + "</td>";
         content += "<td > <input step='0.25' min='0' type='number' max='" + data[i].questionScore + "' id='" + data[i].answerId + "' class='form-control' placeholder='max:" + data[i].questionScore.toString() + "'></td>";
         content += "<td >" + data[i].studentScore + "</td>";

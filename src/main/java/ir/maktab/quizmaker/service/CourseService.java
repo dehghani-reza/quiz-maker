@@ -30,4 +30,6 @@ public interface CourseService {
     List<CourseForTeacherDto> loadAllTeacherCourse(Account account) throws Exception;
 
     List<CourseOutDto> loadAllCourseForStudent(Account account);
+
+    List<AccountStatusDto> loadAccountStatus();
 }

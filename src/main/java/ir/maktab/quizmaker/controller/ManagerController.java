@@ -131,4 +131,9 @@ public class ManagerController {
         courseService.deleteStudentFromCourse(studentCourse);
         return new OutMessage("student deleted successfully");
     }
+
+    @PostMapping("/load-account-status")
+    private List<AccountStatusDto> accountStatus() throws Exception {
+        return courseService.loadAccountStatus();
+    }
 }

@@ -38,7 +38,7 @@ function fillAllExamList(data) {
         content += "<th scope='row'>" + data[i].courseName + "</th>";
         content += "<td >" + data[i].examTitle + "</td>";
         content += "<td >" + data[i].status + "</td>";
-        content += "<td id=" + i + ">"+data[i].studentParticipationNumber+" from " +data[i].studentNumber+ "</td>";
+        content += "<td id=" + i + "> <div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='"+data[i].studentParticipationNumber+"' aria-valuemin='0' aria-valuemax='"+data[i].studentNumber+"' style='width: "+(data[i].studentParticipationNumber/data[i].studentNumber)*100+"%'>"+data[i].studentParticipationNumber +" out of "+ data[i].studentNumber+"</div></div></td>";
         content += "<td >" + data[i].examScore + "</td>";
         content += "<td >" + data[i].averageScore + "</td>";
         content += "<td >" ;
@@ -114,6 +114,34 @@ function endExamByTeacher(data) {
 function showExamStyleSheets(data) {
     window.examIdForStyleSheetPage = data;
     $('#app-content-load').load('features/teacher/load-exam-style-sheet.html');
+}
+
+
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+    var data = google.visualization.arrayToDataTable(
+        fillTheChart(globalAllExamForTeacherManagingExam)
+    );
+
+    var options = {
+        title: 'Exams OverView',
+        hAxis: {title: 'ExamTitle',  titleTextStyle: {color: '#333'}},
+        vAxis: {minValue: 0}
+    };
+
+    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+}
+
+function fillTheChart(data) {
+    var char =  [['ExamTitle', 'ExamScore', 'AverageScore']];
+    for (let i = 0; i <data.length ; i++) {
+        char.push([data[i].examTitle, data[i].examScore,data[i].averageScore]);
+    }
+    return char;
 }
 
 function showSubmitMessage(message) {

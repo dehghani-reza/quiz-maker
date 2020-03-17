@@ -20,4 +20,7 @@ public interface AccountRepository extends JpaRepository<Account,Long> , JpaSpec
 
     Account findByUsername(String username);
 
+    Long countAllByEnabledIsTrue();
+    Long countAccountsByEnabledFalse();
+
 }

@@ -35,7 +35,7 @@ function fillStudentAnswersSheetForStudent(data) {
         content += "<tr class='"+makeRowRed(data[i])+"'>";
         content += "<th scope='row'>" + data[i].questionContext + "</th>";
         content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].questionAnswer + "'>" + data[i].questionAnswer.substring(0, 19) + "</td>";
-        content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].studentAnswer + "'>" + data[i].studentAnswer.substring(0, 19) + "</td>";
+        content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].studentAnswer + "'>" + data[i].studentAnswer + "</td>";
         content += "<td >" + data[i].isCorrected + "</td>";
         content += "<td >" + data[i].score+ "</td>";
         content += "<td >" + data[i].studentScore + "</td>";

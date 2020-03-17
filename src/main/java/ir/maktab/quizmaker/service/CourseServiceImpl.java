@@ -227,6 +227,16 @@ public class CourseServiceImpl implements CourseService {
         return null;
     }
 
+    @Override
+    public List<AccountStatusDto> loadAccountStatus() {
+        Long aLong = accountRepository.countAllByEnabledIsTrue();
+        Long aLong1 = accountRepository.countAccountsByEnabledFalse();
+        List<AccountStatusDto> accountStatusDtos = new ArrayList<>();
+        accountStatusDtos.add(new AccountStatusDto("Enable",aLong));
+        accountStatusDtos.add(new AccountStatusDto("Unable",aLong1));
+        return accountStatusDtos;
+    }
+
     private boolean checkIfPersonHasThisCourse(Person person, Course course) {
         if (person instanceof Teacher) {
             return (((Teacher) person).getStudentInCourseList().contains(course));

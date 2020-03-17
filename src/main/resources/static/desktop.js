@@ -8,6 +8,7 @@ $(".app-content").ready(function () {
         submenu.siblings("ul").hide(500);
     });
     // side bar menu clicked
+    loadAccountStatus();
 });
 
 function receiveFirstLoginMessage() {
@@ -32,6 +33,52 @@ function receiveFirstLoginMessage() {
         }
     });
 }
+
+var AccountDataaas;
+function loadAccountStatus() {
+    const username = window.authenticatedUsername;
+    const password = window.authenticatedPassword;
+    // create command
+    const command = {"whoIAm": username};
+    $.ajax({
+        url: serverUrl() + "/manager/load-account-status",
+        type: "POST",
+        data: JSON.stringify(command),
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        success: function (data, status) {
+            AccountDataaas = data;
+            google.charts.load("current", {packages:["corechart"]});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable( fillTheChartStatus(AccountDataaas));
+                var options = {
+                    title: 'AccountStatus',
+                    pieHole: 0.4,
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                chart.draw(data, options);
+            }
+
+        },
+        error: function (errorMessage) {
+            alert("Some thing wrong happened!")
+        }
+    });
+}
+
+
+function fillTheChartStatus(data) {
+    var char =  [['Status','Account']];
+    for (let i = 0; i <data.length ; i++) {
+        char.push([data[i].condition, data[i].numberAccount]);
+    }
+    return char;
+}
+
 
 function showFirstMessage(message) {
     $("#first-login-message-alert").html(message);
