@@ -15,4 +15,6 @@ public class AccountDto {
 
     private Boolean isAuthenticated;
 
+    private String role;
+
 }

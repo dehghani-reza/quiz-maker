@@ -7,6 +7,12 @@ $('#load-pending-account-list').ready(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+    $("#tableSearch").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#modal-add-student-table tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
     // Material Select
     $('.mdb-select').materialSelect({});
 });

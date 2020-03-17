@@ -19,7 +19,7 @@ function login() {
         contentType: "application/json; charset=utf-8",
         success: function (data, textStatus) {
             if (data.isAuthenticated === true) {
-                loginSuccessful(username, password);
+                loginSuccessful(username, password,data.role);
             } else {
                 loginFailed();
             }
@@ -30,13 +30,13 @@ function login() {
     });
 }
 
-function loginSuccessful(username, password) {
+function loginSuccessful(username, password, role) {
     // put username and password in shared values container
     window.authenticatedUsername = username;
     window.authenticatedPassword = password;
     // show desktop
     // this function is in index.js
-    showDesktopForm();
+    showDesktopForm(role);
 }
 
 function loginFailed() {

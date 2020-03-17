@@ -10,9 +10,16 @@ function showLoginForm() {
 }
 
 // show desktop form
-function showDesktopForm() {
-    $("#app-root").load('desktop.html');
-
+function showDesktopForm(data) {
+    if(data==="teacher"){
+        $("#app-root").load('teacher-desktop.html');
+    }
+    if(data==="student"){
+        $("#app-root").load('student-desktop.html');
+    }
+    if(data==="manager"){
+        $("#app-root").load('desktop.html');
+    }
 //    todo we can redirect person base on role from here
 }
 

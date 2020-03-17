@@ -1,5 +1,11 @@
 $(document).ready(function () {
     loadExamFromWindows(window.examDataForTeacher);
+    $("#tableSearch").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#question-bank-table tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
 });
 
 function loadExamFromWindows(data) {
