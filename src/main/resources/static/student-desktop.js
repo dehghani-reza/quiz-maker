@@ -42,6 +42,9 @@ function loadPage(page) {
     if(page==='show-student-courses'){
         $('#app-content-load').load('features/student/show-student-courses.html');
     }
+    if(page==='show-student-scores'){
+        $('#app-content-load').load('features/student/show-student-scores.html');
+    }
 }
 
 window.onbeforeunload = function(e) {

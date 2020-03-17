@@ -35,4 +35,8 @@ public interface ExamService {
     void startExamByTeacher(Exam exam);
 
     void endExamByTeacher(Exam exam);
+
+    List<StudentScoreOutDto> loadAllScoreOfStudent(Account account);
+
+    List<StudentOutSheetDto> loadStudentAnswersForSheet(StudentAnswerSheet sheet);
 }

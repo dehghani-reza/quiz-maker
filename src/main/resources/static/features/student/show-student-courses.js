@@ -24,7 +24,7 @@ function loadStudentCourses() {
             }
         },
         error: function (errorMessage) {
-            alert("some things went wrong!");
+            alert(errorMessage.responseJSON.message);
         }
     });
 }

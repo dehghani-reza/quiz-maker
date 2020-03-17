@@ -257,6 +257,30 @@ public class ExamServiceImpl implements ExamService {
         examRepository.save(exam1);
     }
 
+    @Override
+    public List<StudentScoreOutDto> loadAllScoreOfStudent(Account account) {
+        List<StudentAnswerSheet> all = sheetRepository.findAllByExaminer_Account_Username(account.getUsername());
+        return all.stream().map(sheet -> new StudentScoreOutDto(sheet.getAnswerSheetId(),
+                sheet.getExam().getTitle(),
+                convertSheetStatusToString(sheet),
+                sheet.getExam().getExplanation(),
+                sheet.getFinalScore(),
+                calculateAverageScoreOfExam(sheet.getExam()))).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentOutSheetDto> loadStudentAnswersForSheet(StudentAnswerSheet sheet) {
+        StudentAnswerSheet sheet1 = sheetRepository.findById(sheet.getAnswerSheetId()).get();
+        return sheet1.getStudentAnswers().stream().map(answer -> new StudentOutSheetDto(answer.getQuestion().getContext(),
+                answer.getQuestion().getAnswer(),
+                answer.getContext(),
+                convertBooleanToString(answer.isCorrected()),
+                scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(answer.getQuestion().getQuestionId(),answer.getExam().getExamId()).getPoint(),
+                answer.getStudentScore(),
+                studentAnswerRepository.findAllByExam_ExamIdAndQuestion_QuestionId(answer.getExam().getExamId(),answer.getQuestion().getQuestionId())
+                        .stream().map(StudentAnswer::getStudentScore).reduce((float)0,(aFloat, aFloat2) -> (aFloat+aFloat2)/2))).collect(Collectors.toList());
+    }
+
     private StudentAnswerSheet correctOneAnswer(StudentAnswerDto answer1) throws Exception {
         if (answer1.getStudentScore() == null || answer1.getStudentScore().equals("") || answer1.getStudentScore().isEmpty()) {
             return studentAnswerRepository.findById(answer1.getStudentAnswerId()).get().getStudentAnswerSheet();
@@ -355,5 +379,10 @@ public class ExamServiceImpl implements ExamService {
         if(!exam.isStarted()) return "Not Started";
         if(!exam.isEnded()) return "On Going";
         return null;
+    }
+
+    private String convertSheetStatusToString(StudentAnswerSheet sheet){
+        if(sheet.isCalculated()) return "corrected";
+        return "waiting";
     }
 }

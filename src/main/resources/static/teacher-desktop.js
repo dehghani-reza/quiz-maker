@@ -45,11 +45,14 @@ function loadPage(page) {
     if(page==='show-teacher-exams'){
         $('#app-content-load').load('features/teacher/show-teacher-exams.html');
     }
+    if(page==='show-teacher-question-bank'){
+        $('#app-content-load').load('features/teacher/show-teacher-question-bank.html');
+    }
     if(page==='show-student-courses'){
         $('#app-content-load').load('features/student/show-student-courses.html');
     }
-    if(page==='show-teacher-question-bank'){
-        $('#app-content-load').load('features/teacher/show-teacher-question-bank.html');
+    if(page==='show-student-scores'){
+        $('#app-content-load').load('features/student/show-student-scores.html');
     }
 }
 
