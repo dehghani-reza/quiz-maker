@@ -82,7 +82,7 @@ function submitAnswersByStudent() {
         } else if (document.getElementById(idCreated).tagName === 'TEXTAREA') {
             answers[i] = [globalExamQuestionForStudent[i].questionId, document.getElementById(idCreated).value];
         }
-        clearInterval(timer);
+
     }
 
     const newCourseCommand = {
@@ -102,13 +102,14 @@ function submitAnswersByStudent() {
         success: function (data) {
             if (data.message !== null) {
                 alert(data.message);
-                $('#app-content-load').load('features/student/course-exam-for-student.html');
             } else {
                 alert("some things went wrong");
+                clearInterval(timer);
             }
         },
         error: function () {
             alert("some things went wrong!");
+            clearInterval(timer);
         }
     });
 }

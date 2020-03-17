@@ -108,7 +108,11 @@ public class ExamServiceImpl implements ExamService {
     public List<ExamOutDto> loadAllCourseExamForStudent(CourseExamDto courseExamDto) {
         List<Exam> exams = examRepository.findAllByCourse_CourseId(courseExamDto.getCourseId()).stream().filter(Exam::isStarted).filter(exam -> !exam.isEnded()).collect(Collectors.toList());
         Person examiner = personRepository.findByAccount_Username(courseExamDto.getUsername());
-        List<Exam> doneExam = examiner.getStudentAnswerSheet().stream().map(StudentAnswerSheet::getExam).collect(Collectors.toList());
+        Date now = new Date();
+        now.setTime(new Date().getTime());
+        List<Exam> doneExam = examiner.getStudentAnswerSheet().stream()
+                .filter(sheet ->!checkIfAnswerSheetIsOnTimeBoolean(sheet))
+                .map(StudentAnswerSheet::getExam).collect(Collectors.toList());
         exams.removeAll(doneExam);
         return exams.stream().map(exam -> new ExamOutDto(exam.getExamId(),
                 exam.getTitle(),
@@ -121,29 +125,40 @@ public class ExamServiceImpl implements ExamService {
     public Set<QuestionOutExamDto> startExamForStudent(StartExamDto startExamDto) {
         Person examiner = personRepository.findByAccount_Username(startExamDto.getUsername());
         Optional<Exam> exam = examRepository.findById(startExamDto.getExamId());
-        Date start = new Date();
-        start.setTime(new Date().getTime());
-        StudentAnswerSheet sheet = new StudentAnswerSheet(null,
-                start,
-                null,
-                false,
-                false,
-                0,
-                examiner,
-                exam.get(),
-                null);
-        sheetRepository.save(sheet);
-        Map<Question, Score> questionPoint = new HashMap<>();
-        exam.get().getScores().forEach(score -> questionPoint.put(score.getQuestion(), score));
-        int hour = exam.get().getExamDuration().getHour();
-        int minute = exam.get().getExamDuration().getMinute();
-        int second = exam.get().getExamDuration().getSecond();
+        Optional<StudentAnswerSheet> possibleSheet = sheetRepository.findByExaminer_Account_UsernameAndExam_ExamId(startExamDto.getUsername(), startExamDto.getExamId());
+        if(possibleSheet.isEmpty()) {
+            Date start = new Date();
+            start.setTime(new Date().getTime());
+            StudentAnswerSheet sheet = new StudentAnswerSheet(null,
+                    start,
+                    null,
+                    false,
+                    false,
+                    0,
+                    examiner,
+                    exam.get(),
+                    null);
+            sheetRepository.save(sheet);
+        }
+            Map<Question, Score> questionPoint = new HashMap<>();
+            exam.get().getScores().forEach(score -> questionPoint.put(score.getQuestion(), score));
+            int hour = exam.get().getExamDuration().getHour();
+            int minute = exam.get().getExamDuration().getMinute();
+            int second = exam.get().getExamDuration().getSecond();
+            int duration = hour * 3600 * 1000 + minute * 60 * 1000 + second * 1000;
+            if(possibleSheet.isPresent()){
+                Date now = new Date();
+                now.setTime(new Date().getTime());
+                duration-=(now.getTime()-possibleSheet.get().getCreatedDate().getTime());
+            }
+        int finalDuration = duration;
         return exam.get().getQuestionList().stream().map(question -> new QuestionOutExamDto(question.getQuestionId(),
-                question.getContext(),
-                questionPoint.get(question).getPoint(),
-                question.getClass().getName().replace("ir.maktab.quizmaker.model.", ""),
-                hour * 3600 * 1000 + minute * 60 * 1000 + second * 1000,
-                convertStringToQuestionOptions(question))).collect(Collectors.toSet());
+                    question.getContext(),
+                    questionPoint.get(question).getPoint(),
+                    question.getClass().getName().replace("ir.maktab.quizmaker.model.", ""),
+                finalDuration,
+                    convertStringToQuestionOptions(question))).collect(Collectors.toSet());
+
     }
 
     @Override
@@ -151,6 +166,7 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = examRepository.findById(submitAnswersDto.getExamId()).get();
         Person person = personRepository.findByAccount_Username(submitAnswersDto.getUsername());
         StudentAnswerSheet sheet = sheetRepository.findByExam_ExamIdAndExaminer_PersonId(exam.getExamId(), person.getPersonId());
+        studentAnswerRepository.deleteAll(sheet.getStudentAnswers());
         List<StudentAnswer> answers = new ArrayList<>();
         for (int i = 0; i < submitAnswersDto.getAnswers().length; i++) {
             answers.add(new StudentAnswer(null,
@@ -336,6 +352,23 @@ public class ExamServiceImpl implements ExamService {
             studentAnswerSheet.setOnTime(false);
         } else {
             studentAnswerSheet.setOnTime(true);
+        }
+    }
+
+    private boolean checkIfAnswerSheetIsOnTimeBoolean(StudentAnswerSheet studentAnswerSheet) {
+        Date createdDate = studentAnswerSheet.getCreatedDate();
+        Date finished = new Date();
+        finished.setTime(new Date().getTime());
+        studentAnswerSheet.setFilledDate(finished);
+        LocalTime examDuration = studentAnswerSheet.getExam().getExamDuration();
+        int hour = examDuration.getHour();
+        int minute = examDuration.getMinute();
+        int second = examDuration.getSecond();
+        int longTime = second * 1000 + minute * 60 * 1000 + hour * 3600 * 1000 + (12 * 1000);
+        if (createdDate.getTime() - finished.getTime() > longTime) {
+            return false;
+        } else {
+            return true;
         }
     }
 
