@@ -287,6 +287,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public List<StudentOutSheetDto> loadStudentAnswersForSheet(StudentAnswerSheet sheet) {
         StudentAnswerSheet sheet1 = sheetRepository.findById(sheet.getAnswerSheetId()).get();
+        if(!sheet1.getExam().isEnded())return null;
         return sheet1.getStudentAnswers().stream().map(answer -> new StudentOutSheetDto(answer.getQuestion().getContext(),
                 answer.getQuestion().getAnswer(),
                 answer.getContext(),
@@ -348,7 +349,7 @@ public class ExamServiceImpl implements ExamService {
         int minute = examDuration.getMinute();
         int second = examDuration.getSecond();
         int longTime = second * 1000 + minute * 60 * 1000 + hour * 3600 * 1000 + (12 * 1000);
-        if (createdDate.getTime() - finished.getTime() > longTime) {
+        if (finished.getTime() - createdDate.getTime() > longTime) {
             studentAnswerSheet.setOnTime(false);
         } else {
             studentAnswerSheet.setOnTime(true);
@@ -357,15 +358,14 @@ public class ExamServiceImpl implements ExamService {
 
     private boolean checkIfAnswerSheetIsOnTimeBoolean(StudentAnswerSheet studentAnswerSheet) {
         Date createdDate = studentAnswerSheet.getCreatedDate();
-        Date finished = new Date();
-        finished.setTime(new Date().getTime());
-        studentAnswerSheet.setFilledDate(finished);
+        Date now = new Date();
+        now.setTime(new Date().getTime());
         LocalTime examDuration = studentAnswerSheet.getExam().getExamDuration();
         int hour = examDuration.getHour();
         int minute = examDuration.getMinute();
         int second = examDuration.getSecond();
         int longTime = second * 1000 + minute * 60 * 1000 + hour * 3600 * 1000 + (12 * 1000);
-        if (createdDate.getTime() - finished.getTime() > longTime) {
+        if (now.getTime() - createdDate.getTime() > longTime) {
             return false;
         } else {
             return true;

@@ -134,6 +134,7 @@ function startTimer(Duration) {
             clearInterval(timer);
             $("#timer").innerHTML = "EXPIRED";
             submitAnswersByStudent();
+            $('#app-content-load').load('features/student/course-exam-for-student.html');
         }
         if ($("#timer") === null) {
             clearInterval(timer);
