@@ -40,10 +40,10 @@ function prepareTable(data) {
         content += "<td >" + data[i].isEnable + "</td>";
         content += "<td >" + data[i].role + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-warning btn-sm' onclick='showCurrentPersonForEdit(" + i + ")'>edit</button>" +
+            "<button type='button' class='btn btn-outline-warning btn-sm' onclick='showCurrentPersonForEdit(" + i + ")'>تغییر</button>" +
             "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='showCurrentPersonForUnable(" + i + ")'>unable</button>" +
+            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='showCurrentPersonForUnable(" + i + ")'>غیرفعال</button>" +
             "</td>";
         content += "</tr>";
     }

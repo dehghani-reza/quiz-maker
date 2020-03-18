@@ -127,6 +127,8 @@ public class AccountServiceImpl implements AccountService {
         for (int i = 0; i <roles.size() ; i++) {
             String trimmer = roles.get(i).getRoleName().toString();
             trimmer = trimmer.replace("ROLE_", "");
+            trimmer = trimmer.replace("TEACHER", "معلم");
+            trimmer = trimmer.replace("STUDENT", "دانش آموز");
             rolesString = rolesString.concat(trimmer+"/").toLowerCase();
         }
         rolesString = rolesString.substring(0,rolesString.length()-1);
@@ -136,9 +138,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String convertBooleanStatusToString(boolean status) {
         if(!status){
-            return "Unable";
+            return "غیرفعال";
         }
-        return "Enabled";
+        return "فعال";
     }
 
     @Override

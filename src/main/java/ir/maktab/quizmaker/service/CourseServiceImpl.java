@@ -222,7 +222,7 @@ public class CourseServiceImpl implements CourseService {
                     course.getStartDate().toString(),
                     course.getEndDate().toString(),
                     course.getCourseTitle(),
-                    "Mr."+course.getTeacher().getLastName())).collect(Collectors.toList());
+                    "آقای "+course.getTeacher().getLastName())).collect(Collectors.toList());
         }
         return null;
     }
@@ -232,8 +232,8 @@ public class CourseServiceImpl implements CourseService {
         Long aLong = accountRepository.countAllByEnabledIsTrue();
         Long aLong1 = accountRepository.countAccountsByEnabledFalse();
         List<AccountStatusDto> accountStatusDtos = new ArrayList<>();
-        accountStatusDtos.add(new AccountStatusDto("Enable",aLong));
-        accountStatusDtos.add(new AccountStatusDto("Unable",aLong1));
+        accountStatusDtos.add(new AccountStatusDto("فعال",aLong));
+        accountStatusDtos.add(new AccountStatusDto("غیرفعال",aLong1));
         return accountStatusDtos;
     }
 

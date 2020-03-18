@@ -6,28 +6,28 @@
             <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl; z-index: +1 ; position: absolute;left: 45%;">
             </div>
             <div>
-                <h2>Course management: </h2>
+                <h2>مدیریت دوره ها:</h2>
             </div>
             <div style="padding-top:5px ; width: 25%" class="input-icons">
                 <form>
                     <i class="fa fa-search icon1"></i>
-                    <input class="form-control mb-4 input-field" id="courseSearch" type="text" placeholder="Search list items"/>
+                    <input class="form-control mb-4 input-field" id="courseSearch" type="text" placeholder="جستجو میان دوره ها"/>
                 </form>
             </div>
         </div>
         <div style="display: flex ; justify-content: flex-end ; padding: 5px"   >
-            <button type="button" class="btn btn-primary" onclick="showCourseCreateModalForm()">Add Course</button>
+            <button type="button" class="btn btn-primary" onclick="showCourseCreateModalForm()">اضافه کردن دوره</button>
         </div>
         <table class="table table-striped table-hover" style="padding-top: 10px">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Course Id</th>
-                <th scope="col">Course Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Teacher Name</th>
-                <th scope="col">Add Teacher/Student</th>
-                <th scope="col">Delete</th>
+                <th scope="col">شناسه دوره</th>
+                <th scope="col">نام دوره</th>
+                <th scope="col">تاریخ شروع دوره</th>
+                <th scope="col">تاریخ پایان دوره</th>
+                <th scope="col">نام استاد</th>
+                <th scope="col">افزودن استاد/دانش آموز</th>
+                <th scope="col">حذف</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -44,7 +44,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Course information</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">اطلاعات دوره</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -52,22 +52,22 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="course-created-title" class="col-form-label">course title:</label>
+                            <label for="course-created-title" class="col-form-label">عنوان دوره:</label>
                             <input type="text" class="form-control" id="course-created-title">
                         </div>
                         <div class="form-group">
-                            <label for="course-created-start" class="col-form-label">start date:</label>
+                            <label for="course-created-start" class="col-form-label">تاریخ شروع:</label>
                             <input type="date" class="form-control" id="course-created-start">
                         </div>
                         <div class="form-group">
-                            <label for="course-created-end" class="col-form-label">end date:</label>
+                            <label for="course-created-end" class="col-form-label">تاریخ پایان:</label>
                             <input type="date" class="form-control" id="course-created-end">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addCourseByManager()">create course</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-primary" onclick="addCourseByManager()">ایجاد دوره</button>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabelInput">Delete Course</h5>
+                    <h5 class="modal-title" id="exampleModalLabelInput">حذف دوره</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -86,22 +86,22 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="course-delete-idInput" class="col-form-label">course Id:</label>
+                            <label for="course-delete-idInput" class="col-form-label">شناسه دوره:</label>
                             <input type="text" class="form-control" id="course-delete-idInput" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="course-delete-titleInput" class="col-form-label">course title:</label>
+                            <label for="course-delete-titleInput" class="col-form-label">عنوان دوره:</label>
                             <input type="text" class="form-control" id="course-delete-titleInput" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="course-delete-teacherInput" class="col-form-label">Teacher Name:</label>
+                            <label for="course-delete-teacherInput" class="col-form-label">نام معلم:</label>
                             <input type="text" class="form-control" id="course-delete-teacherInput" readonly>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteCourseByManager()">Delete course</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteCourseByManager()">حذف دوره</button>
                 </div>
             </div>
         </div>

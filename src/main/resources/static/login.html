@@ -24,22 +24,22 @@
 </script>
 <div class="login-wrap">
     <div class="login-html">
-        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
-        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">ورود</label>
+        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">ثبت نام</label>
         <div class="login-form">
             <form id="form-login">
                 <div class="sign-in-htm">
                     <div class="group">
-                        <label for="usernameInput" class="label">Username</label>
+                        <label for="usernameInput" class="label">نام کاربری</label>
                         <input id="usernameInput" type="text" class="input">
                     </div>
                     <div class="group">
-                        <label for="passwordInput" class="label">Password</label>
+                        <label for="passwordInput" class="label">رمز عبور</label>
                         <input id="passwordInput" type="password" class="input" data-type="password">
                     </div>
                     <div class="group">
                         <input id="check" type="checkbox" class="check" checked>
-                        <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                        <label for="check"><span class="icon"></span>مرا به خاطرت نگه دار </label>
                     </div>
 
                     <button type="button"
@@ -47,15 +47,15 @@
                             style="border-radius: 30px"
                             id="login-button"
                             onclick="login()">
-                        Login
+                        ورود
                     </button>
                     <div class="alert alert-danger loginFailedMessage" role="alert" id="loginFailedMessage"
                          style="margin-top: 20px ; display: none ">
-                        Login Failed ...
+                        ورود ناموفق ...
                     </div>
                     <div class="hr"></div>
                     <div class="foot-lnk">
-                        <a href="#forgot">Forgot Password?</a>
+                        <a href="#forgot">فراموشی رمز عبور؟</a>
                     </div>
                     <div class="g-recaptcha" id="rcaptcha" style="margin-top: 70px" data-sitekey="6LdNp9wUAAAAALGfhm8wv-DOFkkk_ZJjh5ijOMTm" ></div>
                     <span id="captcha" style="color:red" /></span>
@@ -64,37 +64,37 @@
             <form>
                 <div class="sign-up-htm">
                     <div class="group">
-                        <label for="newUsernameInput" class="label">Username</label>
+                        <label for="newUsernameInput" class="label">نام کاربری</label>
                         <input id="newUsernameInput" type="text" class="input" required>
                     </div>
                     <div class="group">
-                        <label for="newPasswordInput" class="label">Password</label>
+                        <label for="newPasswordInput" class="label">رمز عبور</label>
                         <input id="newPasswordInput" type="password" class="input" data-type="password" required>
                     </div>
                     <div class="group">
-                        <label for="emailAddress" class="label">Email Address</label>
+                        <label for="emailAddress" class="label">آدرس ایمیل</label>
                         <input id="emailAddress" type="email" class="input">
                     </div>
                     <div class="group">
-                        <label for="firstName" class="label">first Name</label>
+                        <label for="firstName" class="label">نام</label>
                         <input id="firstName" type="email" class="input">
                     </div>
                     <div class="group">
-                        <label for="lastName" class="label">last Name</label>
+                        <label for="lastName" class="label">نام خانوادگی</label>
                         <input id="lastName" type="email" class="input">
                     </div>
                     <div class="toggle" style="height: 50px">
                         <input type="radio" name="position" value="ROLE_TEACHER" id="teacher"/>
-                        <label for="teacher">Teacher</label>
+                        <label for="teacher">معلم</label>
                         <input type="radio" name="position" value="ROLE_STUDENT" id="student" checked="checked"/>
-                        <label for="student">Student</label>
+                        <label for="student">دانش آموز</label>
                     </div>
 
                     <button type="button"
                             class="btn btn-primary btn-lg btn-block"
                             style="border-radius: 30px"
                             onclick="signUp()">
-                        Sign Up
+                        ثبت نام
                     </button>
                 </div>
             </form>

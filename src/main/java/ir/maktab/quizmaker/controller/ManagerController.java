@@ -61,19 +61,19 @@ public class ManagerController {
     @PostMapping("/submit")
     private OutMessage submitAccountByManager(@RequestBody AccountSubmitDto accountSubmitDto) {
         Account account = accountService.submitAccountByManger(accountSubmitDto);
-        return new OutMessage("successfully submit user:" + account.getUsername());
+        return new OutMessage("کاربر با موفقیت تایید شد" + account.getUsername());
     }
 
     @PostMapping("/editAccount")
     private OutMessage editAccountByManager(@RequestBody AccountEditedByManagerFromFrontDto account) {
         Account account1 = accountService.editAccountByManager(account);
-        return new OutMessage("successfully submit user:" + account1.getUsername());
+        return new OutMessage("کاربر با موفقیت تغییر یافت" + account1.getUsername());
     }
 
     @PostMapping("/unableAccount")
     private OutMessage unableAccountByManager(@RequestBody Account AccountUnableDto) {
         Account account1 = accountService.editAccountByManager(AccountUnableDto);
-        return new OutMessage("successfully unable user:" + account1.getUsername());
+        return new OutMessage("کاربر مسدود شد" + account1.getUsername());
     }
 
     @PostMapping("/create-course")
@@ -85,7 +85,7 @@ public class ManagerController {
         } catch (Exception e) {
             return new OutMessage(e.getMessage());
         }
-        return new OutMessage("course successfully created by id " + courseByManager.getCourseId());
+        return new OutMessage("دوره با موفقیت ایجاد شد " + courseByManager.getCourseId());
     }
 
     @PostMapping("/load-all-course")
@@ -96,7 +96,7 @@ public class ManagerController {
     @PostMapping("/delete-course")
     private OutMessage deleteCourseByManager(@RequestBody Course courseDeleteDto) {
         courseService.deleteCourseByManager(courseDeleteDto.getCourseId());
-        return new OutMessage("Course with Id "+courseDeleteDto.getCourseId()+" deleted");
+        return new OutMessage("دوره با شناسه "+courseDeleteDto.getCourseId()+" حذف شد");
     }
 
     @PostMapping("/load-all-teacher")

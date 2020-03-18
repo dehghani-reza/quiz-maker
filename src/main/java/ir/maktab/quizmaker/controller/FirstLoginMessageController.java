@@ -13,6 +13,6 @@ public class FirstLoginMessageController {
 
     @PostMapping
     private OutMessage firstLoginMessage(@RequestBody WelcomeMessage command) throws Exception {
-        return new OutMessage("خوش آمدید ..."+command.getWhoIAm());
+        return new OutMessage(command.getWhoIAm()+"  خوش آمدید  ");
     }
 }

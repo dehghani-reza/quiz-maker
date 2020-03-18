@@ -231,11 +231,11 @@ body:not(:-moz-handler-blocked) fieldset {
     /* ----- */
 }
 .toggle input + label:first-of-type {
-    border-radius: 25px 0 0 25px;
+    border-radius:0 25px 25px 0 ;
     border-right: none;
 }
 .toggle input + label:last-of-type {
-    border-radius: 0 25px 25px 0;
+    border-radius: 25px 0 0 25px;
     border-left: none;
 }
 .toggle input:hover + label {

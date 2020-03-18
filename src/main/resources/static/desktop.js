@@ -55,8 +55,8 @@ function loadAccountStatus() {
             function drawChart() {
                 var data = google.visualization.arrayToDataTable( fillTheChartStatus(AccountDataaas));
                 var options = {
-                    title: 'AccountStatus',
-                    pieHole: 0.4,
+                    title: 'وضعیت حساب ها',
+                    pieHole: 0.6,
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
@@ -72,7 +72,7 @@ function loadAccountStatus() {
 
 
 function fillTheChartStatus(data) {
-    var char =  [['Status','Account']];
+    var char =  [['وضعیت','حساب']];
     for (let i = 0; i <data.length ; i++) {
         char.push([data[i].condition, data[i].numberAccount]);
     }

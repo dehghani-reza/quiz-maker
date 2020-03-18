@@ -7,28 +7,29 @@
 <div class="desktop-top-menu">
     <div class="desktop-brand-box">
         <div class="desktop-brand-title">
-            Quiz Maker
+            <h3>آزمون یار</h3>
         </div>
     </div>
 </div>
 <!-- Side Bar -->
 <div class="desktop-side-bar">
-    <div class="desktop-side-bar-menu">Manager</div>
+    <div class="desktop-side-bar-menu">پنل مدیریت</div>
     <ul class="desktop-side-bar-menu-ul">
-        <li class="desktop-side-bar-menu-li" onclick="loadPage('load-pending-account')">Load Pended Account</li>
-        <li class="desktop-side-bar-menu-li" onclick="loadPage('load-all-account')">Load All Account</li>
-        <li class="desktop-side-bar-menu-li" onclick="loadPage('show-add-course-by-manager')">Course management</li>
+        <li class="desktop-side-bar-menu-li" onclick="loadPage('load-pending-account')">حساب های منتظر تایید</li>
+        <li class="desktop-side-bar-menu-li" onclick="loadPage('load-all-account')">تمامی حساب ها</li>
+        <li class="desktop-side-bar-menu-li" onclick="loadPage('show-add-course-by-manager')">مدیریت دوره ها</li>
     </ul>
 </div>
 <div class="app-content" >
     <div class="app-content-load" id="app-content-load">
         <!-- Load Pages here -->
-        <div class="alert alert-info" role="alert" >
-            Don't refresh page at all
-        </div>
-        <div class="alert alert-success" id="first-login-message-alert" role="alert" style="display: none; direction: rtl;">
-        </div>
-        <div id="donutchart" style="width: 900px; height: 500px;"></div>
+
+            <div class="alert alert-warning" role="alert" >
+                صفحه را به روز رسانی نکنید!
+            </div>
+            <div class="alert alert-success" id="first-login-message-alert" role="alert" style="display: none;">
+            </div>
+            <div id="donutchart" style="width: 900px; height: 500px;"></div>
 
     </div>
 </div>

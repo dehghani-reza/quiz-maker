@@ -34,7 +34,7 @@ function prepareTable(data) {
         content += "<td >" + data[i].email + "</td>";
         content += "<td >" + data[i].role + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-success btn-sm' onclick='showSubmitIncidentByEmployeeModal(" + i + ")'>submit</button>" +
+            "<button type='button' class='btn btn-outline-success btn-sm' onclick='showSubmitIncidentByEmployeeModal(" + i + ")'>فعال کن</button>" +
             "</td>";
         content += "</tr>";
     }

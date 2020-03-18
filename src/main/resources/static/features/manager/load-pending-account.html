@@ -5,16 +5,16 @@
     <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl; z-index: +1 ; position: absolute;left: 45%;">
     </div>
     <div class="table-responsive">
-        <h2>Pended Accounts: </h2>
+        <h2>حساب های منتظر تایید:</h2>
         <table class="table table-striped table-hover" style="padding-top: 10px">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">firstName</th>
-                <th scope="col">lastName</th>
-                <th scope="col">username</th>
-                <th scope="col">email</th>
-                <th scope="col">roles</th>
-                <th scope="col">Submit</th>
+                <th scope="col">نام</th>
+                <th scope="col">نام خانوادگی</th>
+                <th scope="col">نام کاربری</th>
+                <th scope="col">ایمیل</th>
+                <th scope="col">نقش</th>
+                <th scope="col">فعال سازی</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -30,7 +30,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Enable Account</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">فعال سازی حساب</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -40,24 +40,24 @@
                     <form id="form-submit-pended-account">
                         <div class="sign-in-htm">
                             <label>
-                                <label for="usernameInput" class="label" >Username</label>
+                                <label for="usernameInput" class="label" >نام کاربری</label>
                                 <input id="usernameInput" class="form-control" type="text" placeholder="Readonly input here…" readonly>
                             </label>
-                            <p style="padding-top: 50px"><a class="tooltip-test" title="if leave it empty its doesn't change">Role('s):</a> </p>
+                            <p style="padding-top: 50px"><a class="tooltip-test" title="if leave it empty its doesn't change">نقش(ها):</a> </p>
                             <div class="inputGroup">
                                 <input id="position1" name="position" type="checkbox" value="STUDENT"/>
-                                <label for="position1">Student</label>
+                                <label for="position1">دانش آموز</label>
                             </div>
                             <div class="inputGroup">
                                 <input id="position2" name="position2" type="checkbox"  value="TEACHER"/>
-                                <label for="position2">Teacher</label>
+                                <label for="position2">معلم</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="submit-account" onclick="submitAccountForDataBase()">Enable
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-success" id="submit-account" onclick="submitAccountForDataBase()">فعال کن
                     </button>
                 </div>
             </div>

@@ -28,7 +28,7 @@ function loadCourseFromWindow(data) {
     content += "<td >" + data.endDate + "</td>";
     content += "<td >" + data.teacherName + "</td>";
     content += "<td >" +
-        "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>Alter Course (Add Teacher)</button>" +
+        "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>تغییرات</button>" +
         "</td>";
     // content += "<td >" +
     //     "<button type='button' class='btn btn-outline-danger btn-sm' onclick='showDeleteCourseModalInEditPage()'>Delete</button>" +
@@ -152,7 +152,7 @@ function fillStudentTable(data) {
         content += "<td >" + data[i].username + "</td>";
         content += "<td id=" + i + ">" + data[i].email + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteStudentFromCourse(\"" + data[i].username + "\")'>Delete</button>" +
+            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteStudentFromCourse(\"" + data[i].username + "\")'>حذف</button>" +
             "</td>";
         content += "</tr>";
     }
@@ -194,8 +194,8 @@ function fillAddStudentToCourseModal(data) {
         // content += "<td >" +
         //     "<button type='button' class='btn btn-outline-info btn-sm' onclick='showEditCourseModal()'>Alter Course (Add Teacher)</button>" +
         //     "</td>";
-        content += "<td><input class='form-check-input' type='checkbox' id='" + data[i].username + "' name='student' value='" + data[i].username + "'>";
-        content += "<label class='form-check-label' for='" + data[i].username + "'></label></td>";
+        content += "<td><div class='form-check'><input class='form-check-input position-static' type='checkbox' id='" + data[i].username + "' name='student' value='" + data[i].username + "'>"+
+       "<label class='form-check-label' for='" + data[i].username + "'></label></div></td>";
         content += "</tr>";
     }
     $('#modal-add-student-table').html(content);

@@ -29,7 +29,7 @@
 .desktop-side-bar {
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
     padding-top: 64px;
     height: 100%;
     width: 240px;
@@ -39,7 +39,7 @@
 
 .desktop-side-bar-menu {
     color: #cfd8dc;
-    padding-left: 24px;
+    padding-right: 24px;
     padding-top: 16px;
     padding-bottom: 16px;
     cursor: pointer;
@@ -55,9 +55,9 @@
     background-color: #2c383f;
     margin: 0;
     padding: 0;
-    border-left: 2px;
-    border-left-style: solid;
-    border-left-color: #f57c00;
+    border-right: 2px;
+    border-right-style: solid;
+    border-right-color: #f57c00;
 }
 
 .desktop-side-bar-menu-li {
