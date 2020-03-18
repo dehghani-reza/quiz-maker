@@ -47,14 +47,14 @@ function createExamForm(data) {
         content += '<div style="background-color:' + backgroundColor + ';border-radius: 10px;padding: 10px">';
         if (data[i].type === "SimpleQuestion") {
             content += "<p style='margin: 0px'>" + (i + 1) + ") " + data[i].context + " (score: " + data[i].score + ")" + "</p>";
-            content += "<div style='padding-left: 50px; height: 100px'>";
-            content += "<textarea rows=\"3\" cols=\"50\" class='form-check-input' placeholder='youre answer' type='text' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'></textarea>";
+            content += "<div class='form-check' style='padding-right: 50px; height: 100px'>";
+            content += "<textarea rows=\"3\" cols=\"50\" class='form-check-input  position-static' placeholder='پاسخ شما' type='text' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'></textarea>";
             content += "</div>"
         } else if (data[i].type === "OptionalQuestion") {
             content += "<p>" + (i + 1) + ") " + data[i].context + " (score: " + data[i].score + ")" + "</p>";
-            content += "<div style='padding-left: 20px'>";
+            content += "<div style='padding-right: 20px'>";
             for (let j = 0; j < data[i].options.length; j++) {
-                content += "<input type=\"radio\" value='" + data[i].options[j] + "' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'>";
+                content += "<input class='form-check-input  position-static' type=\"radio\" value='" + data[i].options[j] + "' id='answer" + data[i].questionId + "' name='answer" + data[i].questionId + "'>";
                 content += "<label for='question" + i + "option" + j + "'>" + data[i].options[j] + "</label><br>"
             }
             content += "</div>";
@@ -119,28 +119,42 @@ var timer;
 function startTimer(Duration) {
     var nowDay = new Date().getTime();
     var countDownDate = new Date(nowDay + Duration).getTime();
-    timer = setInterval(function () {
-        var now = new Date().getTime();
-        var distance = countDownDate - now;
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        document.getElementById("timer").innerHTML = hours + "h "
-            + minutes + "m " + seconds + "s ";
-        if (distance < 60 * 1000) {
-            $("#timer").css("color", "darkred").fadeOut().fadeIn(200);
-        }
-        if (distance < 0) {
-            clearInterval(timer);
-            $("#timer").innerHTML = "EXPIRED";
-            submitAnswersByStudent();
-            $('#app-content-load').load('features/student/course-exam-for-student.html');
-        }
-        if ($("#timer") === null) {
-            clearInterval(timer);
-        }
-        //todo if filled send to db
-    }, 1000);
+
+    try {
+        timer = setInterval(function () {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            try {
+                document.getElementById("timer").innerHTML = hours + "h "
+                    + minutes + "m " + seconds + "s ";
+            }
+            catch(err) {
+                clearInterval(timer);
+            }
+            document.getElementById("timer").innerHTML = hours + "h "
+                + minutes + "m " + seconds + "s ";
+            if (distance < 60 * 1000) {
+                $("#timer").css("color", "darkred").fadeOut().fadeIn(200);
+            }
+            if (distance < 0) {
+                clearInterval(timer);
+                $("#timer").innerHTML = "EXPIRED";
+                submitAnswersByStudent();
+                $('#app-content-load').load('features/student/course-exam-for-student.html');
+            }
+            if ($("#timer") === null) {
+                clearInterval(timer);
+            }
+            //todo if filled send to db
+        }, 1000);
+    }catch(err) {
+        clearInterval(timer);
+    }
+
+
 
 }
 

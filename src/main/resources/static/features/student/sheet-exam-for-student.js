@@ -43,7 +43,7 @@ function fillStudentAnswersSheetForStudent(data) {
         content += "</tr>";
     }
     content += "<tr>";
-    content += "<th scope='row'>TotalScore:</th>";
+    content += "<th scope='row'>نمره نهایی:</th>";
     content += "<td colspan='6'>" + calculateTotalScore(data)+"/"+calculateTotalExamScore(data) + "</td>";
     content += "</tr>";
     $('#all-answers-from-sheet-for-student').html(content);
@@ -66,7 +66,7 @@ function calculateTotalExamScore(data) {
 }
 
 function makeRowRed(data) {
-    if (data.isCorrected === "Yes") {
+    if (data.isCorrected === "بلی") {
         return null;
     } else return "bg-danger";
 }

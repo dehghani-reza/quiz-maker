@@ -29,6 +29,6 @@ public class SignUpController {
     public OutMessage signUp(@RequestBody SignUpAccountDto signUpAccountDto) throws Exception {
         System.out.println(signUpAccountDto.toString());
         Account signUpAccount = accountService.signUpAccount(signUpAccountDto);
-        return new OutMessage("Sign up with user name : " + signUpAccount.getUsername() + " successfully done!");
+        return new OutMessage("ثبت نام با نام کاربری : " + signUpAccount.getUsername() + " صورت گرفت");
     }
 }

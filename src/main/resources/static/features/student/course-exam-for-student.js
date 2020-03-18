@@ -41,7 +41,7 @@ function fillStudentCourseExamTable(data) {
         content += "<td id=" + i + ">" + data[i].duration + "</td>";
         content += "<td >" + data[i].totalScore + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-success btn-sm' onclick='startExamByStudent(" + data[i].examId + ")'>Begin</button>" +
+            "<button type='button' class='btn btn-success btn-sm' onclick='startExamByStudent(" + data[i].examId + ")'>شروع آزمون</button>" +
             "</td>";
         content += "</tr>";
     }

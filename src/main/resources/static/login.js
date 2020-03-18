@@ -65,7 +65,7 @@ function signUp() {
         contentType: "application/json; charset=utf-8",
         success: function (data, textStatus) {
             if (data.message !== null) {
-                alert(data.message+"\nplease wait until manager confirm you");
+                alert(data.message+"\nلطفا صبر کنید تا مدیر شما را تایید کند.");
             } else {
                 alert("some things went wrong");
             }

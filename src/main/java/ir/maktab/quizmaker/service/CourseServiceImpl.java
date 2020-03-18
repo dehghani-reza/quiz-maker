@@ -215,7 +215,7 @@ public class CourseServiceImpl implements CourseService {
                     course.getStartDate().toString(),
                     course.getEndDate().toString(),
                     course.getCourseTitle(),
-                    course.getTeacher().getLastName())).collect(Collectors.toList());
+                    "آقای "+course.getTeacher().getLastName())).collect(Collectors.toList());
         }else if(username instanceof Teacher){
             List<Course> courseList = ((Teacher) username).getStudentInCourseList();
             return courseList.stream().map(course -> new CourseOutDto(course.getCourseId().toString(),

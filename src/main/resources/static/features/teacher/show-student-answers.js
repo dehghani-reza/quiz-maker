@@ -127,7 +127,7 @@ function calculateTotalScore(data) {
 }
 
 function makeRowRed(data) {
-    if (data.isCorrected === "Yes") {
+    if (data.isCorrected === "بلی") {
         return null;
     } else return "bg-danger";
 }

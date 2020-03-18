@@ -42,7 +42,7 @@ function fillStudentScoreList(data) {
         content += "<td id=" + i + ">" + data[i].yourScore + "</td>";
         content += "<td >" + data[i].averageScore + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-primary btn-sm' onclick='loadAnswerSheetForStudent(" + i + ")'>Detail</button>" +
+            "<button type='button' class='btn btn-primary btn-sm' onclick='loadAnswerSheetForStudent(" + i + ")'>جزئیات</button>" +
             "</td>";
         content += "</tr>";
     }
@@ -63,8 +63,8 @@ function drawChart() {
     );
 
     var options = {
-        title: 'Exams OverView',
-        hAxis: {title: 'ExamTitle',  titleTextStyle: {color: '#333'}},
+        title: 'نگاه کلی به آزمون ها',
+        hAxis: {title: 'عنوان آزمون',  titleTextStyle: {color: '#333'}},
         vAxis: {minValue: 0}
     };
 
@@ -73,7 +73,7 @@ function drawChart() {
 }
 
 function fillTheChart(data) {
-    var char =  [['ExamTitle', 'YourScore', 'AverageScore']];
+    var char =  [['عنوان آزمون', 'نمره شما', 'میانگین نمرات']];
     for (let i = 0; i <data.length ; i++) {
         char.push([data[i].examTitle, data[i].yourScore,data[i].averageScore]);
     }

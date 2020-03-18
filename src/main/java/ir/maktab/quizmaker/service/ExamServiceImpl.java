@@ -106,10 +106,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public List<ExamOutDto> loadAllCourseExamForStudent(CourseExamDto courseExamDto) {
-        List<Exam> exams = examRepository.findAllByCourse_CourseId(courseExamDto.getCourseId()).stream().filter(Exam::isStarted).filter(exam -> !exam.isEnded()).collect(Collectors.toList());
+//        List<Exam> exams = examRepository.findAllByCourse_CourseId(courseExamDto.getCourseId()).stream().filter(Exam::isStarted).filter(exam -> !exam.isEnded()).collect(Collectors.toList());
+        List<Exam> exams = examRepository.findAllByCourse_CourseIdAndIsEndedFalse(courseExamDto.getCourseId());
         Person examiner = personRepository.findByAccount_Username(courseExamDto.getUsername());
-        Date now = new Date();
-        now.setTime(new Date().getTime());
         List<Exam> doneExam = examiner.getStudentAnswerSheet().stream()
                 .filter(sheet ->!checkIfAnswerSheetIsOnTimeBoolean(sheet))
                 .map(StudentAnswerSheet::getExam).collect(Collectors.toList());
@@ -122,7 +121,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Set<QuestionOutExamDto> startExamForStudent(StartExamDto startExamDto) {
+    public Set<QuestionOutExamDto> startExamForStudent(StartExamDto startExamDto) throws Exception {
         Person examiner = personRepository.findByAccount_Username(startExamDto.getUsername());
         Optional<Exam> exam = examRepository.findById(startExamDto.getExamId());
         Optional<StudentAnswerSheet> possibleSheet = sheetRepository.findByExaminer_Account_UsernameAndExam_ExamId(startExamDto.getUsername(), startExamDto.getExamId());
@@ -150,6 +149,7 @@ public class ExamServiceImpl implements ExamService {
                 Date now = new Date();
                 now.setTime(new Date().getTime());
                 duration-=(now.getTime()-possibleSheet.get().getCreatedDate().getTime());
+                if(duration<=0) throw new Exception("زمان آزمون شما به پایان رسیده است.");
             }
         int finalDuration = duration;
         return exam.get().getQuestionList().stream().map(question -> new QuestionOutExamDto(question.getQuestionId(),
@@ -166,7 +166,7 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = examRepository.findById(submitAnswersDto.getExamId()).get();
         Person person = personRepository.findByAccount_Username(submitAnswersDto.getUsername());
         StudentAnswerSheet sheet = sheetRepository.findByExam_ExamIdAndExaminer_PersonId(exam.getExamId(), person.getPersonId());
-        studentAnswerRepository.deleteAll(sheet.getStudentAnswers());
+        studentAnswerRepository.deleteAll(sheet.getStudentAnswers());//todo can bring by sheet and update it
         List<StudentAnswer> answers = new ArrayList<>();
         for (int i = 0; i < submitAnswersDto.getAnswers().length; i++) {
             answers.add(new StudentAnswer(null,
@@ -403,19 +403,19 @@ public class ExamServiceImpl implements ExamService {
     }
 
     private String convertBooleanToString(boolean b) {
-        if (b) return "Yes";
-        return "No";
+        if (b) return "بلی";
+        return "خیر";
     }
 
     private String examStatus(Exam exam){
-        if(exam.isEnded())return "Finished";
-        if(!exam.isStarted()) return "Not Started";
-        if(!exam.isEnded()) return "On Going";
+        if(exam.isEnded())return "پایان یافته";
+        if(!exam.isStarted()) return "شروع نشده";
+        if(!exam.isEnded()) return "در حال برگزاری";
         return null;
     }
 
     private String convertSheetStatusToString(StudentAnswerSheet sheet){
-        if(sheet.isCalculated()) return "corrected";
-        return "waiting";
+        if(sheet.isCalculated()) return "تصحیح شده";
+        return "منتظر تصحیح";
     }
 }

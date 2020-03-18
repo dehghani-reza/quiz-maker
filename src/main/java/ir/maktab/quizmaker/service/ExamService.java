@@ -18,7 +18,7 @@ public interface ExamService {
 
     List<ExamOutDto> loadAllCourseExamForStudent(CourseExamDto courseExamDto);
 
-    Set<QuestionOutExamDto> startExamForStudent(StartExamDto startExamDto);
+    Set<QuestionOutExamDto> startExamForStudent(StartExamDto startExamDto) throws Exception;
 
     int submitAnswersToAnswerSheet(SubmitAnswersDto submitAnswersDto);
 

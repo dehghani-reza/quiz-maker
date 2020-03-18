@@ -36,14 +36,14 @@ public class StudentController {
     }
 
     @PostMapping("/start-exam")
-    private Set<QuestionOutExamDto> startExamForStudent(@RequestBody StartExamDto startExamDto) {
+    private Set<QuestionOutExamDto> startExamForStudent(@RequestBody StartExamDto startExamDto) throws Exception {
         return examService.startExamForStudent(startExamDto);
     }
 
     @PostMapping("/submit-exam-answers")
     private OutMessage submitAnswersToExamByStudent(@RequestBody SubmitAnswersDto submitAnswersDto) {
         int i =examService.submitAnswersToAnswerSheet(submitAnswersDto);
-        return new OutMessage(i+"answers submitted");
+        return new OutMessage("سوال پاسخ داده شد"+i);
     }
 
     @PostMapping("/load-all-scores")
