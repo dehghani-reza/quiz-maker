@@ -48,7 +48,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Exam createExam(CreateExamDto createExamDto) throws Exception {
         Optional<Course> course = courseRepository.findById(Long.valueOf(createExamDto.getCourseId()));
-        if (course.isEmpty()) throw new Exception("course not found");
+        if (course.isEmpty()) throw new Exception("دوره یافت نشد");
         Exam exam = new Exam(null,
                 createExamDto.getExamTitle(),
                 createExamDto.getExamExplanation(),
@@ -66,7 +66,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public List<ExamOutDto> loadAllCourseExam(Course course) throws Exception {
         Optional<Course> courseOptional = courseRepository.findById(course.getCourseId());
-        if (courseOptional.isEmpty()) throw new Exception("course with this id not found");
+        if (courseOptional.isEmpty()) throw new Exception("دوره ای با اطلاعات مذکور یافت نشد");
         List<Exam> examList = courseOptional.get().getExamList();
         Map<Exam, Float> examTotalScore = new HashMap<>();
         for (int i = 0; i < examList.size(); i++) {
@@ -302,10 +302,10 @@ public class ExamServiceImpl implements ExamService {
         if (answer1.getStudentScore() == null || answer1.getStudentScore().equals("") || answer1.getStudentScore().isEmpty()) {
             return studentAnswerRepository.findById(answer1.getStudentAnswerId()).get().getStudentAnswerSheet();
         }
-        if (Float.parseFloat(answer1.getStudentScore()) < 0) throw new Exception("score not valid");
+        if (Float.parseFloat(answer1.getStudentScore()) < 0) throw new Exception("نمره منفی مجاز نیست!");
         StudentAnswer byId = studentAnswerRepository.findById(answer1.getStudentAnswerId()).get();
         if (Float.parseFloat(answer1.getStudentScore()) > scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(byId.getQuestion().getQuestionId(), byId.getExam().getExamId()).getPoint())
-            throw new Exception("score not valid");
+            throw new Exception("نمره بیش از حد مجاز است!");
         byId.setStudentScore(Float.parseFloat(answer1.getStudentScore()));
         byId.setCorrected(true);
         if (Float.parseFloat(answer1.getStudentScore()) != 0) byId.setTrue(true);

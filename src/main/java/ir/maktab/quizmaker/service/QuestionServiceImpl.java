@@ -90,12 +90,12 @@ public class QuestionServiceImpl implements QuestionService {
                 question.getAnswer(),
                 question.getTitle(),
                 questionScoreExam.get(question).getPoint(),
-                question.getClass().getName().replace("ir.maktab.quizmaker.model.", ""))).collect(Collectors.toList());
+                convertQuestionTypeToString(question))).collect(Collectors.toList());
     }
 
     @Override
     public float editQuestionFromExam(QuestionChangeExamDto question) throws Exception {
-        if(examRepository.findById(question.getExamId()).get().getStudentAnswerSheetList().size()!=0)throw new Exception("you cant change exam question score after starting");
+        if(examRepository.findById(question.getExamId()).get().getStudentAnswerSheetList().size()!=0)throw new Exception("بعد از شروع آزمون نمی توانید نمره آزمون را تغییر دهید");
         Score score = scoreRepository.findByQuestion_QuestionIdAndExam_ExamId(question.getQuestionId(), question.getExamId());
         score.setPoint(question.getQuestionScore());
         scoreRepository.save(score);
@@ -124,13 +124,13 @@ public class QuestionServiceImpl implements QuestionService {
                 question.getAnswer(),
                 question.getTitle(),
                 suggestQuestionScore(question.getScoreList()),
-                question.getClass().getName().replace("ir.maktab.quizmaker.model.", ""))).collect(Collectors.toList());
+                convertQuestionTypeToString(question))).collect(Collectors.toList());
     }
 
     @Override
     public float addQuestionFromBankToExam(QuestionIdScoreDto questionIdScoreDto) throws Exception {
         if (questionIdScoreDto.getScoreQuestionForExam().size() != questionIdScoreDto.getQuestionForExam().size())
-            throw new Exception("wrong input");
+            throw new Exception("ورودی غلط");
         Exam exam = examRepository.findById(questionIdScoreDto.getExamId()).get();
         List<Long> oldExamQuestion = exam.getQuestionList().stream().map(Question::getQuestionId).collect(Collectors.toList());
         Map<Long, Float> questionIdScore = new HashMap<>();
@@ -168,7 +168,7 @@ public class QuestionServiceImpl implements QuestionService {
                 a.getAnswer(),
                 a.getTitle(),
                 a.getScoreList().stream().map(Score::getPoint).reduce((float) 0,(aFloat, aFloat2) -> (aFloat+aFloat2)/2),
-                a.getClass().getName().replace("ir.maktab.quizmaker.model.", ""))).collect(Collectors.toList());
+                convertQuestionTypeToString(a))).collect(Collectors.toList());
     }
 
     @Override
@@ -218,5 +218,12 @@ public class QuestionServiceImpl implements QuestionService {
             return option;
         }
         return null;
+    }
+
+    private String convertQuestionTypeToString(Question q){
+        String replace = q.getClass().getName().replace("ir.maktab.quizmaker.model.", "");
+        if(replace.equals("OptionalQuestion"))return "چند گزینه ای";
+        if(replace.equals("SimpleQuestion"))return "تشریحی";
+        return "";
     }
 }

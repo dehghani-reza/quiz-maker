@@ -6,16 +6,16 @@
     <div class="alert alert-success" id="submit-status-message-alert" role="alert" style="display: none; direction: rtl; z-index: +1 ; position: absolute;left: 45%;">
     </div>
     <div id="courseId" style="padding-top: 10px">
-        <h3 style="padding-top: 5px">Course Detail:</h3>
+        <h3 style="padding-top: 5px">جزئیات دوره:</h3>
         <table class="table table-striped" style="padding-top: 10px">
             <thead class="thead-light">
             <tr>
-                <th scope="col">Course Id</th>
-                <th scope="col">Course Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Student number</th>
-                <th scope="col">Add exam to Course</th>
+                <th scope="col">شناسه دوره</th>
+                <th scope="col">نام دوره</th>
+                <th scope="col">تاریخ شروع</th>
+                <th scope="col">تاریخ پایان</th>
+                <th scope="col">تعداد دانش آموزان</th>
+                <th scope="col">اضافه کردن آزمون</th>
             </tr>
             </thead>
             <tbody id="teacher-courses-table">
@@ -24,20 +24,20 @@
         </table>
     </div>
     <div style="justify-content: flex-end ; display: flex ; padding-top: 10px">
-        <button type="button" class="btn btn-info" onclick="showExamListForTeacher()">Show Exams</button>
+        <button type="button" class="btn btn-info" onclick="showExamListForTeacher()">نمایش آزمون ها</button>
     </div>
     <div>
         <div style="display: none" id="exam-list">
-            <h4 style="padding-bottom: 5px">Exam's list:</h4>
+            <h4 style="padding-bottom: 5px">لیست آزمون ها:</h4>
             <table class="table table-striped table-hover" style="padding-top: 10px ; text-align: center" id="table-course-student">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Exam Title</th>
-                    <th scope="col">Explanation</th>
-                    <th scope="col">Duration(in minute)</th>
-                    <th scope="col">TotalScore</th>
-                    <th scope="col">Exam Page</th>
-                    <th scope="col">Delete Exam</th>
+                    <th scope="col">عنوان آزمون</th>
+                    <th scope="col">توضیحات</th>
+                    <th scope="col">زمان آزمون</th>
+                    <th scope="col">نمره کل</th>
+                    <th scope="col">صفحه آزمون</th>
+                    <th scope="col">حذف آزمون</th>
                 </tr>
                 </thead>
                 <tbody id="exam-table">
@@ -54,7 +54,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabelInput">Exam Detail:</h5>
+                    <h5 class="modal-title" id="exampleModalLabelInput">جزئیات آزمون</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -62,30 +62,30 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="course-exam-idInput" class="col-form-label">course Id:</label>
+                            <label for="course-exam-idInput" class="col-form-label">شناسه دوره:</label>
                             <input type="text" class="form-control" id="course-exam-idInput" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="course-exam-titleInput" class="col-form-label">course title:</label>
+                            <label for="course-exam-titleInput" class="col-form-label">عنوان دوره:</label>
                             <input type="text" class="form-control" id="course-exam-titleInput" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="course-edit-titleInput" class="col-form-label">Exam Title:</label>
+                            <label for="course-edit-titleInput" class="col-form-label">عنوان آزمون</label>
                             <input type="text" class="form-control" id="course-edit-titleInput" >
                         </div>
                         <div class="form-group">
-                            <label for="course-edit-explanationInput" class="col-form-label">Explanation:</label>
+                            <label for="course-edit-explanationInput" class="col-form-label">توضیحات</label>
                             <input type="text" class="form-control" id="course-edit-explanationInput" >
                         </div>
                         <div class="form-group">
-                            <label for="course-edit-durationInput" class="col-form-label">Duration(in minute):</label>
+                            <label for="course-edit-durationInput" class="col-form-label">زمان آزمون:</label>
                             <input type="number"  min="5" max="60" class="form-control" id="course-edit-durationInput" >
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="addExamToCourseByTeacher()">Create Exam</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-success" onclick="addExamToCourseByTeacher()">اضافه کردن آزمون</button>
                 </div>
             </div>
         </div>

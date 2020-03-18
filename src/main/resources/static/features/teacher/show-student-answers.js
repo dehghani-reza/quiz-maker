@@ -41,15 +41,15 @@ function fillStudentAnswersSheet(data) {
         content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].questionAnswer + "'>" + data[i].questionAnswer.substring(0, 19) + "</td>";
         content += "<td data-toggle='tooltip' data-placement='top' title='" + data[i].context + "'>" + data[i].context + "</td>";
         content += "<td >" + data[i].isCorrected + "</td>";
-        content += "<td > <input step='0.25' min='0' type='number' max='" + data[i].questionScore + "' id='" + data[i].answerId + "' class='form-control' placeholder='max:" + data[i].questionScore.toString() + "'></td>";
+        content += "<td > <input step='0.25' min='0' type='number' max='" + data[i].questionScore + "' id='" + data[i].answerId + "' class='form-control' placeholder='حداکثر:" + data[i].questionScore.toString() + "'></td>";
         content += "<td >" + data[i].studentScore + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-success btn-sm' onclick='setScore(" + data[i].answerId + ")'>SetScore</button>" +
+            "<button type='button' class='btn btn-success btn-sm' onclick='setScore(" + data[i].answerId + ")'>ذخیره نمره</button>" +
             "</td>";
         content += "</tr>";
     }
     content += "<tr>";
-    content += "<th scope='row'>TotalScore:</th>";
+    content += "<th scope='row'>جمع کل:</th>";
     content += "<td colspan='6'>" + calculateTotalScore(answersGlobalData) + "</td>";
     content += "</tr>";
     $('#all-answers-from-sheet').html(content);
@@ -77,11 +77,11 @@ function setScore(data) {
             if (data !== null) {
                 fillStudentAnswersSheet(data);
             } else {
-                alert("some things went wrong");
+                alert("خطایی رخ داده");
             }
         },
         error: function (errorMessage) {
-            alert("some things went wrong!");
+            alert(errorMessage.responseJSON.message);
         }
     });
 }

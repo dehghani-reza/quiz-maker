@@ -13,7 +13,7 @@ function loadCourseFromWindowFotTeacher(data) {
     content += "<td >" + data.endDate + "</td>";
     content += "<td >" + data.studentNumber + "</td>";
     content += "<td >" +
-        "<button type='button' class='btn btn-primary' onclick='showAddExamTOCourseModal()'>Add exam</button>" +
+        "<button type='button' class='btn btn-primary' onclick='showAddExamTOCourseModal()'>اضافه کردن آزمون</button>" +
         "</td>";
     content += "</tr>";
     $('#teacher-courses-table').html(content);
@@ -99,10 +99,10 @@ function fillExamTable(data) {
         content += "<td >" + data[i].duration + "</td>";
         content += "<td id=" + i + ">" + data[i].totalScore + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-info btn-sm' onclick='showExamEditPage(\"" + i + "\")'>Exam Page</button>" +
+            "<button type='button' class='btn btn-outline-info btn-sm' onclick='showExamEditPage(\"" + i + "\")'>صفحه آزمون</button>" +
             "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteExamFromCourse(\"" + data[i].examId + "\")'>DeleteExam</button>" +
+            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteExamFromCourse(\"" + data[i].examId + "\")'>حذف</button>" +
             "</td>";
         content += "</tr>";
     }
@@ -110,7 +110,7 @@ function fillExamTable(data) {
 }
 
 function deleteExamFromCourse(data) {
-    var r = confirm("Delete the Exam?");
+    var r = confirm("آزمون حذف شود؟");
     if (r === true) {
         const username = window.authenticatedUsername;
         const password = window.authenticatedPassword;

@@ -16,7 +16,7 @@ function loadExamFromWindows(data) {
     content += "<td >" + data.duration + "</td>";
     content += "<td >" + data.totalScore + "</td>";
     content += "<td >" +
-        "<button type='button' class='btn btn-outline-warning btn-sm' onclick='showEditExamModal()'>Edit Exam</button>" +
+        "<button type='button' class='btn btn-outline-warning btn-sm' onclick='showEditExamModal()'>ویرایش آزمون</button>" +
         "</td>";
     content += "</tr>";
     $('#exam-info-table').html(content);
@@ -111,10 +111,10 @@ function fillQuestionTable(data) {
         content += "<td>" + data[i].score + "</td>";
         content += "<td>" + data[i].type + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-warning btn-sm' onclick='showQuestionScoreEditModal(\"" + i + "\")'>Edit</button>" +
+            "<button type='button' class='btn btn-outline-warning btn-sm' onclick='showQuestionScoreEditModal(\"" + i + "\")'>ویرایش</button>" +
             "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteQuestionFromExam(\"" + i + "\")'>Delete</button>" +
+            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='deleteQuestionFromExam(\"" + i + "\")'>حذف</button>" +
             "</td>";
         content += "</tr>";
     }
@@ -122,7 +122,7 @@ function fillQuestionTable(data) {
 }
 
 function deleteQuestionFromExam(data) {
-    var r = confirm("Delete the Question?");
+    var r = confirm("سوال حذف شود؟");
     if (r === true) {
         const username = window.authenticatedUsername;
         const password = window.authenticatedPassword;
@@ -250,8 +250,8 @@ $("#add-option-to-question").on("click", function () {
     var cols = "";
     cols += '<div class="form-group">';
     cols += '<div style="display: flex; justify-content: space-between">';
-    cols += '<label for="optional-question-add-option' + counter + '" class="col-form-label">Question Option:</label>';
-    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="delete">';
+    cols += '<label for="optional-question-add-option' + counter + '" class="col-form-label">گزینه سوال:</label>';
+    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="حذف">';
     cols += '</div>';
     cols += '<input type="text" class="form-control" name="question-options" id="optional-question-add-option' + counter + '" >';
     cols += '</div>';
@@ -346,10 +346,10 @@ function fillAddQuestionToExamModal(data) {
         content += "<th scope='row'>" + data[i].title + "</th>";
         content += "<td >" + data[i].context + "</td>";
         content += "<td >" + data[i].type + "</td>";
-        content += "<td><input class='form-check-input' style='width: 75px' type='number' step='0.25' id='score" + data[i].questionId + "' name='score' value='" + data[i].score + "'>";
+        content += "<td><input class='form-check-input  position-static' style='width: 75px' type='number' step='0.25' id='score" + data[i].questionId + "' name='score' value='" + data[i].score + "'>";
         content += "<label class='form-check-label' for='score" + data[i].questionId + "'></label></td>";
-        content += "<td><input class='form-check-input' type='checkbox' id='" + data[i].questionId + "' name='question' value='" + data[i].questionId + "'>";
-        content += "<label class='form-check-label' for='" + data[i].questionId + "'></label></td>";
+        content += "<td><div class='form-check'><input class='form-check-input position-static' type='checkbox' id='" + data[i].questionId + "' name='question' value='" + data[i].questionId + "'>";
+        content += "<label class='form-check-label' for='" + data[i].questionId + "'></label></div></td>";
         content += "</tr>";
     }
     $('#question-bank-table').html(content);

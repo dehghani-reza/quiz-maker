@@ -8,12 +8,12 @@
     </div>
     <div id="courseId" style="padding-top: 10px">
         <div style="display: flex ; justify-content: space-between ; padding-bottom: 10px">
-            <h3 style="padding-top: 5px">Question Bank:</h3>
+            <h3 style="padding-top: 5px">بانک سوالات:</h3>
             <div style="padding-top: 5px ; width: 25%" class="input-icons">
                 <form>
                     <i class="fa fa-search icon1"></i>
                     <input class="form-control mb-4 input-field" id="tableSearch" type="text"
-                           placeholder="Search list items"/>
+                           placeholder="جستجو در بانک سوالات"/>
                 </form>
             </div>
         </div>
@@ -21,13 +21,13 @@
                id="table-course-student">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">QuestionId</th>
-                <th scope="col">Context</th>
-                <th scope="col">Answers</th>
-                <th scope="col">Title</th>
-                <th scope="col">AverageScore</th>
-                <th scope="col">Type</th>
-                <th scope="col">Change</th>
+                <th scope="col">شناسه سوال</th>
+                <th scope="col">صورت سوال</th>
+                <th scope="col">جواب</th>
+                <th scope="col">عنوان</th>
+                <th scope="col">میانگین نمرات</th>
+                <th scope="col">نوع</th>
+                <th scope="col">تغییر</th>
             </tr>
             </thead>
             <tbody id="all-exams-question-bank">
@@ -42,7 +42,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Question Data:</h5>
+                <h5 class="modal-title" id="exampleModalLabel">اطلاعات سوال:</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -51,22 +51,22 @@
                 <form>
                     <input style="display: none" type="text" class="form-control" id="changed-question-id">
                     <div class="form-group">
-                        <label for="changed-question-context" class="col-form-label">Question Context:</label>
+                        <label for="changed-question-context" class="col-form-label">صورت سوال:</label>
                         <input type="text" class="form-control" id="changed-question-context">
                     </div>
                     <div class="form-group">
-                        <label for="changed-question-answer" class="col-form-label">Answer:</label>
+                        <label for="changed-question-answer" class="col-form-label">جواب:</label>
                         <input type="text" class="form-control" id="changed-question-answer">
                     </div>
                     <div class="form-group">
-                        <label for="changed-question-title" class="col-form-label">Title:</label>
+                        <label for="changed-question-title" class="col-form-label">عنوان:</label>
                         <input type="text" class="form-control" id="changed-question-title">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning" onclick="changeSimpleQuestion()">Change</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <button type="button" class="btn btn-warning" onclick="changeSimpleQuestion()">تغییر</button>
             </div>
         </div>
     </div>
@@ -79,7 +79,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="questionInput">Question:</h5>
+                <h5 class="modal-title" id="questionInput">سوال:</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -88,21 +88,21 @@
                 <form id="optional-question-form">
                     <input style="display: none" type="text" class="form-control" id="changed-optional-question-id">
                     <div class="form-group">
-                        <label for="changed-optional-question-context" class="col-form-label">Question Context:</label>
+                        <label for="changed-optional-question-context" class="col-form-label">صورت سوال:</label>
                         <input type="text" class="form-control" id="changed-optional-question-context">
                     </div>
                     <div class="form-group">
-                        <label for="changed-optional-question-title" class="col-form-label">Title:</label>
+                        <label for="changed-optional-question-title" class="col-form-label">عنوان:</label>
                         <input type="text" class="form-control" id="changed-optional-question-title">
                     </div>
                     <div class="form-group">
-                        <label for="changed-optional-question-answer" class="col-form-label">Answer:</label>
+                        <label for="changed-optional-question-answer" class="col-form-label">جواب:</label>
                         <input type="text" class="form-control" id="changed-optional-question-answer">
                     </div>
                     <div class="form-group">
                         <div style="display: flex ; justify-content: space-between">
-                            <label for="optional-question-add-option0Input" class="col-form-label">Question Option:</label>
-                            <button type="button" class="btn btn-success" style="border-radius: 50px " id="add-option-to-question">Add Option</button>
+                            <label for="optional-question-add-option0Input" class="col-form-label">گزینه سوال:</label>
+                            <button type="button" class="btn btn-success" style="border-radius: 50px " id="add-option-to-question">اضافه کردن گزینه</button>
                         </div>
                         <input type="text" class="form-control" name="question-options" id="optional-question-add-option0Input">
                     </div>
@@ -111,8 +111,8 @@
                     </div>
                 </form>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning" onclick="changeOptionalQuestionByTeacher()">change
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-warning" onclick="changeOptionalQuestionByTeacher()">تغییر
                     </button>
                 </div>
             </div>

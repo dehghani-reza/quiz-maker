@@ -38,14 +38,14 @@ function fillAllExamList(data) {
         content += "<th scope='row'>" + data[i].courseName + "</th>";
         content += "<td >" + data[i].examTitle + "</td>";
         content += "<td >" + data[i].status + "</td>";
-        content += "<td id=" + i + "> <div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='"+data[i].studentParticipationNumber+"' aria-valuemin='0' aria-valuemax='"+data[i].studentNumber+"' style='width: "+(data[i].studentParticipationNumber/data[i].studentNumber)*100+"%'>"+data[i].studentParticipationNumber +" out of "+ data[i].studentNumber+"</div></div></td>";
+        content += "<td id=" + i + "> <div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='"+data[i].studentParticipationNumber+"' aria-valuemin='0' aria-valuemax='"+data[i].studentNumber+"' style='width: "+(data[i].studentParticipationNumber/data[i].studentNumber)*100+"%'>"+data[i].studentParticipationNumber +" از "+ data[i].studentNumber+"</div></div></td>";
         content += "<td >" + data[i].examScore + "</td>";
         content += "<td >" + data[i].averageScore + "</td>";
         content += "<td >" ;
         content += "<div class=\"btn-group\" role=\"group\" aria-label=\"Basic example\">" +
-            "<button type='button' class='btn btn-primary btn-sm' onclick='showExamStyleSheets(" + data[i].examId + ")'>Details</button>" +
-            "<button type='button' class='btn btn-success btn-sm' onclick='startExamByTeacher(" + data[i].examId + ")'>Start</button>" +
-            "<button type='button' class='btn btn-danger btn-sm' onclick='endExamByTeacher(" + data[i].examId + ")'>End</button>" +
+            "<button type='button' class='btn btn-primary btn-sm' onclick='showExamStyleSheets(" + data[i].examId + ")'>جزئیات</button>" +
+            "<button type='button' class='btn btn-success btn-sm' onclick='startExamByTeacher(" + data[i].examId + ")'>شروع</button>" +
+            "<button type='button' class='btn btn-danger btn-sm' onclick='endExamByTeacher(" + data[i].examId + ")'>خاتمه</button>" +
             "</div>"+
             "</td>";
         content += "</tr>";
@@ -127,8 +127,8 @@ function drawChart() {
     );
 
     var options = {
-        title: 'Exams OverView',
-        hAxis: {title: 'ExamTitle',  titleTextStyle: {color: '#333'}},
+        title: 'اطلاعات کلی آزمون ها',
+        hAxis: {title: 'عنوان آزمون',  titleTextStyle: {color: '#333'}},
         vAxis: {minValue: 0}
     };
 
@@ -137,7 +137,7 @@ function drawChart() {
 }
 
 function fillTheChart(data) {
-    var char =  [['ExamTitle', 'ExamScore', 'AverageScore']];
+    var char =  [['عنوان آزمون', 'نمره آزمون', 'میانگین نمرات']];
     for (let i = 0; i <data.length ; i++) {
         char.push([data[i].examTitle, data[i].examScore,data[i].averageScore]);
     }

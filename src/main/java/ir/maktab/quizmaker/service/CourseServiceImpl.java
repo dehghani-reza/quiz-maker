@@ -195,9 +195,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseForTeacherDto> loadAllTeacherCourse(Account account) throws Exception {
         Optional<Teacher> teacher = teacherRepository.findByAccount_Username(account.getUsername());
-        if(teacher.isEmpty()) throw new Exception("can't find teacher with this user name");
+        if(teacher.isEmpty()) throw new Exception("معلم با اطلاعات مذکور پیدا نشد");
         Optional<List<Course>> courseList = courseRepository.findAllByTeacher(teacher.get());
-        if(courseList.isEmpty()) throw new Exception("you dont have any course");
+        if(courseList.isEmpty()) throw new Exception("شما دوره ای ندارید");
         return courseList.get().stream().map(course -> new CourseForTeacherDto(String.valueOf(course.getCourseId()),
                 course.getCourseTitle(),
                 String.valueOf(course.getStartDate()),

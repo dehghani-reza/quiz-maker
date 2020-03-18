@@ -40,7 +40,7 @@ function fillCourseTable(data) {
             content += "<td id=" + i + ">" + data[i].endDate + "</td>";
             content += "<td >" + data[i].studentNumber + "</td>";
             content += "<td >" +
-                "<button type='button' class='btn btn-primary btn-sm' onclick='showCoursePageForTeacher(" + i + ")'>Course Page</button>" +
+                "<button type='button' class='btn btn-primary btn-sm' onclick='showCoursePageForTeacher(" + i + ")'>صفحه دوره</button>" +
                 "</td>";
             content += "</tr>";
         }

@@ -35,7 +35,7 @@ public class TeacherController {
     @PostMapping("/add-exam-to-course")
     private OutMessage addExamToCourse(@RequestBody CreateExamDto createExamDto) throws Exception {
         Exam exam = examService.createExam(createExamDto);
-        return new OutMessage("exam with id " + exam.getExamId() + " successfully created");
+        return new OutMessage("آزمون با شناسه" + exam.getExamId() + "اضافه شد");
     }
 
     @PostMapping("/load-all-course-exam")
@@ -46,7 +46,7 @@ public class TeacherController {
     @PostMapping("/delete-exam-from-course")
     private OutMessage deleteExamFromCourse(@RequestBody Exam exam) throws Exception {
         examService.deleteExamFromCourse(exam);
-        return new OutMessage("exam with id " + exam.getExamId() + " deleted");
+        return new OutMessage("آزمون با شناسه " + exam.getExamId() + " حذف شد");
     }
 
     @PostMapping("/edit-exam-to-db")
@@ -57,13 +57,13 @@ public class TeacherController {
     @PostMapping("/create-simple-question-to-exam")
     private OutMessageWithExamScoreDto createSimpleQuestionByTeacher(@RequestBody CreateSimpleQuestionDto questionDto) throws Exception {
         float v = questionService.createSimpleQuestion(questionDto);
-        return new OutMessageWithExamScoreDto("Question successfully created", v);
+        return new OutMessageWithExamScoreDto("سوال با موفقیت ساخته شد", v);
     }
 
     @PostMapping("/create-optional-question-to-exam")
     private OutMessageWithExamScoreDto createOptionalQuestionByTeacher(@RequestBody CreateOptionalQuestionDto questionDto) throws Exception {
         float v = questionService.createOptionalQuestion(questionDto);
-        return new OutMessageWithExamScoreDto("Question successfully created", v);
+        return new OutMessageWithExamScoreDto("سوال با موفقیت ساخته شد", v);
     }
 
     @PostMapping("/load-all-exam-question")
@@ -74,25 +74,25 @@ public class TeacherController {
     @PostMapping("/edit-question-from-exam")
     private OutMessageWithExamScoreDto editQuestionFromExam(@RequestBody QuestionChangeExamDto question) throws Exception {
         float v = questionService.editQuestionFromExam(question);
-        return new OutMessageWithExamScoreDto("score of question changed", v);
+        return new OutMessageWithExamScoreDto("نمره سوال تغییر یافت", v);
     }
 
     @PostMapping("/delete-question-from-exam")
     private OutMessageWithExamScoreDto deleteQuestionFromExam(@RequestBody QuestionChangeExamDto question) throws Exception {
         float v = questionService.deleteQuestionFromExam(question);
-        return new OutMessageWithExamScoreDto("question deleted from exam", v);
+        return new OutMessageWithExamScoreDto("سوال از آزمون حذف شد", v);
     }
 
     @PostMapping("/start-exam")
     private OutMessage startExamByTeacher(@RequestBody Exam exam) throws Exception {
        examService.startExamByTeacher(exam);
-        return new OutMessage("exam started");
+        return new OutMessage("آزمون آغاز شد");
     }
 
     @PostMapping("/end-exam")
     private OutMessage endExamByTeacher(@RequestBody Exam exam) throws Exception {
         examService.endExamByTeacher(exam);
-        return new OutMessage("exam ended");
+        return new OutMessage("آزمون خاتمه یافت");
     }
 
     @PostMapping("/load-all-question-from-bank")
@@ -103,7 +103,7 @@ public class TeacherController {
     @PostMapping("/add-question-to-exam-from-bank")
     private OutMessageWithExamScoreDto addQuestionToExamFromBank(@RequestBody QuestionIdScoreDto questionIdScoreDto) throws Exception {
         float v = questionService.addQuestionFromBankToExam(questionIdScoreDto);
-        return new OutMessageWithExamScoreDto("Questions added successfully",v);
+        return new OutMessageWithExamScoreDto("سوال اضافه شد",v);
     }
 
 

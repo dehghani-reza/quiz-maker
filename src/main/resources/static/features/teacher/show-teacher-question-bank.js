@@ -49,7 +49,7 @@ function fillQuestionBank(data) {
         content += "<td >" + data[i].score + "</td>";
         content += "<td >" + data[i].type + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-warning btn-sm' onclick='toggleChangeModal(" + i + ")'>Change</button>" +
+            "<button type='button' class='btn btn-warning btn-sm' onclick='toggleChangeModal(" + i + ")'>تغییر</button>" +
             "</td>";
         content += "</tr>";
     }
@@ -58,7 +58,7 @@ function fillQuestionBank(data) {
 
 function toggleChangeModal(data) {
     var current = globalQuestionBank[data];
-    if (current.type === "SimpleQuestion") {
+    if (current.type === "تشریحی") {
         $("#changed-question-id").val(current.questionId);
         $("#changed-question-answer").val(current.answer);
         $("#changed-question-title").val(current.title);
@@ -97,8 +97,8 @@ function bringOptionalQuestionFromDbToChange(dara) {
                 for (let i = 0; i < ((data.options.length)-1); i++) {
                     cols += '<div class="form-group">';
                     cols += '<div style="display: flex; justify-content: space-between">';
-                    cols += '<label for="optional-question-add-option'+(i+1)+'" class="col-form-label">Question Option:</label>';
-                    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="delete">';
+                    cols += '<label for="optional-question-add-option'+(i+1)+'" class="col-form-label">گزینه سوال:</label>';
+                    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="حذف">';
                     cols += '</div>';
                     cols += '<input type="text" class="form-control" name="question-options" id="optional-question-add-option' +(i+1)+ '" value="'+data.options[i+1]+'">';
                     cols += '</div>';
@@ -121,8 +121,8 @@ $("#add-option-to-question").on("click", function () {
     var cols = "";
     cols += '<div class="form-group">';
     cols += '<div style="display: flex; justify-content: space-between">';
-    cols += '<label for="optional-question-add-option' + counter + '" class="col-form-label">Question Option:</label>';
-    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="delete">';
+    cols += '<label for="optional-question-add-option' + counter + '" class="col-form-label">گزینه سوال:</label>';
+    cols += '<input type="button" style="border-radius: 50px" class="ibtnDel btn btn-md btn-danger "  value="حذف">';
     cols += '</div>';
     cols += '<input type="text" class="form-control" name="question-options" id="optional-question-add-option' + counter + '" >';
     cols += '</div>';

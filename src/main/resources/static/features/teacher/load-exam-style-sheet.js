@@ -41,7 +41,7 @@ function fillExamAnswersSheet(data) {
         content += "<td >" + data[i].isCalculated + "</td>";
         content += "<td >" + data[i].finalScore + "</td>";
         content += "<td >" +
-            "<button type='button' class='btn btn-primary btn-sm' onclick='showAnswersOfStudent(" + data[i].sheetId + ")'>Details</button>" +
+            "<button type='button' class='btn btn-primary btn-sm' onclick='showAnswersOfStudent(" + data[i].sheetId + ")'>جزئیات</button>" +
             "</td>";
         content += "</tr>";
     }
